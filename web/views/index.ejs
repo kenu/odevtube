@@ -21,7 +21,7 @@
   <ul>
     <% list.forEach(video=> { %>
     <li><img src="<%= video.thumbnail %>" title="<%= video.title %>" />
-      <%= video.pubdate %><br />
+      <div style="margin: 3px 0"><%= video.pubdate %></div>
       <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>">
         <%= video.title %>
       </a>

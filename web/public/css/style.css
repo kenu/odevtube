@@ -1,5 +1,6 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', 'Arial', sans-serif;
+  font-size: 0.95rem;
   margin: 0;
   padding: 0 10%;
 }
@@ -16,6 +17,7 @@ ul {
 li {
   background-color: #f4f4f4;
   border: 1px solid #ddd;
+  border-radius: 3%;
   padding: 10px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
@@ -23,6 +25,7 @@ li {
 img {
   width: 100%;
   height: auto;
+  border-radius: 6.5%;
 }
 
 a {
