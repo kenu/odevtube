@@ -82,6 +82,7 @@ const channels = [
 'UCebXwimGkd5YrhPV7vmqKgA',
 'UCwhiiipYzihCAL9cyHwa3aA',
 'UCwbg0dHtGEdLJWATaWJv96Q',
+'UCuynXsGvMXLviyqVMeS2y-g',
 ]
 // 채널 ID를 입력하여 실행합니다.
 channels.forEach(async (channelId) => {
