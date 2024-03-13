@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "dependencies": {
+    "googleapis": "^134.0.0",
+    "mariadb": "^3.2.3",
+    "sequelize": "^6.37.1"
+  }
+}

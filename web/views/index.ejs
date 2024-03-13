@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <h1>
+    <%= title %>
+  </h1>
+  <p>Welcome to <%= title %>
+  </p>
+  <ul>
+    <% list.forEach(video=> { %>
+    <li><img src="<%= video.thumbnail %>" title="<%= video.title %>" />
+      <%= video.pubdate %><br />
+      <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>">
+        <%= video.title %>
+      </a>
+    </li>
+    <% }) %>
+  </ul>
+</body>
+
+</html>

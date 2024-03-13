@@ -1,0 +1,23 @@
+## Youtube API
+
+- Google Developers Console에 접속하여 새 프로젝트를 생성
+  - https://console.cloud.google.com/
+- YouTube Data API v3를 활성화
+- 프로젝트에서 신규 API 키를 생성
+  - 환경변수 YOUTUBE_API_KEY 설정
+
+```
+  {
+    channelId: ''
+    title: '00 Git 그리고 VS Code',
+    videoId: 'GfccCjzhDU4',
+    publishedAt: '2024-03-06T01:05:26Z'
+  }
+```
+
+## DB
+
+```
+create database youtubedb default character set utf8mb4 collate utf8mb4_unicode_ci;
+GRANT ALL PRIVILEGES ON youtubedb.* TO devuser@localhost IDENTIFIED BY 'devpass';
+```
