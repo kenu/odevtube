@@ -32,13 +32,21 @@ async function getLatestVideos(channelId) {
 }
 
 const channels = [
-  'UCQNE2JmbasNYbjGAcuBiRRg',
-  'UCajnLt9NyrPI8txIiefinzw',
-  'UCHbXBo1fQAg7j0D7HKKYHJg',
-  'UCCv0FlNbZYXlnP9Mt8dXeLQ',
-  'UCMt-NBCvJyDbn495ZvDV0dw',
-  'UCslowKauYSj_RqgB-EuSgmw',
-  'UCS0F25vig_sPIQXMiK8IdSg',
+  // 'UCQNE2JmbasNYbjGAcuBiRRg',
+  // 'UCajnLt9NyrPI8txIiefinzw',
+  // 'UCHbXBo1fQAg7j0D7HKKYHJg',
+  // 'UCCv0FlNbZYXlnP9Mt8dXeLQ',
+  // 'UCMt-NBCvJyDbn495ZvDV0dw',
+  // 'UCslowKauYSj_RqgB-EuSgmw',
+  // 'UCS0F25vig_sPIQXMiK8IdSg',
+  'UCzA62wwyiLnVnqFP4VEUOZg',
+  'UCDh8zEDofOcrOMAOnSVL9Tg',
+  'UCrvqts66Jo2gKGZdp_h_QkQ',
+  'UCxZ2AlaT0hOmxzZVbF_j_Sw',
+  'UCFDbz39kFPvU0AUpgHx4ICw',
+  'UCZ3dxObRPEJzoryEyQqmhWg',
+  'UCqcqc3TH6KTfGrLwGh__73g',
+  'UCSLrpBAzr-ROVGHQ5EmxnUg',
 ]
 // 채널 ID를 입력하여 실행합니다.
 channels.forEach(async (channelId) => {
