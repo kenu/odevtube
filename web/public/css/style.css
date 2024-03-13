@@ -36,3 +36,7 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+#keyword {
+  margin: 6px 0;
+}

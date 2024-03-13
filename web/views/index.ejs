@@ -10,6 +10,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
   <link rel="manifest" href="/favicon/site.webmanifest">
   <link rel='stylesheet' href='/css/style.css' />
+  <script src="/js/index.js"></script>
 </head>
 
 <body>
@@ -18,7 +19,8 @@
   </h1>
   <p>Welcome to <%= title %>
   </p>
-  <ul>
+  <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
+  <ul id="list">
     <% list.forEach(video=> { %>
     <li><img src="<%= video.thumbnail %>" title="<%= video.title %>" />
       <div style="margin: 3px 0"><%= video.pubdate %></div>
