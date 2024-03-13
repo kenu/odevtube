@@ -41,11 +41,16 @@ const channels = [
     'UCslowKauYSj_RqgB-EuSgmw',
     'UCS0F25vig_sPIQXMiK8IdSg',
     'UCzA62wwyiLnVnqFP4VEUOZg',
+    'UCwhiiipYzihCAL9cyHwa3aA',
     'UCDh8zEDofOcrOMAOnSVL9Tg',
+    'UCku8mOp8y05Cm6sb9Rp0jMQ',
+    'UCIcyXHo8vAqgBdew8XdOGtw',
+    'UCyrE403VJU3Qq5DKWTNlk6Q',
+    'UCsOJxLxzQl8IbwGS-Cp5t8w',
+    'UCQk9RyBNgXc7ORIsYlOfQrg',
     'UCrvqts66Jo2gKGZdp_h_QkQ',
     'UCxZ2AlaT0hOmxzZVbF_j_Sw',
     'UCTBVYQc1ZVDbAZcm1J_pniA',
-    // 'UCFDbz39kFPvU0AUpgHx4ICw',
     'UCZ3dxObRPEJzoryEyQqmhWg',
     'UCqcqc3TH6KTfGrLwGh__73g',
     'UCSLrpBAzr-ROVGHQ5EmxnUg',
@@ -69,20 +74,11 @@ const channels = [
     'UCdNSo3yB5-FRTFGbUNKNnwQ',
     'UCSEOUzkGNCT_29EU_vnBYjg',
     'UC-mOekGSesms0agFntnQang',
-    'UCiz4XbP6DOEC7UZiMRAgq1Q',
-    'UC0uDM1xZMNBAoW2xnzhAQ7g',
-    'UCSWVilNemHmjQF7alFfoDUw',
     'UCdGTtaI-ERLjzZNLuBj3X6A',
     'UC-mOekGSesms0agFntnQang',
     'UC_XI3ByFO1uZIIH-g-zJZiw',
     'UC5pBkQjap4TW-LJryKZQegQ',
     'UC31Gc42xzclOOi5Gp1xIpZw',
-    'UCPdTFQUHzAzFobngtw1sFKg',
-    'UChflhu32f5EUHlY7_SetNWw',
-    'UCOB_NlfphKSQWwR6gcADhtQ',
-    'UCebXwimGkd5YrhPV7vmqKgA',
-    'UCwhiiipYzihCAL9cyHwa3aA',
-    'UCwbg0dHtGEdLJWATaWJv96Q',
     'UCuynXsGvMXLviyqVMeS2y-g',
   ],
   [
@@ -119,4 +115,3 @@ channels[1].forEach(async (channelId) => {
     dao.createen(data)
   })
 })
-
