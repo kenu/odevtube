@@ -8,24 +8,29 @@ const youtube = google.youtube({
 
 async function getLatestVideos(channelId) {
   try {
-    const response = await youtube.search.list({
+    const response = await youtube.activities.list({
       channelId: channelId,
-      maxResults: 3, // 가져올 동영상의 최대 수
+      maxResults: 50, // 가져올 동영상의 최대 수
       order: 'date', // 최신 순으로 정렬
-      part: 'snippet', // 필요한 정보를 지정합니다.
+      part: 'snippet,contentDetails', // 필요한 정보를 지정합니다.
     })
 
     const videos = response.data.items.map((item) => {
+      const thumbnail = item.snippet.thumbnails.high.url
+      if (!item.contentDetails.upload) {
+        return null
+      }
+      const videoId = item.contentDetails.upload.videoId
       return {
         channelId,
+        videoId,
         title: item.snippet.title,
-        videoId: item.id.videoId,
-        thumbnail: item.snippet.thumbnails.default.url,
+        thumbnail,
         publishedAt: item.snippet.publishedAt,
       }
     })
 
-    return videos
+    return videos.filter((video) => video)
   } catch (error) {
     console.error('Error:', error)
   }
