@@ -6,7 +6,7 @@ const router = express.Router()
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
-  const list = await dao.findAll()
+  const list = await dao.findAllYoutube()
   list.forEach((item) => {
     item.pubdate = dayjs(item.publishedAt).format('YYYY-MM-DD')
   })
@@ -15,7 +15,7 @@ router.get('/', async function (req, res, next) {
 
 /* GET home page. */
 router.get('/en', async function (req, res, next) {
-  const list = await dao.findAllen()
+  const list = await dao.findAllYoutube('en')
   list.forEach((item) => {
     item.pubdate = dayjs(item.publishedAt).format('YYYY-MM-DD')
   })

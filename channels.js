@@ -53,6 +53,16 @@ const channels = [
     'UCmI0g3ROh1WrUMZDv2kcjfQ',
     'UCulplOST7XpLnc6xxNFEAoQ',
     'UC6YQqXMz2SyagOIjg86ceOg',
+    //
+    'UCFDbz39kFPvU0AUpgHx4ICw',
+    'UCiz4XbP6DOEC7UZiMRAgq1Q',
+    'UC0uDM1xZMNBAoW2xnzhAQ7g',
+    'UCSWVilNemHmjQF7alFfoDUw',
+    'UCPdTFQUHzAzFobngtw1sFKg',
+    'UChflhu32f5EUHlY7_SetNWw',
+    'UCOB_NlfphKSQWwR6gcADhtQ',
+    'UCebXwimGkd5YrhPV7vmqKgA',
+    'UCwbg0dHtGEdLJWATaWJv96Q',
   ],
   [
     'UCOxWrX5MIdXIeRNaXC3sqIg',

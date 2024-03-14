@@ -35,14 +35,18 @@ async function getLatestVideos(channelId) {
 // 채널 ID를 입력하여 실행합니다.
 channels[0].forEach(async (channelId) => {
   const videos = await getLatestVideos(channelId)
+  const channel = await dao.findOneByChannelId(channelId)
   videos?.forEach((data) => {
-    dao.create(data)
+    data.ChannelId = channel.id
+    dao.createYoutube(data)
   })
 })
 
 channels[1].forEach(async (channelId) => {
   const videos = await getLatestVideos(channelId)
+  const channel = await dao.findOneByChannelId(channelId)
   videos?.forEach((data) => {
-    dao.createen(data)
+    data.ChannelId = channel.id
+    dao.createYoutube(data)
   })
 })
