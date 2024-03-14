@@ -18,7 +18,7 @@ li {
   background-color: #f4f4f4;
   border: 1px solid #ddd;
   border-radius: 3%;
-  padding: 10px;
+  padding: 6px 10px 10px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -65,10 +65,25 @@ a:hover {
   position: fixed;
   top: 0;
   right: 10px;
-  /* 필요한 경우 너비와 높이를 설정 */
-  width: 90px; /* 예시 */
-  height: 30px; /* 예시 */
-  /* 추가적인 스타일링 */
-  background-color: #f9f9f940; /* 배경색 예시 */
-  padding: 10px; /* 패딩 예시 */
+  width: 90px;
+  height: 30px;
+  background-color: #f9f9f940;
+  padding: 10px;
+}
+
+#count {
+  margin-left: 20px;
+}
+
+.channel {
+  margin-bottom: 6px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  height: 1.2em;
+}
+
+.profile {
+  width: 16px;
+  vertical-align: bottom;
 }

@@ -10,6 +10,7 @@ function search(evt) {
     const text = e.innerText.toLowerCase()
     return text.includes(keyword)
   })
+  document.getElementById('count').innerHTML = filtered.length
   let htmlFiltered = ''
   filtered.forEach(function (e) {
     htmlFiltered += e.outerHTML
@@ -18,6 +19,8 @@ function search(evt) {
 }
 
 window.onload = function () {
+  document.getElementById('count').innerHTML =
+    document.querySelectorAll('li').length
   const el = document.getElementById('keyword')
   el.addEventListener('keyup', search)
 }

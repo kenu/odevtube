@@ -2,6 +2,7 @@
 <html>
 
 <% include ./header.ejs %>
+
 <body>
   <h1>
     <%= title %>
@@ -9,17 +10,27 @@
   <p>Welcome to <%= title %>
   </p>
   <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
+  <span id="count">0</span>
   <ul id="list">
     <% list.forEach(video=> { %>
-      <li><img src="<%= video.thumbnail %>" title="<%= video.title %>" loading="lazy" />
-        <div style="margin: 3px 0">
-          <%= video.pubdate %>
-        </div>
-        <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>">
-          <%= video.title %>
+    <li>
+      <div class="channel">
+        <a href="https://www.youtube.com/<%= video.customUrl %>/videos" alt="<%= video.channame %>">
+          <img src="<%= video.profile %>" title="<%= video.channame %>" loading="lazy" class="profile"/>
+          <span style="font-size: 0.9em; font-weight: 800;">
+            <%= video.channame %>
+          </span>
         </a>
-      </li>
-      <% }) %>
+      </div>
+      <img src="<%= video.thumbnail %>" title="<%= video.title %>" loading="lazy" />
+      <div style="margin: 3px 0">
+        <%= video.pubdate %>
+      </div>
+      <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>">
+        <%= video.title %>
+      </a>
+    </li>
+    <% }) %>
   </ul>
   <hr />
   <% include ./aside.ejs %>
@@ -31,7 +42,10 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y6RK1WT4L9"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
+
+  function gtag() {
+    dataLayer.push(arguments);
+  }
   gtag('js', new Date());
 
   gtag('config', 'G-Y6RK1WT4L9');

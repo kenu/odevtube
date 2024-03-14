@@ -9,6 +9,10 @@ router.get('/', async function (req, res, next) {
   const list = await dao.findAllYoutube()
   list.forEach((item) => {
     item.pubdate = dayjs(item.publishedAt).format('YYYY-MM-DD')
+    item.profile = item.Channel.dataValues.thumbnail
+    item.channame = item.Channel.dataValues.title
+    item.customUrl = item.Channel.dataValues.customUrl
+    delete item.Channel
   })
   res.render('index', { title: '개발 관련 유튜브', list })
 })
