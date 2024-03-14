@@ -17,7 +17,7 @@
 
 ## DB
 
-```
+```sql
 create database youtubedb default character set utf8mb4 collate utf8mb4_unicode_ci;
 GRANT ALL PRIVILEGES ON youtubedb.* TO devuser@localhost IDENTIFIED BY 'devpass';
 ```

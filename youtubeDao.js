@@ -72,5 +72,10 @@ async function findAll() {
     order: [['publishedAt', 'DESC']],
   })
 }
+async function findAllen() {
+  return await Youtubeen.findAll({
+    order: [['publishedAt', 'DESC']],
+  })
+}
 
-export default { create, createen, findAll }
+export default { create, createen, findAll, findAllen }
