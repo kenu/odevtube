@@ -1,5 +1,12 @@
+@font-face {
+  font-family: 'Middleschool_student';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/naverfont_08@1.0/Middleschool_student.woff')
+    format('woff');
+}
+
 body {
   font-family: 'Roboto', 'Arial', sans-serif;
+  font: 14px 'Middleschool_student', Helvetica, Arial, sans-serif;
   font-size: 0.95rem;
   margin: 0;
   padding: 0 10%;
