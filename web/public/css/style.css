@@ -48,3 +48,11 @@ a:hover {
   bottom: 0;
   width: 80%;
 }
+
+.top {
+  position: fixed;
+  right: 10%;
+  bottom: 20px;
+  padding: 10px;
+  border-radius: 45%;
+}

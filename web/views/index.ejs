@@ -22,19 +22,26 @@
   <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
   <ul id="list">
     <% list.forEach(video=> { %>
-    <li><img src="<%= video.thumbnail %>" title="<%= video.title %>" />
-      <div style="margin: 3px 0"><%= video.pubdate %></div>
-      <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>">
-        <%= video.title %>
-      </a>
-    </li>
-    <% }) %>
+      <li><img src="<%= video.thumbnail %>" title="<%= video.title %>" />
+        <div style="margin: 3px 0">
+          <%= video.pubdate %>
+        </div>
+        <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>">
+          <%= video.title %>
+        </a>
+      </li>
+      <% }) %>
   </ul>
   <hr />
   <div class="ad">
-    * VS Code에서 쉽게 사용하는 Git: <a href="https://inf.run/LPpDg" target="_blank" alt="VS Code에서 쉽게 사용하는 Git">https://inf.run/LPpDg</a>
+    * VS Code에서 쉽게 사용하는 Git: <a href="https://inf.run/LPpDg" target="_blank"
+      alt="VS Code에서 쉽게 사용하는 Git">https://inf.run/LPpDg</a>
     <br />
-    * OKdevTV: <a href="https://www.youtube.com/@KenuHeo" target="_blank" alt="OKdevTV">https://www.youtube.com/@KenuHeo</a>
+    * OKdevTV: <a href="https://www.youtube.com/@KenuHeo" target="_blank"
+      alt="OKdevTV">https://www.youtube.com/@KenuHeo</a>
+    <div>
+      <button class="top" onclick="window.scrollTo(0,0)">top</button>
+    </div>
   </div>
   <hr />
   <hr />
@@ -44,17 +51,18 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y6RK1WT4L9"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
 
   gtag('config', 'G-Y6RK1WT4L9');
 </script>
 <script type="text/javascript" src="//wcs.naver.net/wcslog.js"></script>
 <script type="text/javascript">
-if(!wcs_add) var wcs_add = {};
-wcs_add["wa"] = "7d6e896ff89240";
-if(window.wcs) {
-  wcs_do();
-}
+  if (!wcs_add) var wcs_add = {};
+  wcs_add["wa"] = "7d6e896ff89240";
+  if (window.wcs) {
+    wcs_do();
+  }
 </script>
+
 </html>
