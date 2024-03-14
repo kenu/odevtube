@@ -1,12 +1,5 @@
-@font-face {
-  font-family: 'KyoboHand';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff')
-    format('woff');
-}
-
 body {
   font-family: 'Roboto', 'Arial', sans-serif;
-  font: 14px 'KyoboHand', Helvetica, Arial, sans-serif;
   font-size: 0.95rem;
   margin: 0;
   padding: 0 10%;
@@ -66,6 +59,11 @@ a:hover {
 
 .github-logo {
   width: 2.3em;
+}
+
+.okdevtv-logo {
+  width: 1.3em;
+  vertical-align: bottom;
 }
 
 .github {
