@@ -40,3 +40,11 @@ a:hover {
 #keyword {
   margin: 6px 0;
 }
+
+.ad {
+  background-color: #fcebeb;
+  padding: 10px 10px 20px;
+  position: fixed;
+  bottom: 0;
+  width: 80%;
+}
