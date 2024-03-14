@@ -56,3 +56,19 @@ a:hover {
   padding: 10px;
   border-radius: 45%;
 }
+
+.github-logo {
+  width: 2.3em;
+}
+
+.github {
+  position: fixed;
+  top: 0;
+  right: 10px;
+  /* 필요한 경우 너비와 높이를 설정 */
+  width: 30px; /* 예시 */
+  height: 30px; /* 예시 */
+  /* 추가적인 스타일링 */
+  background-color: #f9f9f940; /* 배경색 예시 */
+  padding: 10px; /* 패딩 예시 */
+}
