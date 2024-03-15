@@ -1,6 +1,5 @@
 let repo = ''
-function search(evt) {
-  // const keyword = evt.currentTarget.value.toLowerCase()
+function search() {
   const keyword = document.getElementById('keyword').value.toLowerCase()
   if (!repo) {
     repo = document.querySelectorAll('li')
@@ -16,6 +15,20 @@ function search(evt) {
     htmlFiltered += e.outerHTML
   })
   document.getElementById('list').innerHTML = htmlFiltered
+}
+
+function clearKeyword() {
+  document.getElementById('keyword').value = ''
+  document.getElementById('channelLink').innerHTML = ''
+  search()
+}
+
+function showChannel(name, customUrl) {
+  document.getElementById('keyword').value = name
+  search()
+  window.scrollTo(0, 0)
+  const html = `<a href="https://www.youtube.com/${customUrl}" target="_blank">➡️<em> ${name}</em></a>`
+  document.getElementById('channelLink').innerHTML = html
 }
 
 window.onload = function () {

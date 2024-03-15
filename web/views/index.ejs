@@ -7,20 +7,25 @@
   <section id="title">
     <h1 style="padding: 0.5rem">
       <a href="https://okdevtv.com/" alt="okdevtv">
-        <img src="https://okdevtv.com/images/logo.webp" title="okdevtv" loading="lazy" class="okdevtv-logo"/>
+        <img src="https://okdevtv.com/images/logo.webp" title="okdevtv" class="okdevtv-logo" />
       </a>
-      <a href="javascript:window.scrollTo(0,0)"><%= title %></a>
+      <a href="javascript:window.scrollTo(0,0)">
+        <%= title %>
+      </a>
     </h1>
-    <p>Welcome to <%= title %></p>
+    <p>Welcome to <%= title %>
+    </p>
   </section>
+  <div id="channelLink"></div>
   <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
+  <a href="javascript:clearKeyword()">X</a>
   <span id="count">0</span>
   <ul id="list">
     <% list.forEach(video=> { %>
     <li>
       <div class="channel">
-        <a href="https://www.youtube.com/<%= video.customUrl %>/videos" alt="<%= video.channame %>">
-          <img src="<%= video.profile %>" title="<%= video.channame %>" loading="lazy" class="profile"/>
+        <a href="javascript:showChannel('<%= video.channame %>', '<%= video.customUrl %>')" alt="<%= video.channame %>">
+          <img src="<%= video.profile %>" title="<%= video.channame %>" class="profile" />
           <span style="font-size: 0.9em; font-weight: 800;">
             <%= video.channame %>
           </span>
