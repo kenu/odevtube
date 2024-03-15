@@ -25,7 +25,12 @@ window.onload = function () {
   const el = document.getElementById('keyword')
   el.addEventListener('keyup', search)
 
+  if (localStorage.getItem('font')) {
+    changeFont()
+  }
+
   document.querySelector('h1+p').addEventListener('click', function () {
+    localStorage.setItem('font', localStorage.getItem('font') ? '' : 'true')
     changeFont()
   })
 
@@ -36,18 +41,18 @@ window.onload = function () {
       {}
     )
 
-    font
-      .load()
-      .then(function (loadedFont) {
-        document.fonts.add(loadedFont)
-        const setFont = localStorage.getItem('font')
-        localStorage.setItem('font', setFont ? '' : 'true')
-        document.body.style.fontFamily = setFont
-          ? 'KyoboHand, sans-serif'
-          : 'Roboto, Arial, sans-serif'
-      })
-      .catch(function (error) {
-        console.error('Failed to load font:', error)
-      })
+    if (localStorage.getItem('font')) {
+      font
+        .load()
+        .then(function (loadedFont) {
+          document.fonts.add(loadedFont)
+          document.body.style.fontFamily = 'KyoboHand, sans-serif'
+        })
+        .catch(function (error) {
+          console.error('Failed to load font:', error)
+        })
+    } else {
+      document.body.style.fontFamily = 'Roboto, Arial, sans-serif'
+    }
   }
 }
