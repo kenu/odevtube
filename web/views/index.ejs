@@ -4,14 +4,15 @@
 <% include ./header.ejs %>
 
 <body>
-  <h1>
-    <a href="https://okdevtv.com/" alt="okdevtv">
-      <img src="https://okdevtv.com/images/logo.webp" title="okdevtv" loading="lazy" class="okdevtv-logo"/>
-    </a>
-    <a href="javascript:window.scrollTo(0,0)"><%= title %></a>
-  </h1>
-  <p>Welcome to <%= title %>
-  </p>
+  <section id="title">
+    <h1 style="padding: 0.5rem">
+      <a href="https://okdevtv.com/" alt="okdevtv">
+        <img src="https://okdevtv.com/images/logo.webp" title="okdevtv" loading="lazy" class="okdevtv-logo"/>
+      </a>
+      <a href="javascript:window.scrollTo(0,0)"><%= title %></a>
+    </h1>
+    <p>Welcome to <%= title %></p>
+  </section>
   <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
   <span id="count">0</span>
   <ul id="list">
