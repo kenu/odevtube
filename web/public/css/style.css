@@ -105,3 +105,8 @@ a:hover {
   width: 16px;
   vertical-align: bottom;
 }
+
+.channame {
+  font-size: 0.9em;
+  font-weight: 800;
+}
