@@ -12,7 +12,7 @@ async function getLatestVideos(channelId) {
     })
 
     const videos = response.data.items.map((item) => {
-      const thumbnail = item.snippet.thumbnails.high.url
+      const thumbnail = item.snippet.thumbnails.medium.url
       if (!item.contentDetails.upload) {
         return null
       }

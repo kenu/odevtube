@@ -42,7 +42,7 @@ async function getChannelInfo(channelId) {
     const data = {
       title: items.snippet.title,
       customUrl: items.snippet.customUrl,
-      thumbnail: items.snippet.thumbnails.high.url,
+      thumbnail: items.snippet.thumbnails.medium.url,
       channelId: items.id,
     }
     return data
