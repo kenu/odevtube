@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<% include ./header.ejs %>
+
+<body>
+  <section id="title">
+    <h1 style="padding: 0.5rem">
+      <a href="https://okdevtv.com/" alt="okdevtv">
+        <img src="https://okdevtv.com/images/logo.webp" title="okdevtv" class="okdevtv-logo" />
+      </a>
+      <a href="javascript:window.scrollTo(0,0)">
+        <%= title %>
+      </a>
+      <span id="buymeacoffee"></span>
+    </h1>
+    <p>Welcome to <%= title %>
+    </p>
+  </section>
+  <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
+  <a href="javascript:clearKeyword()">X</a>
+  <span id="channelLink"></span>
+  <span id="count">0</span>
+  <ul id="list">
+    <% list.forEach(video=> { %>
+    <li>
+      <div class="channel">
+        <a href="javascript:showChannel('<%= video.channame %>', '<%= video.customUrl %>')" alt="<%= video.channame %>">
+          <img src="<%= video.profile %>" title="<%= video.channame %>" class="profile" />
+          <span class="channame">
+            <%= video.channame %>
+          </span>
+        </a>
+      </div>
+      <img src="<%= video.thumbnail %>" title="<%= video.title %>" loading="lazy" />
+      <div style="margin: 3px 0">
+        <%= video.pubdate %>
+      </div>
+      <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>">
+        <%= video.title %>
+      </a>
+    </li>
+    <% }) %>
+  </ul>
+  <hr />
+  <div id="buymac">
+  <a href="https://www.buymeacoffee.com/kenu"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=kenu&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
+  </div>
+  <% include ./aside.ejs %>
+  <hr />
+  <hr />
+  <hr />
+  <hr />
+</body>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y6RK1WT4L9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y6RK1WT4L9');
+</script>
+<script type="text/javascript" src="//wcs.naver.net/wcslog.js"></script>
+<script type="text/javascript">
+  if (!wcs_add) var wcs_add = {};
+  wcs_add["wa"] = "7d6e896ff89240";
+  if (window.wcs) {
+    wcs_do();
+  }
+</script>
+
+</html>

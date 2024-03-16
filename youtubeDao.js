@@ -17,6 +17,7 @@ const Channel = sequelize.define('Channel', {
   thumbnail: DataTypes.STRING,
   customUrl: DataTypes.STRING,
   lang: DataTypes.STRING(2),
+  category: DataTypes.STRING,
 })
 
 const Youtube = sequelize.define('Youtube', {
@@ -66,14 +67,13 @@ async function createYoutube(data) {
   }
 }
 
-async function findAllYoutube(lang) {
-  const ln = lang || 'ko'
+async function findAllYoutube(category, lang) {
   return await Youtube.findAll({
     include: [
       {
         model: Channel,
-        where: { lang: ln },
-        required: true, // This ensures an INNER JOIN, equivalent to the SQL query
+        where: { category: category || 'dev', lang: lang || 'ko' },
+        required: true,
       },
     ],
     order: [['publishedAt', 'DESC']],

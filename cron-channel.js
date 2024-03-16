@@ -22,14 +22,30 @@ async function getChannelInfo(channelId) {
 }
 
 // 채널 ID를 입력하여 실행합니다.
-channels[0].forEach(async (channelId) => {
+channels['dev'][0].forEach(async (channelId) => {
   const data = await getChannelInfo(channelId)
+  data.category = 'dev'
   data.lang = 'ko'
   dao.create(data)
 })
-// 채널 ID를 입력하여 실행합니다.
-channels[1].forEach(async (channelId) => {
+
+channels['dev'][1].forEach(async (channelId) => {
   const data = await getChannelInfo(channelId)
+  data.category = 'dev'
   data.lang = 'en'
+  dao.create(data)
+})
+
+channels['drama'][0].forEach(async (channelId) => {
+  const data = await getChannelInfo(channelId)
+  data.category = 'drama'
+  data.lang = 'ko'
+  dao.create(data)
+})
+
+channels['food'][0].forEach(async (channelId) => {
+  const data = await getChannelInfo(channelId)
+  data.category = 'food'
+  data.lang = 'ko'
   dao.create(data)
 })

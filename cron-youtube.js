@@ -33,7 +33,7 @@ async function getLatestVideos(channelId) {
 }
 
 // 채널 ID를 입력하여 실행합니다.
-channels[0].forEach(async (channelId) => {
+channels['dev'][0].forEach(async (channelId) => {
   const videos = await getLatestVideos(channelId)
   const channel = await dao.findOneByChannelId(channelId)
   videos?.forEach((data) => {
@@ -42,7 +42,25 @@ channels[0].forEach(async (channelId) => {
   })
 })
 
-channels[1].forEach(async (channelId) => {
+channels['dev'][1].forEach(async (channelId) => {
+  const videos = await getLatestVideos(channelId)
+  const channel = await dao.findOneByChannelId(channelId)
+  videos?.forEach((data) => {
+    data.ChannelId = channel.id
+    dao.createYoutube(data)
+  })
+})
+
+channels['drama'][0].forEach(async (channelId) => {
+  const videos = await getLatestVideos(channelId)
+  const channel = await dao.findOneByChannelId(channelId)
+  videos?.forEach((data) => {
+    data.ChannelId = channel.id
+    dao.createYoutube(data)
+  })
+})
+
+channels['food'][0].forEach(async (channelId) => {
   const videos = await getLatestVideos(channelId)
   const channel = await dao.findOneByChannelId(channelId)
   videos?.forEach((data) => {

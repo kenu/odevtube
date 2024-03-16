@@ -82,7 +82,7 @@ a:hover {
   position: fixed;
   top: 0;
   right: 10px;
-  width: 90px;
+  width: 210px;
   height: 30px;
   background-color: #f9f9f940;
   padding: 10px;
@@ -113,4 +113,8 @@ a:hover {
 
 #buymac img {
   height: 3.4rem;
+}
+
+.k {
+  background-color: #fabe98;
 }
