@@ -54,6 +54,7 @@ const channels = {
       'UCNKmQkO1zhCwsIqqrh7pSAg',
       'UCfxHOPdVOVbp_xY7xCyNJzg',
       'UCSENXiaCkYVNv1n-vWrqsCw',
+      'UCZ30aWiMw5C8mGcESlAGQbA',
     ],
     [
       'UCOxWrX5MIdXIeRNaXC3sqIg',
@@ -72,8 +73,21 @@ const channels = {
       'UCVHFbqXqoYvEWM1Ddxl0QDg',
     ],
   ],
-  drama: [['UCKuwp52MjSk-zeFRpchSheg']],
-  food: [['UCyn-K7rZLXjGl7VXGweIlcA']],
+  drama: [
+    [
+      'UCKuwp52MjSk-zeFRpchSheg',
+      'UCWYzc_p0GgfCepIWDHGFmEg',
+      'UCsRIHt5FkbGc6cQtCxt-ufA',
+    ],
+  ],
+  food: [
+    [
+      'UCyn-K7rZLXjGl7VXGweIlcA',
+      'UCg-p3lQIqmhh7gHpyaOmOiQ',
+      'UCmtvRxm-nungnQ6fmltGbSA',
+      'UCKA_6r3CWC76x_EaFO6jsPA',
+    ],
+  ],
 }
 
 export default channels
