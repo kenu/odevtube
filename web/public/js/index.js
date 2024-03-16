@@ -31,9 +31,17 @@ function showChannel(name, customUrl) {
   document.getElementById('channelLink').innerHTML = html
 }
 
+function processHash() {
+  const hash = decodeURIComponent(location.hash).replace('#', '')
+  document.getElementById('keyword').value = hash
+  search()
+}
+
 window.onload = function () {
   document.getElementById('count').innerHTML =
-    document.querySelectorAll('li').length
+  document.querySelectorAll('li').length
+
+  processHash()
 
   const el = document.getElementById('keyword')
   el.addEventListener('keyup', search)
