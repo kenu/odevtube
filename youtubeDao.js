@@ -89,7 +89,7 @@ async function findOneByChannelId(channelId) {
 async function newList() {
   const list = await sequelize.query(
     `select y.videoId, y.title from Youtubes y
-    join channels c on y.ChannelId = c.id
+    join Channels c on y.ChannelId = c.id
     where DATE_SUB(NOW(), INTERVAL 1 HOUR) < y.createdAt
     and c.lang = 'ko'
     and c.category = 'dev'
