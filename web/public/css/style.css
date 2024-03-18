@@ -141,7 +141,14 @@ section#title {
   .github {
     font-size: medium;
   }
+  .search {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
 
+  .search input {
+    font-size: 1.2rem;
+  }
   .profile {
     width: 16px;
     vertical-align: bottom;
