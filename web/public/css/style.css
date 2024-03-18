@@ -14,7 +14,7 @@ h1 {
   background-color: #fffd;
   color: #fff;
   z-index: 1000;
-  font-size: 2.2rem;
+  font-size: 3.5rem;
 }
 
 ul {
@@ -82,11 +82,11 @@ a:hover {
   position: fixed;
   top: 0;
   right: 10px;
-  width: 210px;
   height: 30px;
   background-color: #f9f9f940;
   padding: 10px;
   z-index: 1001;
+  font-size: xx-large;
 }
 
 #count {
@@ -117,4 +117,13 @@ a:hover {
 
 .k {
   background-color: #fabe98;
+}
+
+section#title {
+  margin: 4rem 0 0;
+}
+
+#list li a {
+  overflow: hidden;
+  overflow-wrap: break-word;
 }

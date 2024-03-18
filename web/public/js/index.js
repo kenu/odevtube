@@ -39,7 +39,7 @@ function processHash() {
 
 window.onload = function () {
   document.getElementById('count').innerHTML =
-  document.querySelectorAll('li').length
+    document.querySelectorAll('li').length
 
   processHash()
 
