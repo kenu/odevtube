@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes } from 'sequelize'
+import { Sequelize, DataTypes, Op } from 'sequelize'
 const sequelize = new Sequelize(
   process.env.YOUDB_NAME || 'youtubedb',
   process.env.YOUDB_USER || 'devuser',
@@ -86,10 +86,27 @@ async function findOneByChannelId(channelId) {
   })
 }
 
+async function newList() {
+  const list = await sequelize.query(
+    `select y.videoId, y.title from youtubes y
+    join channels c on y.ChannelId = c.id
+    where DATE_SUB(NOW(), INTERVAL 1 HOUR) < y.createdAt
+    and c.lang = 'ko'
+    and c.category = 'dev'
+    limit 10;
+    `,
+    {
+      type: sequelize.QueryTypes.SELECT,
+    }
+  )
+  return list
+}
+
 export default {
   create,
   findOneByChannelId,
   findAll,
   createYoutube,
   findAllYoutube,
+  newList,
 }
