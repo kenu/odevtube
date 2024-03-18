@@ -80,7 +80,7 @@ a:hover {
 
 .github {
   position: fixed;
-  top: 0;
+  top: 1.2rem;
   right: 10px;
   height: 30px;
   background-color: #f9f9f940;
@@ -98,16 +98,24 @@ a:hover {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  height: 1.2em;
+}
+
+.search {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.search input {
+  font-size: 2rem;
 }
 
 .profile {
-  width: 16px;
+  width: 2em;
   vertical-align: bottom;
 }
 
 .channame {
-  font-size: 0.9em;
+  font-size: 1.9em;
   font-weight: 800;
 }
 
@@ -132,5 +140,15 @@ section#title {
   /* Desktop styles */
   .github {
     font-size: medium;
+  }
+
+  .profile {
+    width: 16px;
+    vertical-align: bottom;
+  }
+
+  .channame {
+    font-size: 0.9em;
+    font-weight: 800;
   }
 }
