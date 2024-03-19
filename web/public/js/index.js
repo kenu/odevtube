@@ -46,6 +46,23 @@ window.onload = function () {
   const el = document.getElementById('keyword')
   el.addEventListener('keyup', search)
 
+  // whole page event listener escape keyup clean keyword
+  document.addEventListener('keyup', function (e) {
+    if (e.key === 'Escape') {
+      const el = document.getElementById('keyword')
+      if (el.value) {
+        localStorage.setItem('keyword', el.value)
+        clearKeyword()
+      } else {
+        const keyword = localStorage.getItem('keyword')
+        if (keyword) {
+          el.value = keyword
+          search()
+        }
+      }
+    }
+  })
+
   if (localStorage?.getItem('font')) {
     changeFont()
   }
