@@ -58,6 +58,7 @@ const channels = {
       'UCTcTcjjVKOHBVlfj3YXHx5g',
       'UCfBvs0ZJdTA43NQrnI9imGA',
       'UCHbXBo1fQAg7j0D7HKKYHJg',
+      'UCiQzpvJdiKqOLQR-Izhsj2w',
     ],
     [
       'UCOxWrX5MIdXIeRNaXC3sqIg',
