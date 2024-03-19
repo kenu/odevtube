@@ -46,7 +46,7 @@ window.onload = function () {
   const el = document.getElementById('keyword')
   el.addEventListener('keyup', search)
 
-  if (localStorage.getItem('font')) {
+  if (localStorage?.getItem('font')) {
     changeFont()
   }
 
