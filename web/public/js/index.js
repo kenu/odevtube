@@ -62,35 +62,4 @@ window.onload = function () {
       }
     }
   })
-
-  if (localStorage?.getItem('font')) {
-    changeFont()
-  }
-
-  document.querySelector('h1+p').addEventListener('click', function () {
-    localStorage.setItem('font', localStorage.getItem('font') ? '' : 'true')
-    changeFont()
-  })
-
-  function changeFont() {
-    const font = new FontFace(
-      'KyoboHand',
-      'url(https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff)',
-      {}
-    )
-
-    if (localStorage.getItem('font')) {
-      font
-        .load()
-        .then(function (loadedFont) {
-          document.fonts.add(loadedFont)
-          document.body.style.fontFamily = 'KyoboHand, sans-serif'
-        })
-        .catch(function (error) {
-          console.error('Failed to load font:', error)
-        })
-    } else {
-      document.body.style.fontFamily = 'Roboto, Arial, sans-serif'
-    }
-  }
 }
