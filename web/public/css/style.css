@@ -1,5 +1,7 @@
+@import url('https://cdn.jsdelivr.net/gh/rivercory/rivercory/font.css');
+
 body {
-  font-family: 'Roboto', 'Arial', sans-serif;
+  font-family: 'SUIT-Regular', 'Arial', sans-serif;
   font-size: 0.95rem;
   margin: 0;
   padding: 3.1em 10%;
