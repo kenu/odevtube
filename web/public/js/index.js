@@ -34,7 +34,6 @@ function showChannel(name, customUrl) {
 function processHash() {
   const hash = decodeURIComponent(location.hash).replace('#', '')
   document.getElementById('keyword').value = hash
-  location.href += hash
   search()
 }
 
