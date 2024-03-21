@@ -8,6 +8,9 @@ async function getNewHourly() {
     return `https://youtu.be/${data.videoId} ${data.title}`
   })
   console.log(messages.join('\n'))
+  if (messages.length === 0) {
+    return
+  }
 
   const webhookUrl = process.env.WEBHOOK_DISCORD_MP4_URL
   const data = {
