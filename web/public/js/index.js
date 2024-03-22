@@ -38,6 +38,13 @@ function processHash() {
   search()
 }
 
+window.addEventListener('popstate', function (event) {
+  const hash = decodeURIComponent(location.hash).replace('#', '')
+  document.getElementById('channelLink').innerHTML = ''
+  document.getElementById('keyword').value = hash
+  search()
+})
+
 window.onload = function () {
   document.getElementById('count').innerHTML =
     document.querySelectorAll('li').length
