@@ -39,7 +39,7 @@ function processHash() {
 }
 
 window.addEventListener('popstate', function (event) {
-  const hash = decodeURIComponent(location.hash).replace('#', '')
+  const hash = decodeURIComponent(location.hash)?.replace('#', '')
   document.getElementById('channelLink').innerHTML = ''
   document.getElementById('keyword').value = hash
   search()
