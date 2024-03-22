@@ -33,7 +33,7 @@ function showChannel(name, customUrl) {
 }
 
 function processHash() {
-  const hash = decodeURIComponent(location.hash).replace('#', '')
+  const hash = decodeURIComponent(location.hash)?.replace('#', '')
   document.getElementById('keyword').value = hash
   search()
 }
