@@ -12,7 +12,6 @@
       <a href="javascript:window.scrollTo(0,0)">
         <%= title %>
       </a>
-      <span id="buymeacoffee"></span>
     </h1>
     <p>Welcome to <%= title %>
     </p>
@@ -20,7 +19,9 @@
   <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
   <a href="javascript:clearKeyword()">X</a>
   <span id="channelLink"></span>
-  <span id="count">0</span>
+  <span id="count">
+    <%= list.length %>
+  </span>
   <ul id="list">
     <% list.forEach(video=> { %>
     <li>
@@ -44,7 +45,7 @@
   </ul>
   <hr />
   <div id="buymac">
-  <a href="https://www.buymeacoffee.com/kenu"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=kenu&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
+    <a href="https://www.buymeacoffee.com/kenu"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=kenu&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
   </div>
   <% include ./aside.ejs %>
   <hr />

@@ -12,7 +12,6 @@
       <a href="javascript:window.scrollTo(0,0)">
         <%= title %>
       </a>
-      <span id="buymeacoffee"></span>
     </h1>
     <p>Welcome to <%= title %>
     </p>
@@ -20,7 +19,7 @@
   <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
   <a href="javascript:clearKeyword()">X</a>
   <span id="channelLink"></span>
-  <span id="count">0</span>
+  <span id="count"><%= list.length %></span>
   <ul id="list">
     <% list.forEach(video=> { %>
     <li>
