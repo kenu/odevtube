@@ -36,35 +36,47 @@ async function getLatestVideos(channelId) {
 channels['dev'][0].forEach(async (channelId) => {
   const videos = await getLatestVideos(channelId)
   const channel = await dao.findOneByChannelId(channelId)
-  videos?.forEach((data) => {
+  if (!channel) {
+    return
+  }
+  videos?.forEach(async (data) => {
     data.ChannelId = channel.id
-    dao.createYoutube(data)
+    await dao.createYoutube(data)
   })
 })
 
 channels['dev'][1].forEach(async (channelId) => {
   const videos = await getLatestVideos(channelId)
   const channel = await dao.findOneByChannelId(channelId)
-  videos?.forEach((data) => {
+  if (!channel) {
+    return
+  }
+  videos?.forEach(async (data) => {
     data.ChannelId = channel.id
-    dao.createYoutube(data)
+    await dao.createYoutube(data)
   })
 })
 
 channels['drama'][0].forEach(async (channelId) => {
   const videos = await getLatestVideos(channelId)
   const channel = await dao.findOneByChannelId(channelId)
-  videos?.forEach((data) => {
+  if (!channel) {
+    return
+  }
+  videos?.forEach(async (data) => {
     data.ChannelId = channel.id
-    dao.createYoutube(data)
+    await dao.createYoutube(data)
   })
 })
 
 channels['food'][0].forEach(async (channelId) => {
   const videos = await getLatestVideos(channelId)
   const channel = await dao.findOneByChannelId(channelId)
-  videos?.forEach((data) => {
+  if (!channel) {
+    return
+  }
+  videos?.forEach(async (data) => {
     data.ChannelId = channel.id
-    dao.createYoutube(data)
+    await dao.createYoutube(data)
   })
 })
