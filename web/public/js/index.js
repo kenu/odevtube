@@ -30,6 +30,7 @@ function showChannel(name, customUrl) {
   const html = `<a href="https://www.youtube.com/${customUrl}" target="_blank">➡️<em> ${name}</em></a>`
   document.getElementById('channelLink').innerHTML = html
   location.hash = name
+  wcs.event('showChannel', name)
 }
 
 function processHash() {
