@@ -91,6 +91,7 @@ const channels = {
       'UCDstQZHA9T8-ZP046R0KEXA',
       'UCEwkZIHGqsTGYvX8wgD0LoQ',
       'UCzoVCacndDCfGDf41P-z0iA',
+      'UC-T8W79DN6PBnzomelvqJYw',
     ],
   ],
   drama: [
