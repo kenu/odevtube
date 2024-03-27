@@ -31,6 +31,10 @@ function showChannel(name, customUrl) {
   document.getElementById('channelLink').innerHTML = html
   location.hash = name
   wcs.event('showChannel', name)
+  gtag('event', 'level_end', {
+    level_name: '시작됩니다...' + name,
+    success: true,
+  })
 }
 
 function processHash() {
