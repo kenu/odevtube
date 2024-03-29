@@ -54,7 +54,7 @@
   <hr />
 </body>
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y6RK1WT4L9"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=<%= process.env.YOUTUBE_GTAG %>"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
 
@@ -63,12 +63,12 @@
   }
   gtag('js', new Date());
 
-  gtag('config', 'G-Y6RK1WT4L9');
+  gtag('config', '<%= process.env.YOUTUBE_GTAG %>');
 </script>
 <script type="text/javascript" src="//wcs.naver.net/wcslog.js"></script>
 <script type="text/javascript">
   if (!wcs_add) var wcs_add = {};
-  wcs_add["wa"] = "7d6e896ff89240";
+  wcs_add["wa"] = "<%= process.env.YOUTUBE_WCS %>";
   if (window.wcs) {
     wcs_do();
   }
