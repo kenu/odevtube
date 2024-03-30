@@ -2,16 +2,16 @@
 
 body {
   font-family: 'SUIT-Regular', 'Arial', sans-serif;
-  font-size: 0.95rem;
+  font-size: 1.95rem;
   margin: 0;
-  padding: 3.1em 10%;
+  padding: 3.1em 2%;
 }
 
 h1 {
   position: fixed;
   top: 0;
   margin-top: 0;
-  left: 10%;
+  left: 0;
   width: 100%;
   background-color: #fffd;
   color: #fff;
@@ -60,7 +60,7 @@ a:hover {
   padding: 10px 0 20px;
   position: fixed;
   bottom: 0;
-  width: 80%;
+  width: 96%;
 }
 
 .top {
@@ -117,8 +117,7 @@ a:hover {
 }
 
 .channame {
-  font-size: 1.9em;
-  font-weight: 800;
+  font-size: 1.5em;
 }
 
 #buymac img {
@@ -138,8 +137,26 @@ section#title {
   overflow-wrap: break-word;
 }
 
+li {
+  position: relative;
+}
+
+li button.transcript {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  display: none;
+}
+
+/* Desktop styles */
 @media only screen and (min-width: 992px) {
-  /* Desktop styles */
+  body {
+    font-size: 0.95rem;
+    padding: 3.1em 10%;
+  }
+  h1 {
+    left: 10%;
+  }
   .github {
     font-size: medium;
   }
@@ -158,6 +175,6 @@ section#title {
 
   .channame {
     font-size: 0.9em;
-    font-weight: 800;
+    font-weight: 900;
   }
 }

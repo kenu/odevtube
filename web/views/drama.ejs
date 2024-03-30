@@ -23,55 +23,17 @@
     <%= list.length %>
   </span>
   <ul id="list">
-    <% list.forEach(video=> { %>
-    <li>
-      <div class="channel">
-        <a href="javascript:showChannel('<%= video.channame %>', '<%= video.customUrl %>')" alt="<%= video.channame %>">
-          <img src="<%= video.profile %>" title="<%= video.channame %>" class="profile" />
-          <span class="channame">
-            <%= video.channame %>
-          </span>
-        </a>
-      </div>
-      <img src="<%= video.thumbnail %>" title="<%= video.title %>" loading="lazy" />
-      <div style="margin: 3px 0">
-        <%= video.pubdate %>
-      </div>
-      <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>">
-        <%= video.title %>
-      </a>
-    </li>
+    <% list.forEach(video => { %>
+      <% include ./video.ejs %>
     <% }) %>
   </ul>
   <hr />
-  <div id="buymac">
-    <a href="https://www.buymeacoffee.com/kenu"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=kenu&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
-  </div>
   <% include ./aside.ejs %>
   <hr />
   <hr />
   <hr />
   <hr />
 </body>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=<%= process.env.YOUTUBE_GTAG %>"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag('js', new Date());
-
-  gtag('config', '<%= process.env.YOUTUBE_GTAG %>');
-</script>
-<script type="text/javascript" src="//wcs.naver.net/wcslog.js"></script>
-<script type="text/javascript">
-  if (!wcs_add) var wcs_add = {};
-  wcs_add["wa"] = "<%= process.env.YOUTUBE_WCS %>";
-  if (window.wcs) {
-    wcs_do();
-  }
-</script>
+<% include ./footer.ejs %>
 
 </html>
