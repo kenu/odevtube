@@ -4,6 +4,7 @@ function openModal() {
 
 function closeModal() {
   document.getElementById('mp4Modal').style.display = 'none'
+  document.getElementById('modalContent').innerText = 'Loading text ...'
 }
 
 document.querySelectorAll('.openModal').forEach(i => {

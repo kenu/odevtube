@@ -68,7 +68,7 @@ router.get('/transcript/:videoId', async function (req, res, next) {
     transcript = transcript.replaceAll(pattern, '$1. ')
     res.json({ text: transcript, videoId })
   } catch (error) {
-    res.json({ text: 'Not Found', videoId })
+    res.json({ text: 'Not Available', videoId })
   }
 })
 
