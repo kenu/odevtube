@@ -1,7 +1,7 @@
-const { YoutubeTranscript } = require('youtube-transcript')
+const fetchTranscript = require('../web/transcript.js')
 
-const videoId = 'u3j6IH5PFrE'
-YoutubeTranscript.fetchTranscript(videoId).then((d) => {
-  const textList = d.map((item) => item.text)
-  console.log(textList.join(' '))
+test('', async() => {
+  const videoId = 'u3j6IH5PFrE'
+  const transcript = await fetchTranscript(videoId)
+  console.log(transcript)
 })

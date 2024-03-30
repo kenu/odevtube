@@ -2,7 +2,7 @@
 
 body {
   font-family: 'SUIT-Regular', 'Arial', sans-serif;
-  font-size: 1.95rem;
+  font-size: 1.35rem;
   margin: 0;
   padding: 3.1em 2%;
 }
@@ -24,7 +24,7 @@ ul {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   grid-gap: 10px;
 }
 
