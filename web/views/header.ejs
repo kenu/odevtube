@@ -1,5 +1,7 @@
 <head>
-  <title><%= title %></title>
+  <title>
+    <%= title %>
+  </title>
   <meta property="og:title" content="<%= title %>" />
   <meta property="og:description" content="<%= title %>, <%= list.length %> movies" />
   <meta property="og:url" content="https://mp4.okdevtv.com/<%= uri %>" />
@@ -11,5 +13,13 @@
   <link rel="manifest" href="/favicon/site.webmanifest">
   <link rel='stylesheet' href='/css/style.css' />
   <script src="/js/index.js"></script>
+  <script src="/js/modal.js"></script>
   <script src="https://js.sentry-cdn.com/<%= process.env.YOUTUBE_SENTRY %>.min.js" crossorigin="anonymous"></script>
 </head>
+
+<div id="mp4Modal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+    <p>Loading text ...</p>
+  </div>
+</div>

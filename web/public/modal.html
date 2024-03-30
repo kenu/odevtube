@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modal Example</title>
+  <style>
+    /* 모달창 스타일 */
+    .modal {
+      display: none;
+      /* 초기 상태에서는 숨김 */
+      position: fixed;
+      z-index: 20;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* 모달창 콘텐츠 스타일 */
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <button class="openModal">Open Modal</button>
+
+  <div id="mp4Modal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <p>Some text in the Modal..</p>
+    </div>
+  </div>
+
+  <script src="/js/modal.js"></script>
+
+</body>
+
+</html>

@@ -60,8 +60,8 @@ window.onload = function () {
 
   processHash()
 
-  const el = document.getElementById('keyword')
-  el.addEventListener('keyup', search)
+  const keywordEl = document.getElementById('keyword')
+  keywordEl.addEventListener('keyup', search)
 
   // whole page event listener escape keyup clean keyword
   document.addEventListener('keyup', function (e) {
@@ -110,4 +110,13 @@ window.onload = function () {
       document.body.style.fontFamily = 'Roboto, Arial, sans-serif'
     }
   }
+  const transcript = document.querySelectorAll('.transcript')
+  transcript.forEach(function (e) {
+    e.addEventListener('click', function (v) {
+      openModal()
+      const videoId = v.target.dataset.vid
+      console.log('v ', videoId)
+    })
+  })
+  document.getElementById('closeModal').addEventListener('click', closeModal)
 }
