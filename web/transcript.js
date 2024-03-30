@@ -1,4 +1,4 @@
-const { YoutubeTranscript } = require('youtube-transcript')
+import { YoutubeTranscript } from 'youtube-transcript'
 
 async function fetchTranscript(videoId) {
   const response = await YoutubeTranscript.fetchTranscript(videoId)
@@ -6,6 +6,4 @@ async function fetchTranscript(videoId) {
   return textList.join(' ')
 }
 
-module.exports = fetchTranscript
-module.exports.fetchTranscript = fetchTranscript
-module.exports.default = fetchTranscript
+export default fetchTranscript
