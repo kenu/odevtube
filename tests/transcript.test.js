@@ -1,7 +1,7 @@
-const fetchTranscript = require('../web/transcript.js')
+const fetchTranscript = require('./transcript.js')
 
 test('', async() => {
-  const videoId = 'u3j6IH5PFrE'
+  const videoId = '4Z8qAzlnue8'
   const transcript = await fetchTranscript(videoId)
   console.log(transcript)
 })
