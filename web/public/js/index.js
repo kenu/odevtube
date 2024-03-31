@@ -123,5 +123,5 @@ window.onload = function () {
         })
     })
   })
-  document.getElementById('closeModal').addEventListener('click', closeModal)
+  document.getElementById('closeModal')?.addEventListener('click', closeModal)
 }
