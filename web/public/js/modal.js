@@ -8,7 +8,6 @@ function closeModal() {
 }
 
 document.querySelectorAll('.openModal').forEach(i => {
-  console.log('open')
   i.addEventListener('click', openModal)
 })
 

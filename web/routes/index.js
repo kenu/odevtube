@@ -63,7 +63,7 @@ import fetchTranscript from '../transcript.js'
 router.get('/transcript/:videoId', async function (req, res, next) {
   const videoId = req.params.videoId
   try {
-    const pattern = /(니다|네요|세요|어요)\s/g
+    const pattern = /(니다|하죠|네요|세요|어요|고요)\s/g
     let transcript = await fetchTranscript(videoId)
     transcript = transcript.replaceAll(pattern, '$1. ')
     res.json({ text: transcript, videoId })

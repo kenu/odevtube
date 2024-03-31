@@ -115,7 +115,6 @@ window.onload = function () {
     e.addEventListener('click', function (v) {
       openModal()
       const videoId = v.target.dataset.vid
-      console.log('v ', videoId)
       const url = '/transcript/' + videoId
       fetch(url)
         .then((res) => res.json())
