@@ -123,8 +123,8 @@ window.onload = function () {
   document.getElementById('closeModal')?.addEventListener('click', closeModal)
   document
     .getElementById('clipboardBtn')
-    .addEventListener('click', copyTranscript)
+    ?.addEventListener('click', copyTranscript)
   document
     .getElementById('modalContent')
-    .addEventListener('dblclick', copyTranscript)
+    ?.addEventListener('dblclick', copyTranscript)
 }
