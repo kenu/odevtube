@@ -55,9 +55,6 @@ window.addEventListener('popstate', function (event) {
 })
 
 window.onload = function () {
-  document.getElementById('count').innerHTML =
-    document.querySelectorAll('li').length
-
   processHash()
 
   const keywordEl = document.getElementById('keyword')
@@ -124,4 +121,10 @@ window.onload = function () {
     })
   })
   document.getElementById('closeModal')?.addEventListener('click', closeModal)
+  document
+    .getElementById('clipboardBtn')
+    .addEventListener('click', copyTranscript)
+  document
+    .getElementById('modalContent')
+    .addEventListener('dblclick', copyTranscript)
 }

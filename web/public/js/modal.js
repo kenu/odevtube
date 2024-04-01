@@ -17,3 +17,9 @@ window.onclick = function (event) {
     closeModal()
   }
 }
+
+function copyTranscript() {
+  const text = document.getElementById('modalContent').innerText
+  navigator.clipboard.writeText(text)
+  alert('클립보드에 복사되었습니다.')
+}

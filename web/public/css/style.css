@@ -163,11 +163,17 @@ li button.transcript {
 
 /* 모달창 콘텐츠 스타일 */
 .modal-content {
+  position: relative;
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
+}
+
+.clipboard-icon {
+  position: absolute;
+  right: 2rem;
 }
 
 /* Desktop styles */
