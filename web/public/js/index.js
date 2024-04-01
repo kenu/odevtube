@@ -1,6 +1,6 @@
 let repo = ''
 function search() {
-  const keyword = document.getElementById('keyword').value.toLowerCase()
+  const keyword = keywordEl.value.toLowerCase()
   if (!repo) {
     repo = document.querySelectorAll('li')
   }
@@ -18,13 +18,13 @@ function search() {
 }
 
 function clearKeyword() {
-  document.getElementById('keyword').value = ''
+  keywordEl.value = ''
   document.getElementById('channelLink').innerHTML = ''
   search()
 }
 
 function showChannel(name, customUrl) {
-  document.getElementById('keyword').value = name
+  keywordEl.value = name
   search()
   window.scrollTo(0, 0)
   const html = `<a href="https://www.youtube.com/${customUrl}" target="_blank">➡️<em> ${name}</em></a>`
@@ -39,41 +39,33 @@ function showChannel(name, customUrl) {
 
 function processHash() {
   const hash = decodeURIComponent(location.hash)?.replace('#', '')
-  document.getElementById('keyword').value = hash
+  keywordEl.value = hash
   search()
 }
 
 window.addEventListener('popstate', function (event) {
   const hash = decodeURIComponent(location.hash)?.replace('#', '')
   if (hash) {
-    document.getElementById('keyword').value = hash
+    keywordEl.value = hash
   } else {
     document.getElementById('channelLink').innerHTML = ''
-    document.getElementById('keyword').value = ''
+    keywordEl.value = ''
   }
   search()
 })
-
+// global element
+let keywordEl;
 window.onload = function () {
+  keywordEl = document.getElementById('keyword')
+
   processHash()
 
-  const keywordEl = document.getElementById('keyword')
   keywordEl.addEventListener('keyup', search)
 
   // whole page event listener escape keyup clean keyword
   document.addEventListener('keyup', function (e) {
     if (e.key === 'Escape') {
-      const el = document.getElementById('keyword')
-      if (el.value) {
-        localStorage.setItem('keyword', el.value)
-        clearKeyword()
-      } else {
-        const keyword = localStorage.getItem('keyword')
-        if (keyword) {
-          el.value = keyword
-          search()
-        }
-      }
+      clearKeyword()
     }
   })
 
