@@ -5,7 +5,7 @@ import channels from './channels.js'
 async function getLatestVideos(channelId) {
   try {
     const response = await youtube.activities.list({
-      channelId: channelId,
+      channelId,
       maxResults: 50, // 가져올 동영상의 최대 수
       order: 'date', // 최신 순으로 정렬
       part: 'snippet,contentDetails', // 필요한 정보를 지정합니다.
