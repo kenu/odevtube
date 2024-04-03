@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "nodemon ./bin/youtb.js"
+    "dev": "nodemon ./bin/youtube.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
