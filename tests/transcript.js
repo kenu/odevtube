@@ -6,4 +6,4 @@ async function fetchTranscript(videoId) {
   return textList.join(' ')
 }
 
-co fetchTranscript
+fetchTranscript()
