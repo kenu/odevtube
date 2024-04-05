@@ -9,8 +9,10 @@
   </div>
   <img src="<%= video.thumbnail %>" title="<%= video.title %>" loading="lazy" />
   <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>">
-    <div><%= video.pubdate %></div>
+    <div>
+      <%= video.pubdate %>
+    </div>
     <%= video.title %>
   </a>
-  <button class="transcript" data-vid="<%= video.videoId %>">transcript</button>
+  <button class="transcript" onclick="openTranscript('<%= video.videoId %>')">transcript</button>
 </li>

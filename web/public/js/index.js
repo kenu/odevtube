@@ -54,7 +54,7 @@ window.addEventListener('popstate', function (event) {
   search()
 })
 // global element
-let keywordEl;
+let keywordEl
 window.onload = function () {
   keywordEl = document.getElementById('keyword')
 
@@ -78,40 +78,6 @@ window.onload = function () {
     changeFont()
   })
 
-  function changeFont() {
-    const font = new FontFace(
-      'KyoboHand',
-      'url(https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff)',
-      {}
-    )
-
-    if (localStorage.getItem('font')) {
-      font
-        .load()
-        .then(function (loadedFont) {
-          document.fonts.add(loadedFont)
-          document.body.style.fontFamily = 'KyoboHand, sans-serif'
-        })
-        .catch(function (error) {
-          console.error('Failed to load font:', error)
-        })
-    } else {
-      document.body.style.fontFamily = 'Roboto, Arial, sans-serif'
-    }
-  }
-  const transcript = document.querySelectorAll('.transcript')
-  transcript.forEach(function (e) {
-    e.addEventListener('click', function (v) {
-      openModal()
-      const videoId = v.target.dataset.vid
-      const url = '/transcript/' + videoId
-      fetch(url)
-        .then((res) => res.json())
-        .then((res) => {
-          document.getElementById('modalContent').innerHTML = res.text
-        })
-    })
-  })
   document.getElementById('closeModal')?.addEventListener('click', closeModal)
   document
     .getElementById('clipboardBtn')
@@ -119,4 +85,37 @@ window.onload = function () {
   document
     .getElementById('modalContent')
     ?.addEventListener('dblclick', copyTranscript)
+}
+
+function openTranscript(v) {
+  openModal()
+  const videoId = v
+  const url = '/transcript/' + videoId
+  fetch(url)
+    .then((res) => res.json())
+    .then((res) => {
+      document.getElementById('modalContent').innerHTML = res.text
+    })
+}
+
+function changeFont() {
+  const font = new FontFace(
+    'KyoboHand',
+    'url(https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/KyoboHand.woff)',
+    {}
+  )
+
+  if (localStorage.getItem('font')) {
+    font
+      .load()
+      .then(function (loadedFont) {
+        document.fonts.add(loadedFont)
+        document.body.style.fontFamily = 'KyoboHand, sans-serif'
+      })
+      .catch(function (error) {
+        console.error('Failed to load font:', error)
+      })
+  } else {
+    document.body.style.fontFamily = 'Roboto, Arial, sans-serif'
+  }
 }
