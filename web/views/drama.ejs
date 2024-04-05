@@ -3,37 +3,32 @@
 
 <% include ./header.ejs %>
 
-<body>
-  <section id="title">
-    <h1 style="padding: 0.5rem">
-      <a href="https://okdevtv.com/" alt="okdevtv">
-        <img src="https://okdevtv.com/images/logo.webp" title="okdevtv" class="okdevtv-logo" />
-      </a>
-      <a href="javascript:window.scrollTo(0,0)">
-        <%= title %>
-      </a>
-    </h1>
-    <p>Welcome to <%= title %>
-    </p>
-  </section>
-  <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
-  <a href="javascript:clearKeyword()">X</a>
-  <span id="channelLink"></span>
-  <span id="count">
-    <%= list.length %>
-  </span>
-  <ul id="list">
-    <% list.forEach(video => { %>
-      <% include ./video.ejs %>
-    <% }) %>
-  </ul>
-  <hr />
-  <% include ./aside.ejs %>
-  <hr />
-  <hr />
-  <hr />
-  <hr />
-</body>
-<% include ./footer.ejs %>
+  <body>
+    <section id="title">
+      <h1 style="padding: 0.5rem">
+        <a href="https://okdevtv.com/" alt="okdevtv">
+          <img src="https://okdevtv.com/images/logo.webp" title="okdevtv" class="okdevtv-logo" />
+        </a>
+        <a href="javascript:window.scrollTo(0,0)">
+          <%= title %>
+        </a>
+      </h1>
+      <p>Welcome to <%= title %>
+      </p>
+    </section>
+<% include ./search.ejs %>
+    <ul id="list">
+      <% list.forEach(video=> { %>
+        <% include ./video.ejs %>
+          <% }) %>
+    </ul>
+    <hr />
+    <% include ./aside.ejs %>
+      <hr />
+      <hr />
+      <hr />
+      <hr />
+  </body>
+  <% include ./footer.ejs %>
 
 </html>

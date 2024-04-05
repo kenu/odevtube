@@ -16,12 +16,7 @@
     <p>Welcome to <%= title %>
     </p>
   </section>
-  <section class="search">
-    <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
-    <a href="javascript:clearKeyword()">X</a>
-    <span id="channelLink"></span>
-    <span id="count"><%= list.length %></span>
-  </section>
+<% include ./search.ejs %>
   <ul id="list">
     <% list.forEach(video => { %>
       <% include ./video.ejs %>

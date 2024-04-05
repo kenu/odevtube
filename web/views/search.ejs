@@ -1,0 +1,56 @@
+<section class="search">
+  <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
+  <button onclick="clearKeyword()">X</button>
+  <span id="channelLink"></span>
+  <span id="count">
+    <%= list.length %>
+  </span>
+  <tags class="hash-list">
+  <% hashList.forEach(h => { %>
+    <a href="#<%= h %>">#<%= h %></a>
+  <% }) %>
+  </tags>
+</section>
+<style>
+  /* Desktop */
+  @media (min-width: 768px) {
+    .search {
+      display: flex;
+      align-items: center;
+    }
+
+    .search #keyword {
+      flex-grow: 1;
+    }
+
+    .search .hash-list {
+      margin-left: 10px;
+    }
+
+    .search .hash-list a {
+      display: inline-block;
+      margin-right: 5px;
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 767px) {
+    .search {
+      display: block;
+    }
+
+    .search #keyword {
+      width: 100%;
+    }
+
+    .search .hash-list {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .search .hash-list a {
+      display: inline-block;
+      margin-right: 5px;
+    }
+  }
+</style>

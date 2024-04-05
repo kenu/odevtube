@@ -8,33 +8,39 @@ const router = express.Router()
 router.get('/', async function (req, res, next) {
   const list = await dao.findAllYoutube()
   building(list)
+  const hashList = ['멍슨상', 'spring', 'rust']
   res.render('index', {
     title: '개발 관련 유튜브',
     list,
     locale: 'ko_KR',
     uri: '',
+    hashList,
   })
 })
 
 router.get('/en', async function (req, res, next) {
   const list = await dao.findAllYoutube('dev', 'en')
   building(list)
+  const hashList = ['tutorial', 'spring', 'rust']
   res.render('index', {
     title: 'YouTube for Developers',
     list,
     locale: 'en_US',
     uri: 'en',
+    hashList,
   })
 })
 
 router.get('/drama', async function (req, res, next) {
   const list = await dao.findAllYoutube('drama')
   building(list)
+  const hashList = ['아파트404', '나빌레라', '선공개']
   res.render('drama', {
     title: '드라마 관련 유튜브',
     list,
     locale: 'ko_KR',
     uri: 'drama',
+    hashList,
   })
 })
 
