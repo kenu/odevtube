@@ -47,11 +47,13 @@ router.get('/drama', async function (req, res, next) {
 router.get('/food', async function (req, res, next) {
   const list = await dao.findAllYoutube('food')
   building(list)
+  const hashList = ['시장', '백종원', '간식']
   res.render('food', {
     title: '요리 관련 유튜브',
     list,
     locale: 'ko_KR',
     uri: 'food',
+    hashList,
   })
 })
 
