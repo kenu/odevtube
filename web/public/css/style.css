@@ -2,7 +2,6 @@
 
 body {
   font-family: 'SUIT-Regular', 'Arial', sans-serif;
-  font-size: 1.2rem;
   margin: 0;
   padding: 3.1em 2%;
 }
@@ -16,7 +15,6 @@ h1 {
   background-color: #fffd;
   color: #fff;
   z-index: 10;
-  font-size: 3.5rem;
 }
 
 ul {
@@ -88,7 +86,6 @@ a:hover {
   background-color: #f9f9f940;
   padding: 10px;
   z-index: 11;
-  font-size: 3.5rem;
 }
 
 #count {
@@ -185,30 +182,22 @@ li button.transcript {
 /* Desktop styles */
 @media only screen and (min-width: 768px) {
   body {
-    font-size: 1.05rem;
     padding: 3.1em 0.5rem;
   }
   h1 {
     left: 10%;
   }
-  .github {
-    font-size: medium;
-  }
+
   .search {
-    font-size: 1.2rem;
     margin-bottom: 1rem;
   }
 
-  .search input {
-    font-size: 1.2rem;
-  }
   .profile {
     width: 16px;
     vertical-align: bottom;
   }
 
   .channame {
-    font-size: 0.9em;
     font-weight: 900;
   }
   .search {
