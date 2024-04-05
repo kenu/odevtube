@@ -2,7 +2,7 @@
 
 body {
   font-size: x-large;
-  font-family: 'D2Coding', 'Arial', sans-serif;
+  font-family: 'Pretendard SemiBold', 'Arial', sans-serif;
   margin: 0;
   padding: 3.1em 0.2rem;
 }
@@ -202,6 +202,7 @@ li button.transcript {
   }
 
   .channame {
+    font-size: larger;
     font-weight: 900;
   }
 
@@ -226,5 +227,9 @@ li button.transcript {
 
   ul {
     grid-template-columns: repeat(auto-fill, minmax(240px, 2fr));
+  }
+
+  li a {
+    font-size: medium;
   }
 }
