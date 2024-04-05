@@ -19,6 +19,7 @@ function search() {
 
 function clearKeyword() {
   keywordEl.value = ''
+  location.hash = ''
   document.getElementById('channelLink').innerHTML = ''
   search()
 }
