@@ -45,9 +45,11 @@ async function goRenderPage(res, uri, lang, title, hashList) {
   const locale = lang === 'en'? 'en_US' : 'ko_KR'
   const list = await dao.findAllYoutube(uri, lang)
   building(list)
+  const flist = list.slice(0, 300)
   res.render('index', {
     title,
     list,
+    flist,
     locale,
     uri,
     hashList,
