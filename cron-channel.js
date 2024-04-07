@@ -49,3 +49,10 @@ channels['food'][0].forEach(async (channelId) => {
   data.lang = 'ko'
   await dao.create(data)
 })
+
+channels['kpop'][0].forEach(async (channelId) => {
+  const data = await getChannelInfo(channelId)
+  data.category = 'kpop'
+  data.lang = 'ko'
+  await dao.create(data)
+})

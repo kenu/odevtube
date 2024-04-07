@@ -21,6 +21,13 @@ const channels = {
       'UCg-p3lQIqmhh7gHpyaOmOiQ',
     ],
   ],
+  kpop: [
+    [
+      'UCe52oeb7Xv_KaJsEzcKXJJg',
+      'UCaO6TYtlC8U5ttz62hTrZgg',
+      'UC3IZKseVpdzPSBaWxBxundA',
+    ]
+  ]
 }
 
 export default channels

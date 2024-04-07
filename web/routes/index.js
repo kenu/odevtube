@@ -57,6 +57,19 @@ router.get('/food', async function (req, res, next) {
   })
 })
 
+router.get('/kpop', async function (req, res, next) {
+  const list = await dao.findAllYoutube('kpop')
+  building(list)
+  const hashList = ['M/V', '백종원', '간식']
+  res.render('kpop', {
+    title: 'K-POP YouTube Videos',
+    list,
+    locale: 'ko_KR',
+    uri: 'kpop',
+    hashList,
+  })
+})
+
 function building(list) {
   list.forEach((item) => {
     item.pubdate = dayjs(item.publishedAt).format('YYYY-MM-DD')
