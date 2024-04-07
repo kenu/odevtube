@@ -60,7 +60,7 @@ router.get('/food', async function (req, res, next) {
 router.get('/kpop', async function (req, res, next) {
   const list = await dao.findAllYoutube('kpop')
   building(list)
-  const hashList = ['M/V', '백종원', '간식']
+  const hashList = ['M/V', 'Official', '벚꽃 엔딩']
   res.render('kpop', {
     title: 'K-POP YouTube Videos',
     list,
