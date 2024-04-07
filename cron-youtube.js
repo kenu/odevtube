@@ -80,3 +80,15 @@ channels['food'][0].forEach(async (channelId) => {
     await dao.createYoutube(data)
   })
 })
+
+channels['kpop'][0].forEach(async (channelId) => {
+  const videos = await getLatestVideos(channelId)
+  const channel = await dao.findOneByChannelId(channelId)
+  if (!channel) {
+    return
+  }
+  videos?.forEach(async (data) => {
+    data.ChannelId = channel.id
+    await dao.createYoutube(data)
+  })
+})
