@@ -8,72 +8,42 @@ router.get('/', async function (req, res, next) {
   const uri = 'dev'
   const hashList = ['멍슨상', 'spring', 'rust']
   const title = '개발 관련 유튜브'
-  const locale = 'ko_KR'
-  const list = await dao.findAllYoutube(uri, 'ko')
-  building(list)
-  res.render('index', {
-    title,
-    list,
-    locale,
-    uri,
-    hashList,
-  })
+  const lang = 'ko'
+  await goRenderPage(res, uri, lang, title, hashList)
 })
 
 router.get('/en', async function (req, res, next) {
   const uri = 'dev'
   const hashList = ['tutorial', 'spring', 'rust']
   const title = 'YouTube for Developers'
-  const locale = 'en_US'
-  const list = await dao.findAllYoutube(uri, 'en')
-  building(list)
-  res.render('index', {
-    title,
-    list,
-    locale,
-    uri,
-    hashList,
-  })
+  const lang = 'en'
+  await goRenderPage(res, uri, lang, title, hashList)
 })
 
 router.get('/drama', async function (req, res, next) {
   const uri = 'drama'
   const hashList = ['아파트404', '나빌레라', '선공개']
   const title = '드라마 관련 유튜브'
-  const locale = 'ko_KR'
-  const list = await dao.findAllYoutube(uri)
-  building(list)
-  res.render('index', {
-    title,
-    list,
-    locale,
-    uri,
-    hashList,
-  })
+  await goRenderPage(res, uri, '', title, hashList)
 })
 
 router.get('/food', async function (req, res, next) {
   const uri = 'food'
   const hashList = ['시장', '백종원', '간식']
   const title = '요리 관련 유튜브'
-  const locale = 'ko_KR'
-  const list = await dao.findAllYoutube(uri)
-  building(list)
-  res.render('index', {
-    title,
-    list,
-    locale,
-    uri,
-    hashList,
-  })
+  await goRenderPage(res, uri, '', title, hashList)
 })
 
 router.get('/kpop', async function (req, res, next) {
   const uri = 'kpop'
   const hashList = ['M/V', 'Official', 'ILLIT']
   const title = 'K-POP YouTube Videos'
-  const locale = 'ko_KR'
-  const list = await dao.findAllYoutube(uri)
+  await goRenderPage(res, uri, '', title, hashList)
+})
+
+async function goRenderPage(res, uri, lang, title, hashList) {
+  const locale = lang === 'en'? 'en_US' : 'ko_KR'
+  const list = await dao.findAllYoutube(uri, lang)
   building(list)
   res.render('index', {
     title,
@@ -82,7 +52,7 @@ router.get('/kpop', async function (req, res, next) {
     uri,
     hashList,
   })
-})
+}
 
 function building(list) {
   list.forEach((item) => {

@@ -16,10 +16,15 @@
     <p>Welcome to <%= title %>
     </p>
   </section>
-<% include ./search.ejs %>
+  <% include ./search.ejs %>
+  <% if (uri === 'kpop' ) { %>
+  <section style="background-color: #FABE98; margin-bottom: 2.2rem; padding: 0.45rem;">
+    ➡️ <a href="https://www.youtube.com/playlist?list=PLQu3_HfiL3GQnaFfT7CAfrWMyhoWL7khJ" title="2022 교차편집 모음 (2022 Stage mix playlist)" style="padding-left: 1rem;">2022 교차편집 모음 (2022 Stage mix playlist)</a>
+  </section>
+  <% } %>
   <ul id="list">
-    <% list.forEach(video => { %>
-      <% include ./video.ejs %>
+    <% list.forEach(video=> { %>
+    <% include ./video.ejs %>
     <% }) %>
   </ul>
   <hr />
@@ -30,4 +35,5 @@
   <hr />
 </body>
 <% include ./footer.ejs %>
+
 </html>
