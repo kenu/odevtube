@@ -131,6 +131,7 @@ li {
 }
 
 li button.transcript {
+  display: none; /* not available now */
   position: absolute;
   bottom: 6px;
   right: 10px;
