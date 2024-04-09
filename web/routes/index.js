@@ -6,54 +6,57 @@ const router = express.Router()
 
 router.get('/', async function (req, res, next) {
   const uri = 'dev'
-  const hashList = ['멍슨상', 'spring', 'rust']
   const title = '개발 관련 유튜브'
-  const lang = 'ko'
-  await goRenderPage(res, uri, lang, title, hashList)
+  const hashList = ['멍슨상', 'spring', 'rust']
+  const isApi = req.query.a === '1'
+  await goRenderPage(res, uri, '', title, hashList, isApi)
 })
 
 router.get('/en', async function (req, res, next) {
   const uri = 'dev'
-  const hashList = ['tutorial', 'spring', 'rust']
   const title = 'YouTube for Developers'
+  const hashList = ['tutorial', 'spring', 'rust']
   const lang = 'en'
   await goRenderPage(res, uri, lang, title, hashList)
 })
 
 router.get('/drama', async function (req, res, next) {
   const uri = 'drama'
-  const hashList = ['아파트404', '나빌레라', '선공개']
   const title = '드라마 관련 유튜브'
+  const hashList = ['아파트404', '나빌레라', '선공개']
   await goRenderPage(res, uri, '', title, hashList)
 })
 
 router.get('/food', async function (req, res, next) {
   const uri = 'food'
-  const hashList = ['시장', '백종원', '간식']
   const title = '요리 관련 유튜브'
+  const hashList = ['시장', '백종원', '간식']
   await goRenderPage(res, uri, '', title, hashList)
 })
 
 router.get('/kpop', async function (req, res, next) {
   const uri = 'kpop'
-  const hashList = ['M/V', 'Official', 'ILLIT']
   const title = 'K-POP YouTube Videos'
+  const hashList = ['M/V', 'Official', 'ILLIT', 'BTS']
   await goRenderPage(res, uri, '', title, hashList)
 })
 
-async function goRenderPage(res, uri, lang, title, hashList) {
-  const locale = lang === 'en'? 'en_US' : 'ko_KR'
+async function goRenderPage(res, uri, lang, title, hashList, isApi = false) {
+  const locale = lang === 'en' ? 'en_US' : 'ko_KR'
   const list = await dao.findAllYoutube(uri, lang)
   building(list)
-  const flist = list.slice(0, 300)
-  res.render('index', {
-    title,
-    list,
-    flist,
-    locale,
-    uri,
-    hashList,
-  })
+  if (isApi) {
+    res.json(list)
+  } else {
+    res.render('index', {
+      title,
+      list,
+      flist: list.slice(0, 300),
+      locale,
+      uri,
+      hashList,
+    })
+  }
 }
 
 function building(list) {
@@ -62,7 +65,11 @@ function building(list) {
     item.profile = item.Channel.dataValues.thumbnail
     item.channame = item.Channel.dataValues.title
     item.customUrl = item.Channel.dataValues.customUrl
-    delete item.Channel
+    delete item.dataValues.id
+    delete item.dataValues.Channel
+    delete item.dataValues.ChannelId
+    delete item.dataValues.createdAt
+    delete item.dataValues.updatedAt
   })
 }
 
