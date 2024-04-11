@@ -4,3 +4,6 @@ package-lock.json
 pnpm-lock.yaml
 *.local
 a.json
+coverage
+sonar-project.*
+.scannerwork
