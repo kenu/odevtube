@@ -1,10 +1,10 @@
-name: Build
+name: Build node.js
 on:
- push:
-   branches:
-     - main
- pull_request:
-   types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - mains
+  pull_request:
+    # types: [opened, synchronize, reopened]
 jobs:
   sonarqube:
     name: sonarqube
