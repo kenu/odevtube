@@ -33,6 +33,7 @@ li {
   border-radius: 3%;
   padding: 6px 10px 10px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 img {
@@ -100,10 +101,6 @@ a:hover {
   white-space: nowrap;
 }
 
-.search {
-  margin-bottom: 1rem;
-}
-
 .profile {
   width: 2rem;
   vertical-align: bottom;
@@ -124,10 +121,6 @@ section#title {
 #list li a {
   overflow: hidden;
   overflow-wrap: break-word;
-}
-
-li {
-  position: relative;
 }
 
 li button.transcript {
@@ -165,6 +158,7 @@ li button.transcript {
 
 .search {
   display: block;
+  margin-bottom: 1rem;
 }
 
 .search #keyword {
@@ -193,10 +187,6 @@ li button.transcript {
     left: 10%;
   }
 
-  .search {
-    margin-bottom: 1rem;
-  }
-
   .profile {
     width: 1.4rem;
     vertical-align: bottom;
@@ -208,6 +198,7 @@ li button.transcript {
   }
 
   .search {
+    margin-bottom: 1rem;
     display: flex;
     align-items: center;
   }

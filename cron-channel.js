@@ -6,7 +6,7 @@ async function getChannelInfo(channelId) {
   try {
     const response = await youtube.channels.list({
       id: channelId,
-      part: 'snippet,contentDetails', // 필요한 정보를 지정합니다.
+      part: 'snippet,contentDetails',
     })
     const items = response.data.items[0]
     const data = {
@@ -21,38 +21,18 @@ async function getChannelInfo(channelId) {
   }
 }
 
-// 채널 ID를 입력하여 실행합니다.
-channels['dev'][0].forEach(async (channelId) => {
-  const data = await getChannelInfo(channelId)
-  data.category = 'dev'
-  data.lang = 'ko'
-  await dao.create(data)
-})
+async function processChannels(category, lang, channelIndex) {
+  const channelsList = channels[category][channelIndex]
+  for (const channelId of channelsList) {
+    const data = await getChannelInfo(channelId)
+    data.category = category
+    data.lang = lang
+    await dao.create(data)
+  }
+}
 
-channels['dev'][1].forEach(async (channelId) => {
-  const data = await getChannelInfo(channelId)
-  data.category = 'dev'
-  data.lang = 'en'
-  await dao.create(data)
-})
-
-channels['drama'][0].forEach(async (channelId) => {
-  const data = await getChannelInfo(channelId)
-  data.category = 'drama'
-  data.lang = 'ko'
-  await dao.create(data)
-})
-
-channels['food'][0].forEach(async (channelId) => {
-  const data = await getChannelInfo(channelId)
-  data.category = 'food'
-  data.lang = 'ko'
-  await dao.create(data)
-})
-
-channels['kpop'][0].forEach(async (channelId) => {
-  const data = await getChannelInfo(channelId)
-  data.category = 'kpop'
-  data.lang = 'ko'
-  await dao.create(data)
-})
+processChannels('dev', 'ko', 0)
+processChannels('dev', 'en', 1)
+processChannels('drama', 'ko', 0)
+processChannels('food', 'ko', 0)
+processChannels('kpop', 'ko', 0)

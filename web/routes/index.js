@@ -17,28 +17,32 @@ router.get('/en', async function (req, res, next) {
   const title = 'YouTube for Developers'
   const hashList = ['tutorial', 'spring', 'rust']
   const lang = 'en'
-  await goRenderPage(res, uri, lang, title, hashList)
+  const isApi = req.query.a === '1'
+  await goRenderPage(res, uri, lang, title, hashList, isApi)
 })
 
 router.get('/drama', async function (req, res, next) {
   const uri = 'drama'
   const title = '드라마 관련 유튜브'
   const hashList = ['아파트404', '나빌레라', '선공개']
-  await goRenderPage(res, uri, '', title, hashList)
+  const isApi = req.query.a === '1'
+  await goRenderPage(res, uri, '', title, hashList, isApi)
 })
 
 router.get('/food', async function (req, res, next) {
   const uri = 'food'
   const title = '요리 관련 유튜브'
   const hashList = ['시장', '백종원', '간식']
-  await goRenderPage(res, uri, '', title, hashList)
+  const isApi = req.query.a === '1'
+  await goRenderPage(res, uri, '', title, hashList, isApi)
 })
 
 router.get('/kpop', async function (req, res, next) {
   const uri = 'kpop'
   const title = 'K-POP YouTube Videos'
   const hashList = ['M/V', 'Official', 'ILLIT', 'BTS']
-  await goRenderPage(res, uri, '', title, hashList)
+  const isApi = req.query.a === '1'
+  await goRenderPage(res, uri, '', title, hashList, isApi)
 })
 
 async function goRenderPage(res, uri, lang, title, hashList, isApi = false) {
