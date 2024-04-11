@@ -1,4 +1,4 @@
-const fetchTranscript = require('./transcript.js')
+import fetchTranscript from '../web/transcript.js'
 
 test('', async() => {
   const videoId = '4Z8qAzlnue8'

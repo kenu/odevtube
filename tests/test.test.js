@@ -1,4 +1,4 @@
-const youtube = require('./youtub')
+import youtube from '../youtube.js'
 
 describe('test', () => {
   it('test', () => {
@@ -22,7 +22,7 @@ describe('get channel info by id', () => {
     const channelInfo = await getChannelInfo(channelId)
     expect(channelInfo.title).toBe('프로그래머 김플 스튜디오')
     expect(channelInfo.thumbnail).toBe(
-      'https://yt3.ggpht.com/SrCeLz3yIf5kVvXOZz8VzenrpyYOIolN9xAdyQI9X6G-_JhiGKqR0nRQ_OcaK5c5cYkyeA0OFQ=s800-c-k-c0x00ffffff-no-rj'
+      'https://yt3.ggpht.com/SrCeLz3yIf5kVvXOZz8VzenrpyYOIolN9xAdyQI9X6G-_JhiGKqR0nRQ_OcaK5c5cYkyeA0OFQ=s240-c-k-c0x00ffffff-no-rj'
     )
   })
 })
@@ -31,7 +31,7 @@ async function getChannelInfo(channelId) {
   try {
     const response = await youtube.channels.list({
       id: channelId,
-      part: 'snippet,contentDetails', // 필요한 정보를 지정합니다.
+      part: 'snippet,contentDetails',
     })
     const items = response.data.items[0]
     const data = {

@@ -1,5 +1,8 @@
 {
   "type": "module",
+  "scripts": {
+    "test": "jest --verbose --coverage tests/test.test.js"
+  },
   "dependencies": {
     "axios": "^1.6.8",
     "dayjs": "^1.11.10",
@@ -9,5 +12,10 @@
     "nodemailer": "^6.9.13",
     "sequelize": "^6.37.1",
     "youtube-transcript": "^1.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4",
+    "jest": "^29.7.0"
   }
 }

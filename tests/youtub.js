@@ -5,4 +5,4 @@ const youtube = google.youtube({
   auth: process.env.YOUTUBE_API_KEY,
 })
 
-module.exports = youtube
+// module.exports = youtube

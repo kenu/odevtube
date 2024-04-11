@@ -1,4 +1,4 @@
-import { Sequelize, Model, DataTypes } from 'sequelize'
+import { Sequelize, DataTypes } from 'sequelize'
 const sequelize = new Sequelize(
   process.env.YOUDB_NAME || 'youtubedb',
   process.env.YOUDB_USER || 'devuser',
@@ -25,5 +25,6 @@ const Youtube = sequelize.define('Youtube', {
 
 Channel.hasMany(Youtube)
 Youtube.belongsTo(Channel)
-
-await sequelize.sync()
+;(async () => {
+  await sequelize.sync()
+})()
