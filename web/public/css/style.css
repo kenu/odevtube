@@ -129,10 +129,13 @@ section#title {
 }
 
 li button.transcript {
-  display: none; /* not available now */
+  display: block;
   position: absolute;
   bottom: 6px;
   right: 10px;
+  background-color: #fff6;
+  border: 1px solid #ddd;
+  border-radius: 0.3rem;
 }
 
 .modal {

@@ -3,7 +3,7 @@ const youtube = require('./youtub')
 test('channel', channel)
 
 function channel() {
-  youtube.activities.list(
+  youtube.activities?.list(
     {
       channelId: 'UCHbXBo1fQAg7j0D7HKKYHJg',
       maxResults: 50, // 가져올 동영상의 최대 수
@@ -13,7 +13,6 @@ function channel() {
     (err, res) => {
       if (err) return console.log('The API returned an error: ' + err)
       const { items } = res.data
-      // console.log(JSON.stringify(items))
       const list = items.map((item) => {
         return (item.snippet.type)
       })
