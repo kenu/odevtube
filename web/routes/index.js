@@ -55,7 +55,7 @@ async function goRenderPage(res, uri, lang, title, hashList, isApi = false) {
     res.render('index', {
       title,
       list,
-      flist: list.slice(0, 300),
+      flist: list.slice(0, 1000),
       locale,
       uri,
       hashList,
@@ -69,7 +69,6 @@ function building(list) {
     item.profile = item.Channel.dataValues.thumbnail
     item.channame = item.Channel.dataValues.title
     item.customUrl = item.Channel.dataValues.customUrl
-    delete item.dataValues.id
     delete item.dataValues.Channel
     delete item.dataValues.ChannelId
     delete item.dataValues.createdAt

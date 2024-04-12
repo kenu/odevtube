@@ -58,25 +58,15 @@ window.addEventListener('popstate', function (event) {
 let keywordEl
 window.onload = function () {
   keywordEl = document.getElementById('keyword')
+  keywordEl.addEventListener('keyup', search)
 
   processHash()
-
-  keywordEl.addEventListener('keyup', search)
 
   // whole page event listener escape keyup clean keyword
   document.addEventListener('keyup', function (e) {
     if (e.key === 'Escape') {
       clearKeyword()
     }
-  })
-
-  if (localStorage?.getItem('font')) {
-    changeFont()
-  }
-
-  document.querySelector('h1+p').addEventListener('click', function () {
-    localStorage.setItem('font', localStorage.getItem('font') ? '' : 'true')
-    changeFont()
   })
 
   document.getElementById('closeModal')?.addEventListener('click', closeModal)
@@ -86,7 +76,38 @@ window.onload = function () {
   document
     .getElementById('modalContent')
     ?.addEventListener('dblclick', copyTranscript)
+
+  localData()
+
+  trivial()
 }
+
+function localData() {
+  let videos = []
+  const url = location.pathname + '?a=1'
+  const dataKey = `data${ location.pathname }`
+  fetch(url).then((res) => res.json()).then((res) => {
+    videos = res
+    localStorage.setItem(dataKey, JSON.stringify({ list: videos }))
+    const data = localStorage.getItem(dataKey)
+    const json = JSON.parse(data)
+    const list = json.list
+    if (list.length === 0) {
+      return
+    }
+    const lastLi = document.querySelector('#list>li:last-child')
+    const lastVideoId = lastLi.dataset.v
+    const lastIndex = list.findIndex(v => v.videoId === lastVideoId)
+    const added = list.map((v, index) => {
+      if (index < lastIndex) {
+        return ''
+      }
+      return `<li data-v="${v.videoId}"><a href="https://youtu.be/${v.videoId}">${v.title}</a></li>`
+    })
+    document.getElementById('listAdded').innerHTML = added.join('')
+  })
+}
+
 
 function openTranscript(v) {
   openModal()
@@ -97,6 +118,17 @@ function openTranscript(v) {
     .then((res) => {
       document.getElementById('modalContent').innerHTML = res.text
     })
+}
+
+function trivial() {
+  if (localStorage?.getItem('font')) {
+    changeFont()
+  }
+
+  document.querySelector('h1+p').addEventListener('click', function () {
+    localStorage.setItem('font', localStorage.getItem('font') ? '' : 'true')
+    changeFont()
+  })
 }
 
 function changeFont() {
