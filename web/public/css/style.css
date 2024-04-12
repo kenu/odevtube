@@ -101,6 +101,11 @@ a:hover {
   white-space: nowrap;
 }
 
+.channame {
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
 .profile {
   width: 2rem;
   vertical-align: bottom;
