@@ -1,13 +1,15 @@
 <section class="search">
   <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
-  <button onclick="clearKeyword()">X</button>
-  <span id="channelLink"></span>
-  <span id="count">
-    <%= list.length %>
-  </span>
-  <tags class="hash-list">
-  <% hashList.forEach(h => { %>
-    <a href="#<%= h %>">#<%= h %></a>
-  <% }) %>
-  </tags>
+  <div class="btn-group">
+    <button onclick="clearKeyword()">esc X</button>
+    <span id="count">
+      <%= list.length %>
+    </span>
+    <span id="channelLink"></span>
+    <tags class="hash-list">
+    <% hashList.forEach(h => { %>
+      <a href="#<%= h %>">#<%= h %></a>
+    <% }) %>
+    </tags>
+  </div>
 </section>

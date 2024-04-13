@@ -174,9 +174,12 @@ li button.transcript {
   width: 100%;
 }
 
+.search button {
+  font-size: 2rem;
+}
+
 .search .hash-list {
   display: block;
-  margin-top: 10px;
 }
 
 .search .hash-list a {
@@ -207,22 +210,29 @@ li button.transcript {
 
   .search {
     margin-bottom: 1rem;
-    display: flex;
     align-items: center;
   }
 
   .search #keyword {
     font-size: 1rem;
-    flex-grow: 1;
+  }
+
+  .search button {
+    font-size: 1rem;
+    margin-right: 10px;
+  }
+
+  #channelLink {
+    height: 3.0rem;
+    background-color: #fabe9833;
   }
 
   .search .hash-list {
-    margin-left: 10px;
+    margin: 0.3rem 0.1rem 0.1rem 0.1rem;
   }
 
   .search .hash-list a {
     display: inline-block;
-    margin-right: 5px;
   }
 
   ul {
