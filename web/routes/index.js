@@ -79,10 +79,22 @@ function building(list) {
 import fetchTranscript from '../transcript.js'
 router.get('/transcript/:videoId', async function (req, res, next) {
   const videoId = req.params.videoId
+  // find by videoId
+  const item = await dao.findTranscriptByVideoId(videoId)
+  if (item) {
+    res.json({ text: item.content, videoId })
+    return
+  }
+  // if empty get from youtube web
+  // save with videoId
   try {
     const pattern = /(니다|하죠|네요|세요|어요|고요)\s/g
     let transcript = await fetchTranscript(videoId)
     transcript = transcript.replaceAll(pattern, '$1. ')
+    await dao.createTranscript({
+      videoId,
+      content: transcript,
+    })
     res.json({ text: transcript, videoId })
   } catch (error) {
     res.json({ text: 'Not Available', videoId })

@@ -27,10 +27,26 @@ const Youtube = sequelize.define('Youtube', {
   publishedAt: DataTypes.DATE,
 })
 
+const Transcript = sequelize.define('Transcript', {
+  videoId: {
+    type: DataTypes.STRING,
+    references: {
+      model: Youtube,
+      key: 'videoId',
+    },
+  },
+  content: DataTypes.TEXT,
+})
+
 Channel.hasMany(Youtube)
 Youtube.belongsTo(Channel)
 
-await sequelize.sync()
+Transcript.belongsTo(Youtube)
+Youtube.hasOne(Transcript)
+
+;(async () => {
+  await sequelize.sync()
+})()
 async function create(data) {
   if (!data.channelId) {
     console.log('## ' + JSON.stringify(data))
@@ -102,6 +118,35 @@ async function newList() {
   return list
 }
 
+async function findTranscriptByVideoId(videoId) {
+  return await Transcript.findOne({
+    where: { videoId: videoId },
+  })
+}
+
+async function createTranscript(data) {
+  if (!data.videoId) {
+    console.log('## ' + JSON.stringify(data))
+    return
+  }
+  const one = await Transcript.findOne({
+    where: { videoId: data.videoId },
+  })
+  if (!one) {
+    const result = await Transcript.create(data)
+    return result.toJSON()
+  }
+}
+
+async function removeTranscript(videoId) {
+  const one = await Transcript.findOne({
+    where: { videoId: videoId },
+  })
+  if (one) {
+    await one.destroy()
+  }
+}
+
 export default {
   create,
   findOneByChannelId,
@@ -109,4 +154,7 @@ export default {
   createYoutube,
   findAllYoutube,
   newList,
+  findTranscriptByVideoId,
+  createTranscript,
+  removeTranscript,
 }
