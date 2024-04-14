@@ -1,20 +1,31 @@
-let repo = ''
+let repo = []
+let repoAdded = []
 function search() {
   const keyword = keywordEl.value.toLowerCase()
-  if (!repo) {
-    repo = document.querySelectorAll('li')
+  if (!repo.length) {
+    repo = document.querySelectorAll('#list>li')
   }
-  let allData = repo
-  const filtered = [...allData].filter(function (e) {
+  var { htmlFiltered, count } = getFilteredHtml(keyword, repo)
+  document.getElementById('list').innerHTML = htmlFiltered
+  document.getElementById('count').innerHTML = count
+
+  if (!repoAdded.length) {
+    repoAdded = document.querySelectorAll('#listAdded>li')
+  }
+  var { htmlFiltered } = getFilteredHtml(keyword, repoAdded)
+  document.getElementById('listAdded').innerHTML = htmlFiltered
+}
+
+function getFilteredHtml(keyword, list) {
+  const filtered = [...list].filter(function (e) {
     const text = e.innerText.toLowerCase()
     return text.includes(keyword)
   })
-  document.getElementById('count').innerHTML = filtered.length
   let htmlFiltered = ''
   filtered.forEach(function (e) {
     htmlFiltered += e.outerHTML
   })
-  document.getElementById('list').innerHTML = htmlFiltered
+  return { htmlFiltered, count: filtered.length }
 }
 
 function clearKeyword() {
@@ -85,29 +96,30 @@ window.onload = function () {
 function localData() {
   let videos = []
   const url = location.pathname + '?a=1'
-  const dataKey = `data${ location.pathname }`
-  fetch(url).then((res) => res.json()).then((res) => {
-    videos = res
-    localStorage.setItem(dataKey, JSON.stringify({ list: videos }))
-    const data = localStorage.getItem(dataKey)
-    const json = JSON.parse(data)
-    const list = json.list
-    if (list.length === 0) {
-      return
-    }
-    const lastLi = document.querySelector('#list>li:last-child')
-    const lastVideoId = lastLi.dataset.v
-    const lastIndex = list.findIndex(v => v.videoId === lastVideoId)
-    const added = list.map((v, index) => {
-      if (index < lastIndex) {
-        return ''
+  const dataKey = `data${location.pathname}`
+  fetch(url)
+    .then((res) => res.json())
+    .then((res) => {
+      videos = res
+      localStorage.setItem(dataKey, JSON.stringify({ list: videos }))
+      const data = localStorage.getItem(dataKey)
+      const json = JSON.parse(data)
+      const list = json.list
+      if (list.length === 0) {
+        return
       }
-      return `<li data-v="${v.videoId}"><a href="https://youtu.be/${v.videoId}">${v.title}</a></li>`
+      const lastLi = document.querySelector('#list>li:last-child')
+      const lastVideoId = lastLi.dataset.v
+      const lastIndex = list.findIndex((v) => v.videoId === lastVideoId)
+      const added = list.map((v, index) => {
+        if (index <= lastIndex) {
+          return ''
+        }
+        return `<li data-v="${v.videoId}"><a href="https://youtu.be/${v.videoId}">${v.title}</a></li>`
+      })
+      document.getElementById('listAdded').innerHTML = added.join('')
     })
-    document.getElementById('listAdded').innerHTML = added.join('')
-  })
 }
-
 
 function openTranscript(v) {
   openModal()
