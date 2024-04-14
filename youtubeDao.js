@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes, Op } from 'sequelize'
+import { Sequelize, DataTypes } from 'sequelize'
 const sequelize = new Sequelize(
   process.env.YOUDB_NAME || 'youtubedb',
   process.env.YOUDB_USER || 'devuser',

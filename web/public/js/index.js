@@ -5,15 +5,15 @@ function search() {
   if (!repo.length) {
     repo = document.querySelectorAll('#list>li')
   }
-  var { htmlFiltered, count } = getFilteredHtml(keyword, repo)
+  const { htmlFiltered, count } = getFilteredHtml(keyword, repo)
   document.getElementById('list').innerHTML = htmlFiltered
   document.getElementById('count').innerHTML = count
 
   if (!repoAdded.length) {
     repoAdded = document.querySelectorAll('#listAdded>li')
   }
-  var { htmlFiltered } = getFilteredHtml(keyword, repoAdded)
-  document.getElementById('listAdded').innerHTML = htmlFiltered
+  const { htmlFiltered: html } = getFilteredHtml(keyword, repoAdded)
+  document.getElementById('listAdded').innerHTML = html
 }
 
 function getFilteredHtml(keyword, list) {
