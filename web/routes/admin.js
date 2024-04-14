@@ -1,9 +1,17 @@
 import express from 'express'
+import dao from '../../youtubeDao.js'
+import dayjs from 'dayjs'
 
 const router = express.Router()
 
 router.get('/admin', auth, async function (req, res, next) {
-  res.end('admin')
+  const data = await dao.findAndCountAllYoutube()
+  const videos = data.rows
+  videos.forEach(v => {
+    v.pubdate = dayjs(v.publishedAt).format('MM-DD HH:mm:ss')
+    v.credate = dayjs(v.createdAt).format('MM-DD HH:mm:ss')
+  })
+  res.render('admin/video', {videos})
 })
 
 function auth(req, res, next) {

@@ -96,6 +96,21 @@ async function findAllYoutube(category, lang) {
   })
 }
 
+async function findAndCountAllYoutube(category, lang) {
+  return await Youtube.findAndCountAll({
+    include: [
+      {
+        model: Channel,
+        where: { category: category || 'dev', lang: lang || 'ko' },
+        required: true,
+      },
+    ],
+    order: [['publishedAt', 'DESC']],
+    limit: 30,
+    offset: 0,
+  })
+}
+
 async function findOneByChannelId(channelId) {
   return await Channel.findOne({
     where: { channelId: channelId },
@@ -153,6 +168,7 @@ export default {
   findAll,
   createYoutube,
   findAllYoutube,
+  findAndCountAllYoutube,
   newList,
   findTranscriptByVideoId,
   createTranscript,

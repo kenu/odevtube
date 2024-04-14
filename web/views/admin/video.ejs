@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Video</title>
+  <style>
+  .channel {
+    width: 20%;
+  }
+  .date {
+    width: 15%;
+  }
+  </style>
+</head>
+
+<body>
+  <h1>Admin Video</h1>
+  <section>
+    <h3>Latest videos</h3>
+    <table>
+      <thead>
+        <th class="channel">channel</th>
+        <th class="title">title</th>
+        <th class="date">pub@</th>
+        <th class="date">cre@</th>
+      </thead>
+      <tbody>
+        <% videos.forEach(function(video) { %>
+        <tr>
+          <td><a href="/#<%= video.Channel.title %>" title="<%= video.Channel.title %>" target="_blank">
+              <%= video.Channel.title %>
+            </a></td>
+          <td><a href="/#<%= video.title %>" title="<%= video.title %>" target="_blank">
+              <%= video.title %>
+            </a>
+          </td>
+          <td>
+            <%= video.pubdate %>
+          </td>
+          <td>
+            <%= video.credate %>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </section>
+</body>
+
+</html>
