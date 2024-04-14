@@ -25,6 +25,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 import indexRouter from './routes/index.js'
 app.use('/', indexRouter)
+import adminRouter from './routes/admin.js'
+app.use('/', adminRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
