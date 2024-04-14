@@ -1,0 +1,28 @@
+.videos {
+  width: 100%;
+  border: 1px solid #ccc;
+}
+.videos thead {
+  background-color: #0ff3;
+}
+.videos td,
+.videos th {
+  height: 2.1rem;
+  border-bottom: 1px solid #999;
+}
+.channel {
+  width: 20%;
+}
+.thumbnail {
+  border-radius: 10px;
+  height: 40px;
+  vertical-align: middle;
+}
+.date {
+  width: 12%;
+}
+.datecell{
+  font-family: 'Courier New', Courier, monospace;
+  text-align: center;
+  font-weight: bold;
+}
