@@ -7,3 +7,4 @@ a.json
 coverage
 sonar-project.*
 .scannerwork
+.env

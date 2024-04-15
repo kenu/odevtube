@@ -5,11 +5,21 @@ import cookieParser from 'cookie-parser'
 import logger from 'morgan'
 import helmet from 'helmet'
 import { fileURLToPath } from 'url'
+import bodyParser from 'body-parser'
+import expressSession from 'express-session'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = express()
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(
+  expressSession({
+    secret: 'github cat',
+    resave: true,
+    saveUninitialized: true,
+  })
+)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -22,6 +32,32 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
+
+import 'dotenv/config'
+import passport from 'passport'
+import GitHub from 'passport-github2'
+
+passport.use(
+  new GitHub.Strategy(
+    {
+      clientID: process.env['GITHUB_CLIENT_ID'],
+      clientSecret: process.env['GITHUB_CLIENT_SECRET'],
+      callbackURL: '/login/github/return',
+    },
+    function (accessToken, refreshToken, profile, cb) {
+      console.log('accessToken', accessToken)
+      return cb(null, profile)
+    }
+  )
+)
+
+passport.serializeUser(function (user, cb) {
+  cb(null, user)
+})
+
+passport.deserializeUser(function (obj, cb) {
+  cb(null, obj)
+})
 
 import indexRouter from './routes/index.js'
 app.use('/', indexRouter)

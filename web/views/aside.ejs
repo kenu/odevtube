@@ -1,7 +1,15 @@
 <div id="buymac">
-  <a href="https://www.buymeacoffee.com/kenu"><img
-      src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=kenu&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
+  <a href="https://www.buymeacoffee.com/kenu"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=kenu&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
 </div>
+<aside class="login">
+  <% if (!user) { %>
+  <a href="/login" alt="login">login</a>
+  <% } else { %>
+  <%= user.username %>
+  <a href="/profile" alt="profile">profile</a>
+  <a href="/logout" alt="logout">logout</a>
+  <% } %>
+</aside>
 <aside class="github">
   <span class="k"> | <a href="/kpop" alt="kpop">kpop</a>
     | <a href="/drama" alt="drama">drama</a> |
@@ -14,8 +22,7 @@
 <div class="ad">
   <div class="ad-title" style="display: inline;">
     * <a href="https://inf.run/LPpDg" target="_blank" alt="VS Code에서 쉽게 사용하는 Git">VS Code에서 쉽게 사용하는 Git:
-      https://inf.run/LPpDg</a>, <a href="https://www.udemy.com/course/git-vscode/?referralCode=B8C18816E4B041590CF7"
-      target="_blank">Udemy</a>
+      https://inf.run/LPpDg</a>, <a href="https://www.udemy.com/course/git-vscode/?referralCode=B8C18816E4B041590CF7" target="_blank">Udemy</a>
     <br />
     * <a href="https://inf.run/Q7Ld1" target="_blank" alt="React + API Server 프로젝트 개발과 배포 (CI/CD)">React + API Server
       프로젝트 개발과 배포 (CI/CD): https://inf.run/Q7Ld1</a> - 50% 할인 쿠폰 코드: <code>15108-f2af1e086101</code>
@@ -30,6 +37,5 @@
   </div>
 </div>
 <div class="contact">
-  * Contact: <a href="mailto:kenu@okdevtv.com">kenu@okdevtv.com</a>, OKdevTV: <a href="https://www.youtube.com/@KenuHeo"
-    target="_blank" alt="OKdevTV">https://youtube.com/@KenuHeo</a>
+  * Contact: <a href="mailto:kenu@okdevtv.com">kenu@okdevtv.com</a>, OKdevTV: <a href="https://www.youtube.com/@KenuHeo" target="_blank" alt="OKdevTV">https://youtube.com/@KenuHeo</a>
 </div>
