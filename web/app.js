@@ -43,7 +43,7 @@ try {
       {
         clientID: process.env['GITHUB_CLIENT_ID'],
         clientSecret: process.env['GITHUB_CLIENT_SECRET'],
-        callbackURL: '/login/github/return',
+        callbackURL: process.env['HOST']+'/login/github/return',
       },
       function (accessToken, refreshToken, profile, cb) {
         console.log('accessToken', accessToken)
