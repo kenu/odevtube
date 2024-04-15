@@ -7,6 +7,7 @@
     "dev": "nodemon ./bin/youtb.js"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
     "cookie-parser": "~1.4.4",
     "dayjs": "^1.11.10",
     "debug": "~2.6.9",
