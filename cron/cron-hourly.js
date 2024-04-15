@@ -1,4 +1,4 @@
-import dao from './youtubeDao.js'
+import dao from '../youtubeDao.js'
 import axios from 'axios'
 
 async function getNewHourly() {
