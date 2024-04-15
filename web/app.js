@@ -37,19 +37,23 @@ import 'dotenv/config'
 import passport from 'passport'
 import GitHub from 'passport-github2'
 
-passport.use(
-  new GitHub.Strategy(
-    {
-      clientID: process.env['GITHUB_CLIENT_ID'],
-      clientSecret: process.env['GITHUB_CLIENT_SECRET'],
-      callbackURL: '/login/github/return',
-    },
-    function (accessToken, refreshToken, profile, cb) {
-      console.log('accessToken', accessToken)
-      return cb(null, profile)
-    }
+try {
+  passport.use(
+    new GitHub.Strategy(
+      {
+        clientID: process.env['GITHUB_CLIENT_ID'],
+        clientSecret: process.env['GITHUB_CLIENT_SECRET'],
+        callbackURL: '/login/github/return',
+      },
+      function (accessToken, refreshToken, profile, cb) {
+        console.log('accessToken', accessToken)
+        return cb(null, profile)
+      }
+    )
   )
-)
+} catch(e) {
+  console.log(e)
+}
 
 passport.serializeUser(function (user, cb) {
   cb(null, user)
