@@ -1,16 +1,11 @@
 import express from 'express'
 import dayjs from 'dayjs'
+import passport from 'passport'
 import dao from '../../youtubeDao.js'
 
 const router = express.Router()
-
-router.get('/', async function (req, res, next) {
-  const uri = 'dev'
-  const title = '개발 관련 유튜브'
-  const hashList = ['멍슨상', 'spring', 'rust']
-  const isApi = req.query.a === '1'
-  await goRenderPage(res, uri, '', title, hashList, isApi)
-})
+router.use(passport.initialize())
+router.use(passport.session())
 
 router.get('/en', async function (req, res, next) {
   const uri = 'dev'
@@ -18,7 +13,7 @@ router.get('/en', async function (req, res, next) {
   const hashList = ['tutorial', 'spring', 'rust']
   const lang = 'en'
   const isApi = req.query.a === '1'
-  await goRenderPage(res, uri, lang, title, hashList, isApi)
+  await goRenderPage(req, res, uri, lang, title, hashList, isApi)
 })
 
 router.get('/drama', async function (req, res, next) {
@@ -26,7 +21,7 @@ router.get('/drama', async function (req, res, next) {
   const title = '드라마 관련 유튜브'
   const hashList = ['아파트404', '나빌레라', '선공개']
   const isApi = req.query.a === '1'
-  await goRenderPage(res, uri, '', title, hashList, isApi)
+  await goRenderPage(req, res, uri, '', title, hashList, isApi)
 })
 
 router.get('/food', async function (req, res, next) {
@@ -34,7 +29,7 @@ router.get('/food', async function (req, res, next) {
   const title = '요리 관련 유튜브'
   const hashList = ['시장', '백종원', '간식']
   const isApi = req.query.a === '1'
-  await goRenderPage(res, uri, '', title, hashList, isApi)
+  await goRenderPage(req, res, uri, '', title, hashList, isApi)
 })
 
 router.get('/kpop', async function (req, res, next) {
@@ -42,12 +37,14 @@ router.get('/kpop', async function (req, res, next) {
   const title = 'K-POP YouTube Videos'
   const hashList = ['M/V', 'Official', 'ILLIT', 'BTS']
   const isApi = req.query.a === '1'
-  await goRenderPage(res, uri, '', title, hashList, isApi)
+  await goRenderPage(req, res, uri, '', title, hashList, isApi)
 })
 
-async function goRenderPage(res, uri, lang, title, hashList, isApi = false) {
+async function goRenderPage(req, res, uri, lang, title, hashList, isApi = false) {
   const locale = lang === 'en' ? 'en_US' : 'ko_KR'
   const list = await dao.findAllYoutube(uri, lang)
+  const user = req.user
+  console.log(user)
   building(list)
   if (isApi) {
     res.json(list)
@@ -59,6 +56,7 @@ async function goRenderPage(res, uri, lang, title, hashList, isApi = false) {
       locale,
       uri,
       hashList,
+      user,
     })
   }
 }
@@ -99,6 +97,46 @@ router.get('/transcript/:videoId', async function (req, res, next) {
   } catch (error) {
     res.json({ text: 'Not Available', videoId })
   }
+})
+
+router.get('/login', function (req, res) {
+  res.render('login')
+})
+
+router.get('/login/github', passport.authenticate('github'))
+
+router.get(
+  '/login/github/return',
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  function (_req, res) {
+    res.redirect('/')
+  }
+)
+router.get('/home', function (req, res) {
+  console.log(req.user)
+  res.render('home', { user: req.user })
+})
+
+import connectEnsureLogin from 'connect-ensure-login'
+router.get('/profile', connectEnsureLogin.ensureLoggedIn(), function (req, res) {
+  res.render('profile', { user: req.user })
+})
+
+router.get('/logout', function (req, res, next) {
+  req.logout((err) => {
+    if (err) {
+      return next(err)
+    }
+    res.redirect('/')
+  })
+})
+
+router.get('/', async function (req, res, next) {
+  const uri = 'dev'
+  const title = '개발 관련 유튜브'
+  const hashList = ['멍슨상', 'spring', 'rust']
+  const isApi = req.query.a === '1'
+  await goRenderPage(req, res, uri, '', title, hashList, isApi)
 })
 
 export default router
