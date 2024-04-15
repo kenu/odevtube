@@ -8,7 +8,9 @@ router.use(passport.initialize())
 router.use(passport.session())
 
 router.get('/admin', auth, async function (req, res, next) {
-  const data = await dao.findAndCountAllYoutube()
+  const category = req.query.c
+  const lang = req.query.l
+  const data = await dao.findAndCountAllYoutube(category, lang)
   const videos = data.rows
   videos.forEach(v => {
     v.pubdate = dayjs(v.publishedAt).format('MM-DD HH:mm:ss')
