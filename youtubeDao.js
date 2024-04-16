@@ -43,7 +43,6 @@ Youtube.belongsTo(Channel)
 
 Transcript.belongsTo(Youtube)
 Youtube.hasOne(Transcript)
-
 ;(async () => {
   await sequelize.sync()
 })()
@@ -96,7 +95,13 @@ async function findAllYoutube(category, lang) {
   })
 }
 
-async function findAndCountAllYoutube(category, lang) {
+async function getPagedYoutubes(options) {
+  const offset = (options.page - 1) * options.pageSize
+  const result = await findAndCountAllYoutube(options.category, options.lang, offset, options.pageSize)
+  return result
+}
+
+async function findAndCountAllYoutube(category, lang, offset = 0, pageSize = 30) {
   return await Youtube.findAndCountAll({
     include: [
       {
@@ -106,8 +111,8 @@ async function findAndCountAllYoutube(category, lang) {
       },
     ],
     order: [['publishedAt', 'DESC']],
-    limit: 30,
-    offset: 0,
+    offset: offset,
+    limit: pageSize,
   })
 }
 
@@ -169,6 +174,7 @@ export default {
   createYoutube,
   findAllYoutube,
   findAndCountAllYoutube,
+  getPagedYoutubes,
   newList,
   findTranscriptByVideoId,
   createTranscript,

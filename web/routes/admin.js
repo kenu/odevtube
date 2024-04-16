@@ -10,13 +10,37 @@ router.use(passport.session())
 router.get('/admin', auth, async function (req, res, next) {
   const category = req.query.c
   const lang = req.query.l
-  const data = await dao.findAndCountAllYoutube(category, lang)
+  let page = +req.query.p
+  if (!page) {
+    page = 1
+  }
+  const pageSize = 30
+  const data = await dao.getPagedYoutubes({
+    category,
+    lang,
+    page,
+    pageSize: pageSize,
+  })
   const videos = data.rows
-  videos.forEach(v => {
+  videos.forEach((v) => {
     v.pubdate = dayjs(v.publishedAt).format('MM-DD HH:mm:ss')
     v.credate = dayjs(v.createdAt).format('MM-DD HH:mm:ss')
   })
-  res.render('admin/video', {videos, user: req.user})
+  const maxVisiblePages = 7
+  const totalPages = Math.ceil(data.count / pageSize)
+  let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2))
+  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
+  const area = `c=${category || 'dev'}&l=${lang || 'ko'}` + '&';
+  res.render('admin/video', {
+    videos,
+    user: req.user,
+    area,
+    currentPage: page,
+    totalPages,
+    startPage,
+    endPage,
+    maxVisiblePages,
+  })
 })
 
 function auth(req, res, next) {
