@@ -1,4 +1,4 @@
-function getUri(category = 'dev', lang) {
+function getUri(category = 'dev', lang = '') {
   if (category === 'dev') {
     category = ''
   }
