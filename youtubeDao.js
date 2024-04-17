@@ -97,11 +97,21 @@ async function findAllYoutube(category, lang) {
 
 async function getPagedYoutubes(options) {
   const offset = (options.page - 1) * options.pageSize
-  const result = await findAndCountAllYoutube(options.category, options.lang, offset, options.pageSize)
+  const result = await findAndCountAllYoutube(
+    options.category,
+    options.lang,
+    offset,
+    options.pageSize
+  )
   return result
 }
 
-async function findAndCountAllYoutube(category, lang, offset = 0, pageSize = 30) {
+async function findAndCountAllYoutube(
+  category,
+  lang,
+  offset = 0,
+  pageSize = 30
+) {
   return await Youtube.findAndCountAll({
     include: [
       {
@@ -122,10 +132,30 @@ async function findOneByChannelId(channelId) {
   })
 }
 
-async function findAllChannelList() {
+async function findAllChannelList_() {
   return await Channel.findAll({
     order: [['createdAt', 'DESC']],
   })
+}
+
+async function findAllChannelList() {
+  // Query to get the channel list and the last update
+  const list = await sequelize.query(
+    `select
+        max(y.publishedAt) publishedAt,
+        count(y.id) cnt,
+        'aaa' a,
+        c.*
+      from channels c
+      join youtubes y on c.id = y.ChannelId
+      group by c.id
+      order by publishedAt desc;
+    `,
+    {
+      type: sequelize.QueryTypes.SELECT,
+    }
+  )
+  return list
 }
 
 async function newList() {

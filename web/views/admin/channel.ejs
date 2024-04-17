@@ -38,8 +38,10 @@
         <th class="channel">channel</th>
         <th class="id">channel id</th>
         <th class="customurl">custom url</th>
-        <th class="customurl">category</th>
-        <th class="customurl">lang</th>
+        <th class="count">count</th>
+        <th class="category">category</th>
+        <th class="lang">lang</th>
+        <th class="date">last@</th>
         <th class="date">cre@</th>
       </thead>
       <tbody>
@@ -58,8 +60,12 @@
               <%= channel.customUrl %>
             </a>
           </td>
-          <td><%= channel.category %></td>
-          <td><%= channel.lang %></td>
+          <td class="count"><%= channel.cnt %></td>
+          <td class="category"><%= channel.category %></td>
+          <td class="lang"><%= channel.lang %></td>
+          <td class="datecell">
+            <%= channel.pubdate %>
+          </td>
           <td class="datecell">
             <%= channel.credate %>
           </td>

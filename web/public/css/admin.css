@@ -22,6 +22,11 @@ tr:hover {
   border-bottom: 1px solid #999;
   padding: 2px 5px 4px;
 }
+.channels .count,
+.channels .lang,
+.channels .category {
+  text-align: center;
+}
 .channel {
   width: 20%;
 }

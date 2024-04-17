@@ -45,7 +45,8 @@ router.get('/admin', auth, async function (req, res, next) {
 router.get('/admin/channel', auth, async function (req, res, next) {
   const channelList = await dao.findAllChannelList()
   channelList.forEach((item) => {
-    item.credate = dayjs(item.createdAt).format('MM-DD HH:mm:ss')
+    item.credate = dayjs(item.createdAt).format('MM-DD')
+    item.pubdate = dayjs(item.publishedAt).format('YYYY-MM-DD')
   })
   res.render('admin/channel', {
     channels: channelList,
