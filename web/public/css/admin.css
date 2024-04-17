@@ -2,15 +2,22 @@ h1 {
   color: #333;
   text-shadow: #888 1px 0 2px;
 }
-.videos {
+.videos,
+.channels {
   width: 100%;
   border: 1px solid #ccc;
 }
-.videos thead {
+.videos thead,
+.channels thead {
   background-color: #0ff3;
 }
+tr:hover {
+  background-color: rgba(131, 131, 46, 0.148);
+}
 .videos td,
-.videos th {
+.videos th,
+.channels td,
+.channels th {
   height: 2.1rem;
   border-bottom: 1px solid #999;
   padding: 2px 5px 4px;
@@ -30,7 +37,7 @@ h1 {
 .date {
   width: 12%;
 }
-.datecell{
+.datecell {
   font-family: cursive;
   text-align: center;
   font-weight: bold;
@@ -40,25 +47,25 @@ h1 {
   display: flex;
   justify-content: center;
   margin-top: 20px;
-  }
+}
 
-  .pagination a {
+.pagination a {
   color: #333;
   padding: 8px 16px;
   text-decoration: none;
   transition: background-color 0.3s;
-  }
+}
 
-  .pagination a.active {
-  background-color: #4CAF50;
+.pagination a.active {
+  background-color: #4caf50;
   color: white;
-  }
+}
 
-  .pagination a:hover:not(.active) {
+.pagination a:hover:not(.active) {
   background-color: #ddd;
-  }
+}
 
-  .pagination a.prev,
-  .pagination a.next {
+.pagination a.prev,
+.pagination a.next {
   background-color: #f1f1f1;
-  }
+}

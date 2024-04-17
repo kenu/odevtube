@@ -42,6 +42,16 @@ router.get('/admin', auth, async function (req, res, next) {
     maxVisiblePages,
   })
 })
+router.get('/admin/channel', auth, async function (req, res, next) {
+  const channelList = await dao.findAllChannelList()
+  channelList.forEach((item) => {
+    item.credate = dayjs(item.createdAt).format('MM-DD HH:mm:ss')
+  })
+  res.render('admin/channel', {
+    channels: channelList,
+    user: req.user,
+  })
+})
 
 function auth(req, res, next) {
   if (req.user) {

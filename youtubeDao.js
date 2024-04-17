@@ -122,6 +122,12 @@ async function findOneByChannelId(channelId) {
   })
 }
 
+async function findAllChannelList() {
+  return await Channel.findAll({
+    order: [['createdAt', 'DESC']],
+  })
+}
+
 async function newList() {
   const list = await sequelize.query(
     `select y.videoId, y.title from Youtubes y
@@ -170,6 +176,7 @@ async function removeTranscript(videoId) {
 export default {
   create,
   findOneByChannelId,
+  findAllChannelList,
   findAll,
   createYoutube,
   findAllYoutube,

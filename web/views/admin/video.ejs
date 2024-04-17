@@ -13,10 +13,10 @@
   <h1>Admin Video</h1>
   <section>
     <% if (!user) { %>
-    <p>Welcome! Please <a href="/login">log in</a>.</p>
-    <% } else { %>
-    <p>Hello, <%= user.username %>. <a href="/logout" alt="logout">logout</a>. <a href="/profile">profile</a>.</p>
-    <% } %>
+      <p>Welcome! Please <a href="/login">log in</a>.</p>
+      <% } else { %>
+        <p>Hello, <%= user.username %>. <a href="/logout" alt="logout">logout</a>. <a href="/profile">profile</a>.</p>
+        <% } %>
   </section>
   <aside class="github">
     <span class="k"> | <a href="/admin?c=kpop" alt="kpop">kpop</a>
@@ -28,6 +28,9 @@
       <img src="/images/github-mark.svg" class="github-logo" title="fork in github"></a>
   </aside>
 
+  <nav>
+    <a href="/admin/channel">채널</a>
+  </nav>
   <section>
     <h3>Latest videos</h3>
     <table class="videos">
@@ -39,44 +42,44 @@
       </thead>
       <tbody>
         <% videos.forEach(function(video) { %>
-        <tr>
-          <td><a href="/#<%= video.Channel.title %>" title="<%= video.Channel.title %>" target="_blank">
-              <img src="<%= video.Channel.thumbnail %>" alt="<%= video.Channel.title %>" class="thumbnail">
-              <%= video.Channel.title %>
-            </a></td>
-          <td><a href="/#<%= video.title %>" title="<%= video.title %>" target="_blank">
-              <img src="<%= video.thumbnail %>" alt="<%= video.title %>" class="thumbnail">
-              <%= video.title %>
-            </a>
-          </td>
-          <td class="datecell">
-            <%= video.pubdate %>
-          </td>
-          <td class="datecell">
-            <%= video.credate %>
-          </td>
-        </tr>
-        <% }) %>
+          <tr>
+            <td><a href="/#<%= video.Channel.title %>" title="<%= video.Channel.title %>" target="_blank">
+                <img src="<%= video.Channel.thumbnail %>" alt="<%= video.Channel.title %>" class="thumbnail">
+                <%= video.Channel.title %>
+              </a></td>
+            <td><a href="/#<%= video.title %>" title="<%= video.title %>" target="_blank">
+                <img src="<%= video.thumbnail %>" alt="<%= video.title %>" class="thumbnail">
+                <%= video.title %>
+              </a>
+            </td>
+            <td class="datecell">
+              <%= video.pubdate %>
+            </td>
+            <td class="datecell">
+              <%= video.credate %>
+            </td>
+          </tr>
+          <% }) %>
       </tbody>
     </table>
     </div>
     <div class="pagination-wrapper">
       <div class="pagination">
         <% if (currentPage> 1) { %>
-        <a href="/admin?<%= area %>p=1" class="latest">Latest</a>
-        <a href="/admin?<%= area %>p=<%= currentPage - 1 %>" class="prev">Prev</a>
-        <% } %>
-        <% for (let i=startPage; i <=endPage; i++) { %>
-        <a href="/admin?<%= area %>p=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
-          <%= i %>
-        </a>
-        <% } %>
-        <% if (currentPage < totalPages) { %>
-        <a href="/admin?<%= area %>p=<%= currentPage + 1 %>" class="next">Next</a>
-        <a href="/admin?<%= area %>p=<%= totalPages %>" class="end">
-          <%= totalPages %>
-        </a>
-        <% } %>
+          <a href="/admin?<%= area %>p=1" class="latest">Latest</a>
+          <a href="/admin?<%= area %>p=<%= currentPage - 1 %>" class="prev">Prev</a>
+          <% } %>
+            <% for (let i=startPage; i <=endPage; i++) { %>
+              <a href="/admin?<%= area %>p=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
+                <%= i %>
+              </a>
+              <% } %>
+                <% if (currentPage < totalPages) { %>
+                  <a href="/admin?<%= area %>p=<%= currentPage + 1 %>" class="next">Next</a>
+                  <a href="/admin?<%= area %>p=<%= totalPages %>" class="end">
+                    <%= totalPages %>
+                  </a>
+                  <% } %>
       </div>
     </div>
   </section>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Channel</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+
+<body>
+  <h1>Admin Channel</h1>
+  <section>
+    <% if (!user) { %>
+    <p>Welcome! Please <a href="/login">log in</a>.</p>
+    <% } else { %>
+    <p>Hello, <%= user.username %>. <a href="/logout" alt="logout">logout</a>. <a href="/profile">profile</a>.</p>
+    <% } %>
+  </section>
+  <aside class="github">
+    <span class="k"> | <a href="/admin?c=kpop" alt="kpop">kpop</a>
+      | <a href="/admin?c=drama" alt="drama">drama</a> |
+      <a href="/admin?c=food" alt="food">food</a> |</span>
+    <a href="/admin" alt="korean">ko</a> |
+    <a href="/admin?c=dev&l=en" alt="english">en</a>
+    <a href="https://github.com/kenu/youtb" target="_blank">
+      <img src="/images/github-mark.svg" class="github-logo" title="fork in github"></a>
+  </aside>
+
+  <nav>
+    <a href="/admin">비디오</a>
+  </nav>
+  <section>
+    <h3>Latest channels</h3>
+    <table class="channels">
+      <thead>
+        <th class="channel">channel</th>
+        <th class="id">channel id</th>
+        <th class="customurl">custom url</th>
+        <th class="customurl">category</th>
+        <th class="customurl">lang</th>
+        <th class="date">cre@</th>
+      </thead>
+      <tbody>
+        <% channels.forEach(function(channel) { %>
+        <tr>
+          <td><a href="/#<%= channel.title %>" title="<%= channel.title %>" target="_blank">
+              <img src="<%= channel.thumbnail %>" alt="<%= channel.title %>" class="thumbnail">
+              <%= channel.title %>
+            </a></td>
+          <td><a href="/#<%= channel.title %>" title="<%= channel.title %>" target="_blank">
+              <%= channel.channelId %>
+            </a>
+          </td>
+          <td>
+            <a href="https://youtube.com/<%= channel.customUrl %>" title="<%= channel.title %>" target="_blank">
+              <%= channel.customUrl %>
+            </a>
+          </td>
+          <td><%= channel.category %></td>
+          <td><%= channel.lang %></td>
+          <td class="datecell">
+            <%= channel.credate %>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    </div>
+    <div class="pagination-wrapper">
+      <div class="pagination">
+      </div>
+    </div>
+  </section>
+</body>
+
+</html>
