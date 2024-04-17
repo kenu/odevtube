@@ -47,11 +47,11 @@
       <tbody>
         <% channels.forEach(function(channel) { %>
         <tr>
-          <td><a href="/#<%= channel.title %>" title="<%= channel.title %>" target="_blank">
+          <td><a href="<%= channel.uri %>#<%= channel.title %>" title="<%= channel.title %>" target="_blank">
               <img src="<%= channel.thumbnail %>" alt="<%= channel.title %>" class="thumbnail">
               <%= channel.title %>
             </a></td>
-          <td><a href="/#<%= channel.title %>" title="<%= channel.title %>" target="_blank">
+          <td><a href="<%= channel.uri %>#<%= channel.title %>" title="<%= channel.title %>" target="_blank">
               <%= channel.channelId %>
             </a>
           </td>

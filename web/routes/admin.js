@@ -2,12 +2,13 @@ import express from 'express'
 import dao from '../../youtubeDao.js'
 import dayjs from 'dayjs'
 import passport from 'passport'
+import util from '../utils/uri.js'
 
 const router = express.Router()
 router.use(passport.initialize())
 router.use(passport.session())
 
-router.get('/admin', auth, async function (req, res, next) {
+router.get('/admin', async function (req, res, next) {
   const category = req.query.c
   const lang = req.query.l
   let page = +req.query.p
@@ -25,6 +26,7 @@ router.get('/admin', auth, async function (req, res, next) {
   videos.forEach((v) => {
     v.pubdate = dayjs(v.publishedAt).format('MM-DD HH:mm:ss')
     v.credate = dayjs(v.createdAt).format('MM-DD HH:mm:ss')
+    v.uri = util.getUri(v.Channel.category, v.Channel.lang)
   })
   const maxVisiblePages = 7
   const totalPages = Math.ceil(data.count / pageSize)
@@ -42,11 +44,12 @@ router.get('/admin', auth, async function (req, res, next) {
     maxVisiblePages,
   })
 })
-router.get('/admin/channel', auth, async function (req, res, next) {
+router.get('/admin/channel', async function (req, res, next) {
   const channelList = await dao.findAllChannelList()
   channelList.forEach((item) => {
     item.credate = dayjs(item.createdAt).format('MM-DD')
     item.pubdate = dayjs(item.publishedAt).format('YYYY-MM-DD')
+    item.uri = util.getUri(item.category, item.lang)
   })
   res.render('admin/channel', {
     channels: channelList,
