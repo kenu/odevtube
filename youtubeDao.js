@@ -216,8 +216,7 @@ async function removeTranscript(videoId) {
 }
 
 async function createAccount(data) {
-  const result = await Account.create(data)
-  console.log(result.toJSON())
+  await Account.upsert(data)
   return result
 }
 
