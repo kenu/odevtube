@@ -71,6 +71,12 @@ a:hover {
   border-radius: 45%;
 }
 
+#login-page {
+  margin: auto;
+  text-align: center;
+  width: 30rem;
+}
+
 .github-logo {
   width: 2.3em;
 }
@@ -92,12 +98,12 @@ a:hover {
 
 .login {
   position: fixed;
-    top: 0.8rem;
-    right: 4.4rem;
-    height: 30px;
-    background-color: #f9f9f940;
-    padding: 10px;
-    z-index: 12;
+  top: 0.8rem;
+  right: 4.4rem;
+  height: 30px;
+  background-color: #f9f9f940;
+  padding: 10px;
+  z-index: 12;
 }
 
 #count {
@@ -233,7 +239,7 @@ li button.transcript {
   }
 
   #channelLink {
-    height: 3.0rem;
+    height: 3rem;
     background-color: #fabe9833;
   }
 

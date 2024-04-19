@@ -43,6 +43,15 @@ Youtube.belongsTo(Channel)
 
 Transcript.belongsTo(Youtube)
 Youtube.hasOne(Transcript)
+
+const Account = sequelize.define('Account', {
+  accountId: { type: DataTypes.STRING, unique: true },
+  username: DataTypes.STRING,
+  email: DataTypes.STRING,
+  photo: DataTypes.STRING,
+  provider: DataTypes.STRING,
+})
+
 ;(async () => {
   await sequelize.sync()
 })()
@@ -132,12 +141,6 @@ async function findOneByChannelId(channelId) {
   })
 }
 
-async function findAllChannelList_() {
-  return await Channel.findAll({
-    order: [['createdAt', 'DESC']],
-  })
-}
-
 async function findAllChannelList() {
   // Query to get the channel list and the last update
   const list = await sequelize.query(
@@ -203,6 +206,12 @@ async function removeTranscript(videoId) {
   }
 }
 
+async function createAccount(data) {
+  const result = await Account.create(data)
+  console.log(result.toJSON() )
+  return result
+}
+
 export default {
   create,
   findOneByChannelId,
@@ -216,4 +225,5 @@ export default {
   findTranscriptByVideoId,
   createTranscript,
   removeTranscript,
+  createAccount,
 }
