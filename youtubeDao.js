@@ -141,7 +141,8 @@ async function findOneByChannelId(channelId) {
   })
 }
 
-async function findAllChannelList() {
+import dayjs from 'dayjs'
+async function findAllChannelList(offset) {
   // Query to get the channel list and the last update
   const list = await sequelize.query(
     `select
@@ -158,7 +159,15 @@ async function findAllChannelList() {
       type: sequelize.QueryTypes.SELECT,
     }
   )
-  return list
+  if (offset) {
+    const baseDate = dayjs().subtract(offset, 'day').toISOString()
+    const lastUpdate = list.filter((item) => {
+      return dayjs(item.publishedAt).toISOString() > baseDate
+    })
+    return lastUpdate
+  } else {
+    return list
+  }
 }
 
 async function newList() {
@@ -208,7 +217,7 @@ async function removeTranscript(videoId) {
 
 async function createAccount(data) {
   const result = await Account.create(data)
-  console.log(result.toJSON() )
+  console.log(result.toJSON())
   return result
 }
 
