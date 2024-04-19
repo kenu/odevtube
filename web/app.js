@@ -36,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 import 'dotenv/config'
 import passport from 'passport'
 import GitHub from 'passport-github2'
+import dao from '../youtubeDao.js'
 
 try {
   passport.use(
@@ -45,8 +46,16 @@ try {
         clientSecret: process.env['GITHUB_CLIENT_SECRET'],
         callbackURL: process.env['HOST']+'/login/github/return',
       },
-      function (accessToken, refreshToken, profile, cb) {
+      async function (accessToken, _refreshToken, profile, cb) {
         console.log('accessToken', accessToken)
+        const account = {
+          accountId: profile.id,
+          username: profile.username,
+          email: profile._json.email,
+          photo: profile.photos[0].value,
+          provider: profile.provider,
+        }
+        await dao.createAccount(account)
         return cb(null, profile)
       }
     )
