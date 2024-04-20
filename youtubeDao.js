@@ -158,6 +158,9 @@ async function findAllChannelList(offset) {
   if (offset) {
     const baseDate = dayjs().subtract(offset, 'day').toISOString()
     const lastUpdate = list.filter((item) => {
+      if (!item.publishedAt) {
+        return true
+      }
       return dayjs(item.publishedAt).toISOString() > baseDate
     })
     return lastUpdate
