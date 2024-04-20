@@ -206,7 +206,6 @@ async function removeTranscript(videoId) {
 
 async function createAccount(data) {
   await Account.upsert(data)
-  return result
 }
 
 export default {
