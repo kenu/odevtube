@@ -67,6 +67,12 @@ async function findAll() {
   })
 }
 
+async function findAllEmpty() {
+  return await Channel.findAll({
+    where: {title: null},
+  })
+}
+
 async function createYoutube(data) {
   if (!data.videoId) {
     console.log('## ' + JSON.stringify(data))
@@ -214,6 +220,7 @@ export default {
   findOneByChannelId,
   findAllChannelList,
   findAll,
+  findAllEmpty,
   createYoutube,
   findAllYoutube,
   findAndCountAllYoutube,
