@@ -147,7 +147,7 @@ async function findAllChannelList(offset) {
         'aaa' a,
         c.*
       from channels c
-      join youtubes y on c.id = y.ChannelId
+      left join youtubes y on c.id = y.ChannelId
       group by c.id
       order by publishedAt desc;
     `,
