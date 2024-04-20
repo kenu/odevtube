@@ -32,6 +32,21 @@
     <a href="/admin">비디오</a>
   </nav>
   <section>
+    <input type="text" id="channelId" name="channelId" placeholder="channel id" value="">
+    <input type="text" id="lang" name="lang" placeholder="lang" value="ko">
+    <select id="lang" name="lang" value="ko">
+      <option value="ko">ko</option>
+      <option value="en">en</option>
+    </select>
+    <select id="category" name="category" value="dev">
+      <option value="dev">dev</option>
+      <option value="food">food</option>
+      <option value="kpop">kpop</option>
+      <option value="drama">drama</option>
+    </select>
+    <button onclick="createChannel()">create</button>
+  </section>
+  <section>
     <h3>Latest channels</h3>
     <table class="channels">
       <thead>
@@ -60,9 +75,15 @@
               <%= channel.customUrl %>
             </a>
           </td>
-          <td class="count"><%= channel.cnt %></td>
-          <td class="category"><%= channel.category %></td>
-          <td class="lang"><%= channel.lang %></td>
+          <td class="count">
+            <%= channel.cnt %>
+          </td>
+          <td class="category">
+            <%= channel.category %>
+          </td>
+          <td class="lang">
+            <%= channel.lang %>
+          </td>
           <td class="datecell">
             <%= channel.pubdate %>
           </td>
@@ -80,5 +101,6 @@
     </div>
   </section>
 </body>
+<script src="/js/admin.js"></script>
 
 </html>

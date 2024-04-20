@@ -58,6 +58,7 @@ const Account = sequelize.define('Account', {
 async function create(data) {
   await sequelize.sync()
   await Channel.upsert(data)
+  return await Channel.findOne({ where: { channelId: data.channelId } })
 }
 
 async function findAll() {

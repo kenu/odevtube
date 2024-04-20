@@ -56,6 +56,11 @@ router.get('/admin/channel', async function (req, res, next) {
     user: req.user,
   })
 })
+router.post('/api/channel', async function (req, res, next) {
+  const channel = req.body
+  const result = await dao.create(channel)
+  res.json(result.dataValues)
+})
 
 function auth(req, res, next) {
   if (req.user) {
