@@ -14,6 +14,7 @@ function createChannel() {
    .then((res) => res.json())
    .then((res) => {
       console.log(res)
+      alert('success: ' + JSON.stringify(res))
     })
    .catch((err) => {
       console.error(err)
