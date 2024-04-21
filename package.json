@@ -8,10 +8,11 @@
     "dayjs": "^1.11.10",
     "googleapis": "^134.0.0",
     "helmet": "^7.1.0",
-    "mariadb": "^3.2.3",
+    "mariadb": "^3.3.0",
     "node-html-parser": "^6.1.13",
     "nodemailer": "^6.9.13",
-    "sequelize": "^6.37.1"
+    "openai": "^4.38.2",
+    "sequelize": "^6.37.3"
   },
   "devDependencies": {
     "@babel/core": "^7.24.4",

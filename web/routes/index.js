@@ -40,7 +40,15 @@ router.get('/kpop', async function (req, res, next) {
   await goRenderPage(req, res, uri, '', title, hashList, isApi)
 })
 
-async function goRenderPage(req, res, uri, lang, title, hashList, isApi = false) {
+async function goRenderPage(
+  req,
+  res,
+  uri,
+  lang,
+  title,
+  hashList,
+  isApi = false
+) {
   const locale = lang === 'en' ? 'en_US' : 'ko_KR'
   const list = await dao.findAllYoutube(uri, lang)
   const user = req.user
@@ -74,13 +82,14 @@ function building(list) {
   })
 }
 
-import fetchTranscript from '../transcript.js'
+import fetchTranscript from '../utils/transcript.js'
+import summarize from '../utils/summary.js'
 router.get('/transcript/:videoId', async function (req, res, next) {
   const videoId = req.params.videoId
   // find by videoId
   const item = await dao.findTranscriptByVideoId(videoId)
   if (item) {
-    res.json({ text: item.content, videoId })
+    res.json({ videoId, summary: item.summary, text: item.content })
     return
   }
   // if empty get from youtube web
@@ -89,13 +98,25 @@ router.get('/transcript/:videoId', async function (req, res, next) {
     const pattern = /(니다|하죠|네요|세요|어요|고요)\s/g
     let transcript = await fetchTranscript(videoId)
     transcript = transcript.replaceAll(pattern, '$1. ')
+    const cmd =
+      "3줄 단문에, 명사형 어미로 요약(예)'있습니다.' 대신 '있음', '설명드립니다' 대신 '설명함' :\n"
+    const messages = [
+      {
+        role: 'system',
+        content: cmd + transcript,
+      },
+    ]
+    const result = await summarize(messages)
+    let summary = result[0].message.content
     await dao.createTranscript({
       videoId,
       content: transcript,
+      summary: summary,
     })
-    res.json({ text: transcript, videoId })
+    res.json({ videoId, summary, text: transcript })
   } catch (error) {
-    res.json({ text: 'Not Available', videoId })
+    console.log(error)
+    res.json({ videoId, summary: '', text: 'Not Available' })
   }
 })
 
@@ -109,13 +130,12 @@ router.get(
   '/login/github/return',
   passport.authenticate('github', { failureRedirect: '/login' }),
   function (req, res) {
-    let prevSession = req.session;
+    let prevSession = req.session
     req.session.regenerate((err) => {
-      Object.assign(req.session, prevSession);
-      res.redirect('/');
-    });
+      Object.assign(req.session, prevSession)
+      res.redirect('/')
+    })
   }
-
 )
 router.get('/home', function (req, res) {
   console.log(req.user)
@@ -123,9 +143,13 @@ router.get('/home', function (req, res) {
 })
 
 import connectEnsureLogin from 'connect-ensure-login'
-router.get('/profile', connectEnsureLogin.ensureLoggedIn(), function (req, res) {
-  res.render('profile', { user: req.user })
-})
+router.get(
+  '/profile',
+  connectEnsureLogin.ensureLoggedIn(),
+  function (req, res) {
+    res.render('profile', { user: req.user })
+  }
+)
 
 router.get('/logout', function (req, res, next) {
   req.logout((err) => {

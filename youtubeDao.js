@@ -36,6 +36,7 @@ const Transcript = sequelize.define('Transcript', {
     },
   },
   content: DataTypes.TEXT,
+  summary: DataTypes.STRING,
 })
 
 Channel.hasMany(Youtube)
@@ -55,6 +56,7 @@ const Account = sequelize.define('Account', {
 ;(async () => {
   await sequelize.sync()
 })()
+
 async function create(data) {
   await sequelize.sync()
   await Channel.upsert(data)

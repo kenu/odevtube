@@ -1,4 +1,4 @@
-import fetchTranscript from '../web/transcript.js'
+import fetchTranscript from '../web/utils/transcript.js'
 
 test('', async() => {
   const videoId = '4Z8qAzlnue8'

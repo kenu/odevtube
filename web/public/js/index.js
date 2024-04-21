@@ -128,7 +128,8 @@ function openTranscript(v) {
   fetch(url)
     .then((res) => res.json())
     .then((res) => {
-      document.getElementById('modalContent').innerHTML = res.text
+      document.getElementById('modalContent').innerHTML =
+        res.summary + '<hr />' + res.text
     })
 }
 
