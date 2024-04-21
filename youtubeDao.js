@@ -36,7 +36,7 @@ const Transcript = sequelize.define('Transcript', {
     },
   },
   content: DataTypes.TEXT,
-  summary: DataTypes.STRING,
+  summary: DataTypes.TEXT,
 })
 
 Channel.hasMany(Youtube)
