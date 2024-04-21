@@ -1,5 +1,3 @@
-// 채널 목록
-import dayjs from 'dayjs'
 import dao from '../youtubeDao'
 
 test('채널 목록 조회', async () => {

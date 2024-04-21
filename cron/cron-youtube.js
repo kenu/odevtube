@@ -1,6 +1,5 @@
 import youtube from '../youtube.js'
 import dao from '../youtubeDao.js'
-import channels from '../channels.js'
 
 async function getLatestVideos(channelId) {
   try {
