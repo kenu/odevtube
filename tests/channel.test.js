@@ -7,7 +7,7 @@ test('채널 목록 조회', async () => {
 })
 
 test('최근 업데이트 목록', async () => {
-  const channelList = await dao.findAllChannelList(7)
+  const channelList = await dao.findAllChannelList(14)
   console.log(channelList.length)
   expect(channelList).not.toBeNull()
   expect(channelList.length).not.toBe(0)

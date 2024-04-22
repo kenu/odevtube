@@ -31,7 +31,7 @@ async function getLatestVideos(channelId) {
   }
 }
 
-const list = await dao.findAllChannelList(7)
+const list = await dao.findAllChannelList(14)
 list.map(item => item.channelId).forEach(addVideos)
 
 async function addVideos(channelId) {
