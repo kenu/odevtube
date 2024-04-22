@@ -109,6 +109,9 @@ function localData() {
         return
       }
       const lastLi = document.querySelector('#list>li:last-child')
+      if (!lastLi) {
+        return
+      }
       const lastVideoId = lastLi.dataset.v
       const lastIndex = list.findIndex((v) => v.videoId === lastVideoId)
       const added = list.map((v, index) => {
