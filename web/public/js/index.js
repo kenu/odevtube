@@ -124,15 +124,20 @@ function localData() {
     })
 }
 
-function openTranscript(v) {
+function openTranscript(videoId) {
   openModal()
-  const videoId = v
   const url = '/transcript/' + videoId
+  wcs?.event('transcript', videoId)
   fetch(url)
     .then((res) => res.json())
     .then((res) => {
       document.getElementById('modalContent').innerHTML =
         res.summary + '<hr />' + res.text
+    })
+    .catch((err) => {
+      console.log(err)
+      document.getElementById('modalContent').innerHTML =
+        '🤔 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'
     })
 }
 
