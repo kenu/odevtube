@@ -42,8 +42,8 @@ const Transcript = sequelize.define('Transcript', {
 Channel.hasMany(Youtube)
 Youtube.belongsTo(Channel)
 
-Transcript.belongsTo(Youtube)
-Youtube.hasOne(Transcript)
+Transcript.belongsTo(Youtube, { as: 'video', foreignKey: 'videoId' })
+Youtube.hasOne(Transcript, { as: 'transcripts', foreignKey: 'videoId' })
 
 const Account = sequelize.define('Account', {
   accountId: { type: DataTypes.STRING, unique: true },
@@ -71,7 +71,7 @@ async function findAll() {
 
 async function findAllEmpty() {
   return await Channel.findAll({
-    where: {title: null},
+    where: { title: null },
   })
 }
 
