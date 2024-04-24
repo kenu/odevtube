@@ -15,6 +15,7 @@ function createChannel() {
    .then((res) => {
       console.log(res)
       alert('success: ' + JSON.stringify(res))
+      document.getElementById('channelId').value = ''
     })
    .catch((err) => {
       console.error(err)
