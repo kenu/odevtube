@@ -38,14 +38,22 @@ function sortTable(n) {
       shouldSwitch = false
       const x = rows[i].getElementsByTagName('TD')[n]
       const y = rows[i + 1].getElementsByTagName('TD')[n]
+      if (x.innerHTML.toLowerCase() === y.innerHTML.toLowerCase()) {
+        return
+      }
 
-      if (dir == 'asc') {
-        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+      let diff = x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()
+      if (n === 3) {
+        diff = +x.innerHTML > +y.innerHTML
+      }
+
+      if (dir === 'asc') {
+        if (diff) {
           shouldSwitch = true
           break
         }
-      } else if (dir == 'desc') {
-        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+      } else if (dir === 'desc') {
+        if (!diff) {
           shouldSwitch = true
           break
         }
