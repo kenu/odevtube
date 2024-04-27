@@ -13,10 +13,10 @@
   <h1>Admin Channel</h1>
   <section>
     <% if (!user) { %>
-      <p>Welcome! Please <a href="/login">log in</a>.</p>
-      <% } else { %>
-        <p>Hello, <%= user.username %>. <a href="/logout" alt="logout">logout</a>. <a href="/profile">profile</a>.</p>
-        <% } %>
+    <p>Welcome! Please <a href="/login">log in</a>.</p>
+    <% } else { %>
+    <p>Hello, <%= user.username %>. <a href="/logout" alt="logout">logout</a>. <a href="/profile">profile</a>.</p>
+    <% } %>
   </section>
   <aside class="github">
     <span class="k"> | <a href="/admin?c=kpop" alt="kpop">kpop</a>
@@ -25,7 +25,7 @@
     <a href="/admin" alt="korean">ko</a> |
     <a href="/admin?c=dev&l=en" alt="english">en</a>
     <a href="https://github.com/kenu/youtb" target="_blank">
-      <img src="/images/github-mark.svg" class="github-logo" title="fork in github"></a>
+      <img src="/images/github-mark.svg" class="github-logo" alt="fork in github"></a>
   </aside>
 
   <nav>
@@ -49,48 +49,48 @@
     <h3>Latest channels</h3>
     <table id="channelTable" class="channels">
       <thead>
-        <th class="channel" onclick="sortTable(0)">channel</th>
-        <th class="id" onclick="sortTable(1)">channel id</th>
-        <th class="customurl" onclick="sortTable(2)">custom url</th>
-        <th class="count" onclick="sortTable(3)">count</th>
-        <th class="category" onclick="sortTable(4)">category</th>
-        <th class="lang" onclick="sortTable(5)">lang</th>
-        <th class="date" onclick="sortTable(6)">last@</th>
-        <th class="date" onclick="sortTable(7)">cre@</th>
+        <th class="channel" onClick="sortTable(0)" onKeyDown="sortTable(0)">channel</th>
+        <th class="id" onClick="sortTable(1)" onKeyDown="sortTable(1)">channel id</th>
+        <th class="customurl" onClick="sortTable(2)" onKeyDown="sortTable(2)">custom url</th>
+        <th class="count" onClick="sortTable(3)" onKeyDown="sortTable(3)">count</th>
+        <th class="category" onClick="sortTable(4)" onKeyDown="sortTable(4)">category</th>
+        <th class="lang" onClick="sortTable(5)" onKeyDown="sortTable(5)">lang</th>
+        <th class="date" onClick="sortTable(6)" onKeyDown="sortTable(6)">last@</th>
+        <th class="date" onClick="sortTable(7)" onKeyDown="sortTable(7)">cre@</th>
       </thead>
       <tbody>
         <% channels.forEach(function(channel) { %>
-          <tr>
-            <td><a href="<%= channel.uri %>#<%= channel.title %>" title="<%= channel.title %>" target="_blank">
-                <img src="<%= channel.thumbnail %>" alt="<%= channel.title %>" class="thumbnail">
-                <%= channel.title %>
-              </a></td>
-            <td><a href="<%= channel.uri %>#<%= channel.title %>" title="<%= channel.title %>" target="_blank">
-                <%= channel.channelId %>
-              </a>
-            </td>
-            <td>
-              <a href="https://youtube.com/<%= channel.customUrl %>" title="<%= channel.title %>" target="_blank">
-                <%= channel.customUrl %>
-              </a>
-            </td>
-            <td class="count">
-              <%= channel.cnt %>
-            </td>
-            <td class="category">
-              <%= channel.category %>
-            </td>
-            <td class="lang">
-              <%= channel.lang %>
-            </td>
-            <td class="datecell">
-              <%= channel.pubdate %>
-            </td>
-            <td class="datecell">
-              <%= channel.credate %>
-            </td>
-          </tr>
-          <% }) %>
+        <tr>
+          <td><a href="<%= channel.uri %>#<%= channel.title %>" title="<%= channel.title %>" target="_blank">
+              <img src="<%= channel.thumbnail %>" alt="<%= channel.title %>" class="thumbnail">
+              <%= channel.title %>
+            </a></td>
+          <td><a href="<%= channel.uri %>#<%= channel.title %>" title="<%= channel.title %>" target="_blank">
+              <%= channel.channelId %>
+            </a>
+          </td>
+          <td>
+            <a href="https://youtube.com/<%= channel.customUrl %>" title="<%= channel.title %>" target="_blank">
+              <%= channel.customUrl %>
+            </a>
+          </td>
+          <td class="count">
+            <%= channel.cnt %>
+          </td>
+          <td class="category">
+            <%= channel.category %>
+          </td>
+          <td class="lang">
+            <%= channel.lang %>
+          </td>
+          <td class="datecell">
+            <%= channel.pubdate %>
+          </td>
+          <td class="datecell">
+            <%= channel.credate %>
+          </td>
+        </tr>
+        <% }) %>
       </tbody>
     </table>
     </div>
