@@ -39,19 +39,7 @@ function sortTable(columnIndex) {
       const currentCell = currentRow.getElementsByTagName('TD')[columnIndex]
       const nextCell = nextRow.getElementsByTagName('TD')[columnIndex]
 
-      let shouldSwitch = false
-
-      let currentValue = currentCell.innerHTML.toLowerCase()
-      let nextValue = nextCell.innerHTML.toLowerCase()
-      if (columnIndex === 3) {
-        currentValue = +currentValue
-        nextValue = +nextValue
-      }
-      if (dir === 'asc') {
-        shouldSwitch = currentValue > nextValue
-      } else {
-        shouldSwitch = currentValue < nextValue
-      }
+      let shouldSwitch = decideSwitch(currentCell, nextCell, columnIndex, dir)
 
       if (shouldSwitch) {
         rows[i].parentNode.insertBefore(rows[i + 1], rows[i])
@@ -66,3 +54,21 @@ function sortTable(columnIndex) {
     }
   }
 }
+
+function decideSwitch(currentCell, nextCell, columnIndex, dir) {
+  let currentValue = currentCell.innerHTML.toLowerCase()
+  let nextValue = nextCell.innerHTML.toLowerCase()
+  if (columnIndex === 3) {
+    currentValue = +currentValue
+    nextValue = +nextValue
+  }
+
+  let shouldSwitch = false
+  if (dir === 'asc') {
+    shouldSwitch = currentValue > nextValue
+  } else {
+    shouldSwitch = currentValue < nextValue
+  }
+  return shouldSwitch
+}
+
