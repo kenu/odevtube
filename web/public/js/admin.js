@@ -41,12 +41,16 @@ function sortTable(columnIndex) {
 
       let shouldSwitch = false
 
+      let currentValue = currentCell.innerHTML.toLowerCase()
+      let nextValue = nextCell.innerHTML.toLowerCase()
+      if (columnIndex === 3) {
+        currentValue = +currentValue
+        nextValue = +nextValue
+      }
       if (dir === 'asc') {
-        shouldSwitch =
-          currentCell.innerHTML.toLowerCase() > nextCell.innerHTML.toLowerCase()
+        shouldSwitch = currentValue > nextValue
       } else {
-        shouldSwitch =
-          currentCell.innerHTML.toLowerCase() < nextCell.innerHTML.toLowerCase()
+        shouldSwitch = currentValue < nextValue
       }
 
       if (shouldSwitch) {
