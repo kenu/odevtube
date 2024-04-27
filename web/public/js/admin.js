@@ -22,53 +22,43 @@ function createChannel() {
     })
 }
 
-function sortTable(n) {
+function sortTable(columnIndex) {
   const table = document.getElementById('channelTable')
-  let switchcount = 0
+  let switchCount = 0
   let switching = true
-  let shouldSwitch = true
   let dir = 'asc'
-  let i = 0
 
+  let rows = table.rows
   while (switching) {
     switching = false
-    const rows = table.rows
 
-    for (i = 1; i < rows.length - 1; i++) {
-      shouldSwitch = false
-      const x = rows[i].getElementsByTagName('TD')[n]
-      const y = rows[i + 1].getElementsByTagName('TD')[n]
-      if (x.innerHTML.toLowerCase() === y.innerHTML.toLowerCase()) {
-        return
-      }
+    for (let i = 1; i < rows.length - 1; i++) {
+      const currentRow = rows[i]
+      const nextRow = rows[i + 1]
 
-      let diff = x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()
-      if (n === 3) {
-        diff = +x.innerHTML > +y.innerHTML
-      }
+      const currentCell = currentRow.getElementsByTagName('TD')[columnIndex]
+      const nextCell = nextRow.getElementsByTagName('TD')[columnIndex]
+
+      let shouldSwitch = false
 
       if (dir === 'asc') {
-        if (diff) {
-          shouldSwitch = true
-          break
-        }
-      } else if (dir === 'desc') {
-        if (!diff) {
-          shouldSwitch = true
-          break
-        }
+        shouldSwitch =
+          currentCell.innerHTML.toLowerCase() > nextCell.innerHTML.toLowerCase()
+      } else {
+        shouldSwitch =
+          currentCell.innerHTML.toLowerCase() < nextCell.innerHTML.toLowerCase()
+      }
+
+      if (shouldSwitch) {
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i])
+        switching = true
+        switchCount++
       }
     }
 
-    if (shouldSwitch) {
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i])
+    if (switchCount === 0 && dir === 'asc') {
+      dir = 'desc'
       switching = true
-      switchcount++
-    } else {
-      if (switchcount == 0 && dir == 'asc') {
-        dir = 'desc'
-        switching = true
-      }
     }
   }
 }
