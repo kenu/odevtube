@@ -101,6 +101,9 @@ function localData() {
     .then((res) => res.json())
     .then((res) => {
       videos = res
+      if (!localStorage) {
+        return
+      }
       localStorage?.setItem(dataKey, JSON.stringify({ list: videos }))
       const data = localStorage.getItem(dataKey)
       const json = JSON.parse(data)

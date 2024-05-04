@@ -1,7 +1,7 @@
 import fetchTranscript from '../web/utils/transcript.js'
 
 test('', async() => {
-  const videoId = '4Z8qAzlnue8'
+  const videoId = 'ulqHnefBFMM'
   const transcript = await fetchTranscript(videoId)
   expect(transcript).not.toBeNull()
 })

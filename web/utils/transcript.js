@@ -16,8 +16,9 @@ async function fetchTranscript(videoId) {
   const data = JSON.parse(dataString.trim())
   const captionsUrl =
     data.captions.playerCaptionsTracklistRenderer.captionTracks[0].baseUrl
+  const captionsDefault = captionsUrl.replace('lang=de-DE', 'lang=ko-KR')
 
-  const resXML = await fetch(captionsUrl)
+  const resXML = await fetch(captionsDefault)
     .then((res) => res.text())
     .then((xml) => parse(xml))
 
