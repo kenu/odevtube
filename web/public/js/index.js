@@ -96,7 +96,7 @@ window.onload = function () {
 function localData() {
   let videos = []
   const url = location.pathname + '?a=1'
-  const dataKey = `data${location.pathname}`
+  const dataKey = `data${location.pathname}/`.replace(/\/\//g, '/')
   fetch(url)
     .then((res) => res.json())
     .then((res) => {
