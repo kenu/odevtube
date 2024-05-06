@@ -1,7 +1,7 @@
 const channels = {
   dev: [
     [
-      'UCGDJ6xYxrs9ijplSnY8GrHg',
+      'UCvnY2N2UEGJ6nzBuOEuxG-A',
       'UC8lT6sXcuLvFNstnnSqrsIA',
     ],
     [

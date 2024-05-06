@@ -1,4 +1,4 @@
-## Youtube API
+## Video API
 
 - Node.js v18+
 - Google Developers Console에 접속하여 새 프로젝트를 생성

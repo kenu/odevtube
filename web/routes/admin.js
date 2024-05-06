@@ -16,7 +16,7 @@ router.get('/admin', async function (req, res, next) {
     page = 1
   }
   const pageSize = 30
-  const data = await dao.getPagedYoutubes({
+  const data = await dao.getPagedVideos({
     category,
     lang,
     page,
@@ -32,7 +32,7 @@ router.get('/admin', async function (req, res, next) {
   const totalPages = Math.ceil(data.count / pageSize)
   let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2))
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
-  const area = `c=${category || 'dev'}&l=${lang || 'ko'}` + '&';
+  const area = `c=${category || 'dev'}&l=${lang || 'ko'}` + '&'
   res.render('admin/video', {
     videos,
     user: req.user,

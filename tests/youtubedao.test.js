@@ -2,7 +2,7 @@ import dao from '../youtubeDao'
 
 // pagination test
 test('pagination', async () => {
-  const result = await dao.getPagedYoutubes({
+  const result = await dao.getPagedVideos({
     page: 1,
     pageSize: 3,
   })
@@ -10,7 +10,7 @@ test('pagination', async () => {
   expect(result.count).not.toBe(0)
   expect(result.rows.length).toBe(3)
 
-  const result2 = await dao.getPagedYoutubes({
+  const result2 = await dao.getPagedVideos({
     page: 2,
     pageSize: 3,
   })

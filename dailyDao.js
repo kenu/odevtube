@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
     host: 'localhost',
     dialect: 'mariadb',
     timezone: 'Asia/Seoul',
-    logging: false,
+    logging: true,
   }
 )
 
@@ -19,7 +19,7 @@ async function newList(date) {
   const list = await sequelize.query(
     `select y.title, y.videoId, y.thumbnail, y.publishedAt,
     c.title ctitle, c.thumbnail cthumbnail, c.category
-    from Youtubes y
+    from Videos y
     join Channels c on c.id = y.ChannelId and c.lang = 'ko' and c.category in ('dev', 'drama', 'food')
     where y.publishedAt > $date order by y.publishedAt desc;`,
     {

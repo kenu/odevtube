@@ -7,7 +7,7 @@ const sequelize = new Sequelize(
     host: 'localhost',
     dialect: 'mariadb',
     timezone: 'Asia/Seoul',
-    logging: false,
+    logging: true,
   }
 )
 
@@ -20,7 +20,7 @@ const Channel = sequelize.define('Channel', {
   category: DataTypes.STRING,
 })
 
-const Youtube = sequelize.define('Youtube', {
+const Video = sequelize.define('Video', {
   title: DataTypes.STRING,
   videoId: { type: DataTypes.STRING, unique: true },
   thumbnail: DataTypes.STRING,
@@ -31,7 +31,7 @@ const Transcript = sequelize.define('Transcript', {
   videoId: {
     type: DataTypes.STRING,
     references: {
-      model: Youtube,
+      model: Video,
       key: 'videoId',
     },
   },
@@ -39,11 +39,11 @@ const Transcript = sequelize.define('Transcript', {
   summary: DataTypes.TEXT,
 })
 
-Channel.hasMany(Youtube)
-Youtube.belongsTo(Channel)
+Channel.hasMany(Video)
+Video.belongsTo(Channel)
 
-Transcript.belongsTo(Youtube, { as: 'video', foreignKey: 'videoId' })
-Youtube.hasOne(Transcript, { as: 'transcripts', foreignKey: 'videoId' })
+Transcript.belongsTo(Video, { as: 'video', foreignKey: 'videoId' })
+Video.hasOne(Transcript, { as: 'transcripts', foreignKey: 'videoId' })
 
 const Account = sequelize.define('Account', {
   accountId: { type: DataTypes.STRING, unique: true },
@@ -75,22 +75,22 @@ async function findAllEmpty() {
   })
 }
 
-async function createYoutube(data) {
+async function createVideo(data) {
   if (!data.videoId) {
     console.log('## ' + JSON.stringify(data))
     return
   }
-  const one = await Youtube.findOne({
+  const one = await Video.findOne({
     where: { videoId: data.videoId },
   })
   if (!one) {
-    const result = await Youtube.create(data)
+    const result = await Video.create(data)
     console.log(result.toJSON())
   }
 }
 
-async function findAllYoutube(category, lang) {
-  return await Youtube.findAll({
+async function findAllVideo(category, lang) {
+  return await Video.findAll({
     include: [
       {
         model: Channel,
@@ -102,9 +102,9 @@ async function findAllYoutube(category, lang) {
   })
 }
 
-async function getPagedYoutubes(options) {
+async function getPagedVideos(options) {
   const offset = (options.page - 1) * options.pageSize
-  const result = await findAndCountAllYoutube(
+  const result = await findAndCountAllVideo(
     options.category,
     options.lang,
     offset,
@@ -113,13 +113,13 @@ async function getPagedYoutubes(options) {
   return result
 }
 
-async function findAndCountAllYoutube(
+async function findAndCountAllVideo(
   category,
   lang,
   offset = 0,
   pageSize = 30
 ) {
-  return await Youtube.findAndCountAll({
+  return await Video.findAndCountAll({
     include: [
       {
         model: Channel,
@@ -149,7 +149,7 @@ async function findAllChannelList(offset) {
         'aaa' a,
         c.*
       from channels c
-      left join youtubes y on c.id = y.ChannelId
+      left join videos y on c.id = y.ChannelId
       group by c.id
       order by publishedAt desc;
     `,
@@ -173,7 +173,7 @@ async function findAllChannelList(offset) {
 
 async function newList() {
   const list = await sequelize.query(
-    `select y.videoId, y.title from Youtubes y
+    `select y.videoId, y.title from Videos y
     join Channels c on y.ChannelId = c.id
     where DATE_SUB(NOW(), INTERVAL 1 HOUR) < y.createdAt
     and c.lang = 'ko'
@@ -226,10 +226,10 @@ export default {
   findAllChannelList,
   findAll,
   findAllEmpty,
-  createYoutube,
-  findAllYoutube,
-  findAndCountAllYoutube,
-  getPagedYoutubes,
+  createVideo,
+  findAllVideo,
+  findAndCountAllVideo,
+  getPagedVideos,
   newList,
   findTranscriptByVideoId,
   createTranscript,

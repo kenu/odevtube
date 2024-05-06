@@ -24,8 +24,8 @@ test('save with videoId', async () => {
 })
 
 afterEach(async () => {
-  return await dao.removeTranscript(videoId);
-});
+  return await dao.removeTranscript(videoId)
+})
 
 test('newList', async () => {
   const newList = await dao.newList()
@@ -39,8 +39,8 @@ test('findOneByChannelId', async () => {
   expect(channel).toBeNull()
 })
 
-test('findAndCountAllYoutube', async () => {
-  const result = await dao.findAndCountAllYoutube()
+test('findAndCountAllVideo', async () => {
+  const result = await dao.findAndCountAllVideo()
   expect(result).not.toBeNull()
   expect(result.count).not.toBe(0)
 })

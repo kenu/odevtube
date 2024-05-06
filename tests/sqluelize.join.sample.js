@@ -16,15 +16,15 @@ const Channel = sequelize.define('Channel', {
   thumbnail: DataTypes.STRING,
   customUrl: DataTypes.STRING,
 })
-const Youtube = sequelize.define('Youtube', {
+const Video = sequelize.define('Video', {
   title: DataTypes.STRING,
   videoId: { type: DataTypes.STRING, unique: true },
   thumbnail: DataTypes.STRING,
   publishedAt: DataTypes.DATE,
 })
 
-Channel.hasMany(Youtube)
-Youtube.belongsTo(Channel)
+Channel.hasMany(Video)
+Video.belongsTo(Channel)
 ;(async () => {
   await sequelize.sync()
 })()

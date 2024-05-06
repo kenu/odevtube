@@ -5,7 +5,7 @@ async function getLatestVideos(channelId) {
   try {
     const response = await youtube.activities.list({
       channelId,
-      maxResults: 50, // 가져올 동영상 activity의 최대 수
+      maxResults: 150, // 가져올 동영상 activity의 최대 수
       order: 'date',
       part: 'snippet,contentDetails',
     })
@@ -31,8 +31,8 @@ async function getLatestVideos(channelId) {
   }
 }
 
-const list = await dao.findAllChannelList(14)
-list.map(item => item.channelId).forEach(addVideos)
+const list = await dao.findAllChannelList(914)
+list.map((item) => item.channelId).forEach(addVideos)
 
 async function addVideos(channelId) {
   const videos = await getLatestVideos(channelId)
@@ -42,6 +42,6 @@ async function addVideos(channelId) {
   }
   videos?.forEach(async (data) => {
     data.ChannelId = channel.id
-    await dao.createYoutube(data)
+    await dao.createVideo(data)
   })
 }

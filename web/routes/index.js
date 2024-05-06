@@ -7,6 +7,14 @@ const router = express.Router()
 router.use(passport.initialize())
 router.use(passport.session())
 
+router.get('/', async function (req, res, next) {
+  const uri = 'dev'
+  const title = '개발 관련 유튜브'
+  const hashList = ['멍슨상', 'spring', 'rust']
+  const isApi = req.query.a === '1'
+  await goRenderPage(req, res, uri, '', title, hashList, isApi)
+})
+
 router.get('/en', async function (req, res, next) {
   const uri = 'dev'
   const title = 'YouTube for Developers'
@@ -50,7 +58,7 @@ async function goRenderPage(
   isApi = false
 ) {
   const locale = lang === 'en' ? 'en_US' : 'ko_KR'
-  const list = await dao.findAllYoutube(uri, lang)
+  const list = await dao.findAllVideo(uri, lang)
   const user = req.user
   console.log(user)
   building(list)
@@ -158,14 +166,6 @@ router.get('/logout', function (req, res, next) {
     }
     res.redirect('/')
   })
-})
-
-router.get('/', async function (req, res, next) {
-  const uri = 'dev'
-  const title = '개발 관련 유튜브'
-  const hashList = ['멍슨상', 'spring', 'rust']
-  const isApi = req.query.a === '1'
-  await goRenderPage(req, res, uri, '', title, hashList, isApi)
 })
 
 export default router
