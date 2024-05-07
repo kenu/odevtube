@@ -15,7 +15,6 @@ const sequelize = new Sequelize(
 
 async function newList(date) {
   const dddd = dayjs(date).format('YYYY-MM-DD hh')
-  console.log(dddd)
   const list = await sequelize.query(
     `select y.title, y.videoId, y.thumbnail, y.publishedAt,
     c.title ctitle, c.thumbnail cthumbnail, c.category

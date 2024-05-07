@@ -58,9 +58,11 @@ async function goRenderPage(
   isApi = false
 ) {
   const locale = lang === 'en' ? 'en_US' : 'ko_KR'
-  const list = await dao.findAllVideo(uri, lang)
+  const stime = Date.now()
+  const list = await getAllVideos(uri, lang)
+  const etime = Date.now()
+  console.log('elapsed time: ', etime - stime)
   const user = req.user
-  console.log(user)
   building(list)
   if (isApi) {
     res.json(list)
@@ -74,6 +76,18 @@ async function goRenderPage(
       hashList,
       user,
     })
+  }
+}
+
+const cache = {}
+async function getAllVideos(uri, lang) {
+  // memory cache
+  if (cache[uri]) {
+    return cache[uri]
+  } else {
+    const list = await dao.findAllVideo(uri, lang)
+    cache[uri] = list
+    return list
   }
 }
 
@@ -146,7 +160,6 @@ router.get(
   }
 )
 router.get('/home', function (req, res) {
-  console.log(req.user)
   res.render('home', { user: req.user })
 })
 

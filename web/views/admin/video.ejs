@@ -13,17 +13,17 @@
   <h1>Admin Video</h1>
   <section>
     <% if (!user) { %>
-      <p>Welcome! Please <a href="/login">log in</a>.</p>
-      <% } else { %>
-        <p>Hello, <%= user.username %>. <a href="/logout" alt="logout">logout</a>. <a href="/profile">profile</a>.</p>
-        <% } %>
+    <p>Welcome! Please <a href="/login">log in</a>.</p>
+    <% } else { %>
+    <p>Hello, <%= user.username %>. <a href="/logout" title="">logout</a>. <a href="/profile">profile</a>.</p>
+    <% } %>
   </section>
   <aside class="github">
-    <span class="k"> | <a href="/admin?c=kpop" alt="kpop">kpop</a>
-      | <a href="/admin?c=drama" alt="drama">drama</a> |
-      <a href="/admin?c=food" alt="food">food</a> |</span>
-    <a href="/admin" alt="korean">dev ko</a> |
-    <a href="/admin?c=dev&l=en" alt="english">en</a>
+    <span class="k"> | <a href="/admin?c=kpop" title="">kpop</a>
+      | <a href="/admin?c=drama" title="">drama</a> |
+      <a href="/admin?c=food" title="">food</a> |</span>
+    <a href="/admin" title="korean">dev ko</a> |
+    <a href="/admin?c=dev&l=en" title="english">en</a>
     <a href="https://github.com/kenu/youtb" target="_blank">
       <img src="/images/github-mark.svg" class="github-logo" alt="fork in github"></a>
   </aside>
@@ -42,44 +42,44 @@
       </thead>
       <tbody>
         <% videos.forEach(function(video) { %>
-          <tr>
-            <td><a href="<%= video.uri %>#<%= video.Channel.title %>" title="<%= video.Channel.title %>" target="_blank">
-                <img src="<%= video.Channel.thumbnail %>" alt="<%= video.Channel.title %>" class="thumbnail">
-                <%= video.Channel.title %>
-              </a></td>
-            <td><a href="<%= video.uri %>#<%= video.title %>" title="<%= video.title %>" target="_blank">
-                <img src="<%= video.thumbnail %>" alt="<%= video.title %>" class="thumbnail">
-                <%= video.title %>
-              </a>
-            </td>
-            <td class="datecell">
-              <%= video.pubdate %>
-            </td>
-            <td class="datecell">
-              <%= video.credate %>
-            </td>
-          </tr>
-          <% }) %>
+        <tr>
+          <td><a href="<%= video.uri %>#<%= video.Channel.title %>" title="<%= video.Channel.title %>" target="_blank">
+              <img src="<%= video.Channel.thumbnail %>" alt="" class="thumbnail">
+              <%= video.Channel.title %>
+            </a></td>
+          <td><a href="<%= video.uri %>#<%= video.title %>" title="" target="_blank">
+              <img src="<%= video.thumbnail %>" alt="" class="thumbnail">
+              <%= video.title %>
+            </a>
+          </td>
+          <td class="datecell">
+            <%= video.pubdate %>
+          </td>
+          <td class="datecell">
+            <%= video.credate %>
+          </td>
+        </tr>
+        <% }) %>
       </tbody>
     </table>
     </div>
     <div class="pagination-wrapper">
       <div class="pagination">
         <% if (currentPage> 1) { %>
-          <a href="/admin?<%= area %>p=1" class="latest">Latest</a>
-          <a href="/admin?<%= area %>p=<%= currentPage - 1 %>" class="prev">Prev</a>
-          <% } %>
-            <% for (let i=startPage; i <=endPage; i++) { %>
-              <a href="/admin?<%= area %>p=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
-                <%= i %>
-              </a>
-              <% } %>
-                <% if (currentPage < totalPages) { %>
-                  <a href="/admin?<%= area %>p=<%= currentPage + 1 %>" class="next">Next</a>
-                  <a href="/admin?<%= area %>p=<%= totalPages %>" class="end">
-                    <%= totalPages %>
-                  </a>
-                  <% } %>
+        <a href="/admin?<%= area %>p=1" class="latest">Latest</a>
+        <a href="/admin?<%= area %>p=<%= currentPage - 1 %>" class="prev">Prev</a>
+        <% } %>
+        <% for (let i=startPage; i <=endPage; i++) { %>
+        <a href="/admin?<%= area %>p=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
+          <%= i %>
+        </a>
+        <% } %>
+        <% if (currentPage < totalPages) { %>
+        <a href="/admin?<%= area %>p=<%= currentPage + 1 %>" class="next">Next</a>
+        <a href="/admin?<%= area %>p=<%= totalPages %>" class="end">
+          <%= totalPages %>
+        </a>
+        <% } %>
       </div>
     </div>
   </section>

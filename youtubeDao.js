@@ -77,7 +77,6 @@ async function findAllEmpty() {
 
 async function createVideo(data) {
   if (!data.videoId) {
-    console.log('## ' + JSON.stringify(data))
     return
   }
   const one = await Video.findOne({
@@ -85,7 +84,6 @@ async function createVideo(data) {
   })
   if (!one) {
     const result = await Video.create(data)
-    console.log(result.toJSON())
   }
 }
 
@@ -195,7 +193,6 @@ async function findTranscriptByVideoId(videoId) {
 
 async function createTranscript(data) {
   if (!data.videoId) {
-    console.log('## ' + JSON.stringify(data))
     return
   }
   const one = await Transcript.findOne({

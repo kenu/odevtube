@@ -7,7 +7,6 @@ async function getNewHourly() {
     // videoId, title
     return `https://youtu.be/${data.videoId} ${data.title}`
   })
-  console.log(messages.join('\n'))
   if (messages.length === 0) {
     return
   }

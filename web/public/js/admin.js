@@ -13,7 +13,6 @@ function createChannel() {
   })
     .then((res) => res.json())
     .then((res) => {
-      console.log(res)
       alert('success: ' + JSON.stringify(res))
       document.getElementById('channelId').value = ''
     })
