@@ -82,11 +82,12 @@ async function goRenderPage(
 const cache = {}
 async function getAllVideos(uri, lang) {
   // memory cache
-  if (cache[uri]) {
-    return cache[uri]
+  const key = uri + lang
+  if (cache[key]) {
+    return cache[key]
   } else {
     const list = await dao.findAllVideo(uri, lang)
-    cache[uri] = list
+    cache[key] = list
     return list
   }
 }
