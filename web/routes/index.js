@@ -81,13 +81,15 @@ async function goRenderPage(
 
 const cache = {}
 async function getAllVideos(uri, lang) {
-  // memory cache
   const key = uri + lang
-  if (cache[key]) {
+  const interval = Date.now() - cache[key]?.timestamp
+  const isAvailable = interval < 1000 * 60 * 20 // 20mins inner
+  if (cache[key] && isAvailable) {
     return cache[key]
   } else {
     const list = await dao.findAllVideo(uri, lang)
     cache[key] = list
+    cache[key].timestamp = Date.now()
     return list
   }
 }
