@@ -39,6 +39,10 @@ tr:hover {
   width: auto;
   vertical-align: middle;
 }
+.channel-id {
+  font-family: monospace;
+}
+
 .date {
   width: 12%;
 }
