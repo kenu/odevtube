@@ -22,7 +22,7 @@ async function newList(date) {
     join Channels c on c.id = y.ChannelId and c.lang = 'ko' and c.category in ('dev', 'drama', 'food')
     where y.publishedAt > $date order by y.publishedAt desc;`,
     {
-      bind: { date: date },
+      bind: { date: dddd },
       type: sequelize.QueryTypes.SELECT,
     }
   )
