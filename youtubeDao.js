@@ -58,7 +58,7 @@ const Account = sequelize.define('Account', {
 })()
 
 async function create(data) {
-  await sequelize.sync()
+  console.log(data, 'created')
   await Channel.upsert(data)
   return await Channel.findOne({ where: { channelId: data.channelId } })
 }
@@ -138,7 +138,7 @@ async function findOneByChannelId(channelId) {
 }
 
 import dayjs from 'dayjs'
-async function findAllChannelList(offset) {
+async function findAllChannelList(dayOffset) {
   // Query to get the channel list and the last update
   const list = await sequelize.query(
     `select
@@ -155,8 +155,8 @@ async function findAllChannelList(offset) {
       type: sequelize.QueryTypes.SELECT,
     }
   )
-  if (offset) {
-    const baseDate = dayjs().subtract(offset, 'day').toISOString()
+  if (dayOffset) {
+    const baseDate = dayjs().subtract(dayOffset, 'day').toISOString()
     const lastUpdate = list.filter((item) => {
       if (!item.publishedAt) {
         return true

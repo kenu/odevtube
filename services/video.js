@@ -1,5 +1,5 @@
-import youtube from '../youtube.js'
 import dao from '../youtubeDao.js'
+import youtube from '../youtube.js'
 
 async function getLatestVideos(channelId) {
   try {
@@ -31,9 +31,6 @@ async function getLatestVideos(channelId) {
   }
 }
 
-const list = await dao.findAllChannelList(914)
-list.map((item) => item.channelId).forEach(addVideos)
-
 async function addVideos(channelId) {
   const videos = await getLatestVideos(channelId)
   const channel = await dao.findOneByChannelId(channelId)
@@ -44,4 +41,9 @@ async function addVideos(channelId) {
     data.ChannelId = channel.id
     await dao.createVideo(data)
   })
+}
+
+export default {
+  getLatestVideos,
+  addVideos,
 }
