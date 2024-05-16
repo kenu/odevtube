@@ -1,5 +1,6 @@
 import express from 'express'
 import dao from '../../youtubeDao.js'
+import yapi from '../../cron/cron-channel.js'
 import dayjs from 'dayjs'
 import passport from 'passport'
 import util from '../utils/uri.js'
@@ -56,8 +57,19 @@ router.get('/admin/channel', async function (req, res, next) {
     user: req.user,
   })
 })
+
 router.post('/api/channel', async function (req, res, next) {
-  const channel = req.body
+  const channelId = req.body.channelId
+  let channel;
+  if (channelId.indexOf('@') === 0) {
+    channel = await yapi.findChannelInfo(channelId)
+  } else {
+    channel = await yapi.getChannelInfo(channelId)
+  }
+  channel = {
+    ...req.body,
+    ...channel,
+  }
   const result = await dao.create(channel)
   res.json(result.dataValues)
 })
