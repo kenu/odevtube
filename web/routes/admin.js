@@ -1,6 +1,6 @@
 import express from 'express'
 import dao from '../../youtubeDao.js'
-import capi from '../../cron/cron-channel.js'
+import capi from '../../services/channel.js'
 import vapi from '../../services/video.js'
 import dayjs from 'dayjs'
 import passport from 'passport'
