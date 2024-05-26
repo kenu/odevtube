@@ -1,0 +1,7 @@
+sonar.projectKey=ok:mp4
+sonar.projectName=mp4
+sonar.projectVersion=1.0
+sonar.sources=.
+sonar.token=${SONAR_TOKEN}
+sonar.javascript.lcov.reportPaths=./coverage/lcov.info
+sonar.exclusions=web/public/js/**/*.js
