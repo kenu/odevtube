@@ -56,11 +56,9 @@ a:hover {
 }
 
 .ad {
-  background-color: #fcebebee;
-  padding: 10px 0 20px;
+  display: none;
   position: fixed;
   bottom: 0;
-  width: 96%;
 }
 
 .top {
@@ -88,11 +86,10 @@ a:hover {
 
 .github {
   position: fixed;
-  top: 1.2rem;
+  top: 3.5rem;
   right: 0.5rem;
   height: 30px;
   background-color: #f9f9f940;
-  padding: 10px;
   z-index: 11;
 }
 
@@ -257,5 +254,13 @@ li button.transcript {
 
   li a {
     font-size: medium;
+  }
+
+  .ad {
+    background-color: #fcebebee;
+    padding: 10px 0 20px;
+    position: fixed;
+    bottom: 0;
+    width: 96%;
   }
 }

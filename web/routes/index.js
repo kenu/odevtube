@@ -24,14 +24,6 @@ router.get('/en', async function (req, res, next) {
   await goRenderPage(req, res, uri, lang, title, hashList, isApi)
 })
 
-router.get('/drama', async function (req, res, next) {
-  const uri = 'drama'
-  const title = '드라마 관련 유튜브'
-  const hashList = ['아파트404', '나빌레라', '선공개']
-  const isApi = req.query.a === '1'
-  await goRenderPage(req, res, uri, '', title, hashList, isApi)
-})
-
 router.get('/food', async function (req, res, next) {
   const uri = 'food'
   const title = '요리 관련 유튜브'

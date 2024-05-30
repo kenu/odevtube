@@ -9,12 +9,6 @@ const channels = {
       'UCOxWrX5MIdXIeRNaXC3sqIg',
     ],
   ],
-  drama: [
-    [
-      'UCKuwp52MjSk-zeFRpchSheg',
-      'UCWYzc_p0GgfCepIWDHGFmEg',
-    ],
-  ],
   food: [
     [
       'UCyn-K7rZLXjGl7VXGweIlcA',
