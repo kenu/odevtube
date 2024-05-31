@@ -207,8 +207,8 @@ li button.transcript {
     padding: 3.1em 2.5rem;
   }
 
-  h1 {
-    left: 10%;
+  .title {
+    padding: 0.5rem 2.5rem;
   }
 
   .profile {
@@ -257,10 +257,12 @@ li button.transcript {
   }
 
   .ad {
-    background-color: #fcebebee;
-    padding: 10px 0 20px;
+    display: block;
+    background-color: #ccebebee;
+    padding: 10px 2.5rem;
     position: fixed;
     bottom: 0;
-    width: 96%;
+    left: 0;
+    width: 100%;
   }
 }
