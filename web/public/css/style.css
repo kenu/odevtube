@@ -20,20 +20,16 @@ h1 {
 ul {
   list-style: none;
   padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
 }
 
 li {
-  background-color: #f4f4f4;
-  border: 1px solid #ddd;
-  border-radius: 3%;
-  display: inline-block;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
-  margin: 3px;
-  padding: 6px 10px 4px;
   position: relative;
-  text-align: initial;
-  vertical-align: text-top;
-  width: 40%;
+  margin: 0.6rem 0.1rem;
+  min-height: 12rem;
+  padding: 0.2rem 0.1rem 1.4rem;
 }
 
 img {
