@@ -57,12 +57,12 @@ async function goRenderPage(
   const user = req.user
   building(list)
   if (isApi) {
-    res.json(list)
+    res.json(list.slice(201, 400))
   } else {
     res.render('index', {
       title,
       list,
-      flist: list.slice(0, 1000),
+      flist: list.slice(0, 200),
       locale,
       uri,
       hashList,
