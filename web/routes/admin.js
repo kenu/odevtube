@@ -71,6 +71,7 @@ router.post('/api/channel', async function (req, res, next) {
     ...req.body,
     ...channel,
   }
+
   const result = await dao.create(channel)
   await addVideos(channel.channelId)
   res.json(result.dataValues)
@@ -80,8 +81,8 @@ async function addVideos(channelId) {
   const videos = await vapi.getLatestVideos(channelId)
   await videos
     .map((item) => item.channelId)
-    .forEach(async () => {
-      vapi.addVideos()
+    .forEach(async (channelId) => {
+      vapi.addVideos(channelId)
     })
 }
 

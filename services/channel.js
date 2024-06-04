@@ -35,6 +35,7 @@ async function findChannelInfo(forHandle) {
     return data
   } catch (error) {
     console.error('Error:', error)
+    throw error
   }
 }
 
