@@ -38,6 +38,7 @@
         <th class="title">title</th>
         <th class="date">pub@</th>
         <th class="date">cre@</th>
+        <th class="del">del</th>
       </thead>
       <tbody>
         <% videos.forEach(function(video) { %>
@@ -56,6 +57,9 @@
           </td>
           <td class="datecell">
             <%= video.credate %>
+          </td>
+          <td class="datecell">
+            <a href="javascript:remove('<%= video.videoId %>')">x</a>
           </td>
         </tr>
         <% }) %>
@@ -82,6 +86,25 @@
       </div>
     </div>
   </section>
+  <script>
+  function remove(videoId) {
+      if (confirm('Are you sure?')) {
+        fetch('/api/video', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            videoId
+          }
+        }).then(function(response) {
+          if (response.ok) {
+            location.reload();
+          } else {
+            alert('Something went wrong, please try again later.');
+          }
+        });
+      }
+    }
+  </script>
 </body>
 
 </html>

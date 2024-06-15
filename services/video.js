@@ -1,5 +1,5 @@
-import dao from '../youtubeDao.js'
 import youtube from '../youtube.js'
+import dao from '../youtubeDao.js'
 
 async function getLatestVideos(channelId) {
   try {
@@ -43,7 +43,12 @@ async function addVideos(channelId) {
   })
 }
 
+async function remove(videoId) {
+  await dao.removeVideo(videoId)
+}
+
 export default {
   getLatestVideos,
   addVideos,
+  remove,
 }

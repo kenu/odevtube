@@ -59,6 +59,12 @@ router.get('/admin/channel', async function (req, res, next) {
   })
 })
 
+router.delete('/api/video', async function (req, res, next) {
+  const videoId = req.headers.videoid
+  const result = await vapi.remove(videoId)
+  res.json(result)
+})
+
 router.post('/api/channel', async function (req, res, next) {
   const channelId = req.body.channelId
   let channel

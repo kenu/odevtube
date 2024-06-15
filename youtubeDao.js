@@ -87,6 +87,15 @@ async function createVideo(data) {
   }
 }
 
+async function removeVideo(videoId) {
+  const one = await Video.findOne({
+    where: { videoId: videoId },
+  })
+  if (one) {
+    await one.destroy()
+  }
+}
+
 async function findAllVideo(category, lang) {
   return await Video.findAll({
     include: [
@@ -224,6 +233,7 @@ export default {
   findAll,
   findAllEmpty,
   createVideo,
+  removeVideo,
   findAllVideo,
   findAndCountAllVideo,
   getPagedVideos,
