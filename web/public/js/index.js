@@ -42,7 +42,7 @@ function showChannel(name, customUrl) {
   const html = `<a href="https://www.youtube.com/${customUrl}" target="_blank">➡️<em> ${name}</em></a>`
   document.getElementById('channelLink').innerHTML = html
   location.hash = name
-  wcs.event('showChannel', name)
+  wcs?.event('showChannel', name)
   gtag('event', 'level_end', {
     level_name: '시작됩니다...' + name,
     success: true,
