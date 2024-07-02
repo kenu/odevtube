@@ -62,7 +62,7 @@ async function goRenderPage(
     res.render('index', {
       title,
       list,
-      flist: list.slice(0, 200),
+      flist: list.slice(0, 400),
       locale,
       uri,
       hashList,
