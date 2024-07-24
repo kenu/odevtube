@@ -1,0 +1,17 @@
+.aidigestignore
+sonar-project.*
+*.local
+a.json
+README.md
+LICENSE
+CODE_OF_CONDUCT.md
+.prettierrc.json
+.gitignore
+tests/add*
+.scannerwork/
+web/public/favicon/
+web/public/images/
+.github/
+scripts/
+cron/
+simplemail.js

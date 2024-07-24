@@ -176,3 +176,22 @@ function changeFont() {
     document.body.style.fontFamily = 'Roboto, Arial, sans-serif'
   }
 }
+
+function shareTwitter(title, videoId) {
+  const url = `https://youtu.be/${videoId}`;
+  const text = encodeURIComponent(`${title} ${url}`);
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${text}`;
+
+  window.open(twitterUrl, '_blank');
+
+  if (typeof wcs !== 'undefined') {
+    wcs.event('shareTwitter', videoId);
+  }
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'share', {
+      method: 'Twitter',
+      content_type: 'video',
+      item_id: videoId,
+    });
+  }
+}

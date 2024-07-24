@@ -8,3 +8,4 @@ coverage
 sonar-project.properties
 .scannerwork
 .env
+codebase.md
