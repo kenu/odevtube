@@ -82,8 +82,6 @@ window.onload = function () {
     .getElementById('modalContent')
     ?.addEventListener('dblclick', copyTranscript)
 
-  localData()
-
   trivial()
 }
 
