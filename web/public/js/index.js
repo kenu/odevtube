@@ -8,12 +8,6 @@ function search() {
   const { htmlFiltered, count } = getFilteredHtml(keyword, repo)
   document.getElementById('list').innerHTML = htmlFiltered
   document.getElementById('count').innerHTML = count
-
-  if (!repoAdded.length) {
-    repoAdded = document.querySelectorAll('#listAdded>li')
-  }
-  const { htmlFiltered: html } = getFilteredHtml(keyword, repoAdded)
-  document.getElementById('listAdded').innerHTML = html
 }
 
 function getFilteredHtml(keyword, list) {

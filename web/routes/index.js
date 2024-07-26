@@ -11,8 +11,10 @@ router.get('/', async function (req, res, next) {
   const uri = 'dev'
   const title = '개발 관련 유튜브'
   const hashList = ['멍슨상', 'spring', 'rust']
+  const page = parseInt(req.query.page) || 1
+  const pageSize = 30
   const isApi = req.query.a === '1'
-  await goRenderPage(req, res, uri, '', title, hashList, isApi)
+  await goRenderPage(req, res, uri, '', title, hashList, isApi, page, pageSize)
 })
 
 router.get('/en', async function (req, res, next) {
@@ -47,26 +49,37 @@ async function goRenderPage(
   lang,
   title,
   hashList,
-  isApi = false
+  isApi = false,
+  page,
+  pageSize
 ) {
   const locale = lang === 'en' ? 'en_US' : 'ko_KR'
   const stime = Date.now()
-  const list = await getAllVideos(uri, lang)
+  const data = await dao.getPagedVideos({
+    category: uri,
+    lang,
+    page,
+    pageSize,
+  })
   const etime = Date.now()
   console.log('elapsed time: ', etime - stime)
   const user = req.user
-  building(list)
+  building(data.rows)
+  const totalPages = Math.ceil(data.count / pageSize)
+
   if (isApi) {
-    res.json(list.slice(201, 400))
+    res.json(data.rows)
   } else {
     res.render('index', {
       title,
-      list,
-      flist: list.slice(0, 400),
+      list: data.rows,
       locale,
       uri,
       hashList,
       user,
+      currentPage: page,
+      totalPages,
+      pageSize,
     })
   }
 }

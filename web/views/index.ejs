@@ -23,13 +23,31 @@
   </section>
   <% } %>
   <ul id="list">
-    <% flist.forEach(video=> { %>
+    <% list.forEach(video=> { %>
     <% include ./video.ejs %>
     <% }) %>
   </ul>
   <hr />
-  <ul id="listAdded"></ul>
   <hr />
+  <div class="pagination">
+    <% if (currentPage > 1) { %>
+    <a href="?page=1">First</a>
+    <a href="?page=<%= currentPage - 1 %>">Previous</a>
+    <% } %>
+
+    <% for(let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
+    <% if (i === currentPage) { %>
+    <span class="current"><%= i %></span>
+    <% } else { %>
+    <a href="?page=<%= i %>"><%= i %></a>
+    <% } %>
+    <% } %>
+
+    <% if (currentPage < totalPages) { %>
+    <a href="?page=<%= currentPage + 1 %>">Next</a>
+    <a href="?page=<%= totalPages %>">Last</a>
+    <% } %>
+  </div>
   <% include ./aside.ejs %>
   <hr />
   <hr />
