@@ -131,7 +131,7 @@ router.get('/transcript/:videoId', async function (req, res, next) {
   // if empty get from youtube web
   // save with videoId
   try {
-    const pattern = /(니다|하죠|네요|세요|어요|고요)\s/g
+    const pattern = /(니다|하죠|하겠죠|고요|까요|네요|데요|세요|아요|어요)\s/g
     let transcript = await fetchTranscript(videoId)
     transcript = transcript.replaceAll(pattern, '$1. ')
     const cmd =

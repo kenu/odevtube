@@ -43,7 +43,7 @@ async function fetchXml(url) {
 function extractTranscriptFromXml(xml) {
   const chunks = xml.getElementsByTagName('text')
   return Array.from(chunks).reduce(
-    (transcript, chunk) => transcript + chunk.textContent,
+    (transcript, chunk) => transcript + chunk.textContent + ' ',
     ''
   )
 }

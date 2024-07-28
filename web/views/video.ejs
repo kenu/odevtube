@@ -1,14 +1,14 @@
 <li data-v="<%= video.videoId %>">
   <div class="channel">
     <a href="javascript:showChannel('<%= video.channame %>', '<%= video.customUrl %>')" alt="<%= video.channame %>">
-      <img src="<%= video.profile %>" title="<%= video.channame %>" class="profile" />
+      <img src="<%= video.profile %>" alt="<%= video.channame %>" class="profile" />
       <span class="channame">
         <%= video.channame %>
       </span>
     </a>
   </div>
-  <img src="<%= video.thumbnail %>" title="<%= video.title %>" loading="lazy" />
-  <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>">
+  <img src="<%= video.thumbnail %>" alt="<%= video.title %>" loading="lazy" />
+  <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>" target="_blank">
     <div>
       <%= video.pubdate %>
     </div>
