@@ -5,9 +5,8 @@ function search() {
   if (!repo.length) {
     repo = document.querySelectorAll('#list>li')
   }
-  const { htmlFiltered, count } = getFilteredHtml(keyword, repo)
+  const { htmlFiltered } = getFilteredHtml(keyword, repo)
   document.getElementById('list').innerHTML = htmlFiltered
-  document.getElementById('count').innerHTML = count
 }
 
 function getFilteredHtml(keyword, list) {
@@ -19,7 +18,7 @@ function getFilteredHtml(keyword, list) {
   filtered.forEach(function (e) {
     htmlFiltered += e.outerHTML
   })
-  return { htmlFiltered, count: filtered.length }
+  return { htmlFiltered }
 }
 
 function clearKeyword() {

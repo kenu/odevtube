@@ -84,19 +84,18 @@ a:hover {
   position: fixed;
   top: 3.5rem;
   right: 0.5rem;
-  height: 30px;
-  background-color: #f9f9f940;
+  background-color: #f9000010;
+  padding: 4px;
   z-index: 11;
 }
 
 .login {
   position: fixed;
-  top: 1.6rem;
-  right: 2.1rem;
-  height: 30px;
-  background-color: #f9f9f940;
-  padding: 10px;
-  z-index: 12;
+  top: 3.5rem;
+  right: 0.5rem;
+  background-color: #f9000040;
+  padding: 4px;
+  z-index: 11;
 }
 
 #count {
@@ -280,7 +279,7 @@ li button.share-twitter {
   position: absolute;
   bottom: 6px;
   right: 90px;
-  background-color: #000000C0;
+  background-color: #000000c0;
   color: white;
   border: none;
   border-radius: 0.3rem;
@@ -298,12 +297,13 @@ li button.share-twitter:hover {
   margin-top: 20px;
 }
 
-.pagination a, .pagination span {
+.pagination a,
+.pagination span {
   color: black;
   float: left;
   padding: 8px 16px;
   text-decoration: none;
-  transition: background-color .3s;
+  transition: background-color 0.3s;
   border: 1px solid #ddd;
   margin: 0 4px;
 }
@@ -313,7 +313,7 @@ li button.share-twitter:hover {
 }
 
 .pagination .current {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
-  border: 1px solid #4CAF50;
+  border: 1px solid #4caf50;
 }
