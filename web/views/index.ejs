@@ -6,16 +6,35 @@
 <body>
   <section id="title">
     <h1 class="title">
-      <a href="https://okdevtv.com/" alt="okdevtv">
-        <img src="https://okdevtv.com/images/logo.webp" alt="okdevtv" class="okdevtv-logo" />
-      </a>
       <a href="javascript:window.scrollTo(0,0)">
+        <img src="https://okdevtv.com/images/logo.webp" alt="okdevtv" class="okdevtv-logo" />
         odevtube: <%= title %>
       </a>
     </h1>
-    <p>Welcome to <%= title %>
-    </p>
+    <div class="github">
+      <a href="https://github.com/kenu/youtb" target="_blank">
+        <img src="/images/github-mark.svg" class="github-logo" alt="fork in github"></a>
+    </div>
   </section>
+  <nav class="main-nav">
+    <aside class="login" aria-label="login">
+      <% if (!user) { %>
+      <a href="/login" alt="login">login</a>
+      <% } else { %>
+      <%= user.username %>
+      <a href="/profile" alt="profile">profile</a>
+      <a href="/logout" alt="logout">logout</a>
+      <a href="/admin" alt="admin">admin</a>
+      <% } %>
+    </aside>
+    <aside aria-label="menu">
+      | <a href="/kpop" alt="kpop">kpop</a>
+      | <a href="/food" alt="food">food</a>
+      | <a href="/" alt="korean">dev ko</a>
+      | <a href="/en" alt="english">dev en</a>
+    </aside>
+</nav>
+
   <% include ./search.ejs %>
   <% if (uri === 'kpop' ) { %>
   <section style="background-color: #FABE98; margin-bottom: 2.2rem; padding: 0.45rem;">

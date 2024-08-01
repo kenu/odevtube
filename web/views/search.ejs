@@ -1,9 +1,11 @@
 <section class="search">
+  <div class="search-title">
   <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
   <button id="searchButton">검색</button>
+  <button onclick="clearKeyword()">esc X</button>
+  <span id="channelLink"></span>
+</div>
   <div class="btn-group">
-    <button onclick="clearKeyword()">esc X</button>
-    <span id="channelLink"></span>
     <tags class="hash-list">
     <% hashList.forEach(h => { %>
       <a href="#<%= h %>">#<%= h %></a>

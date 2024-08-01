@@ -1,21 +1,3 @@
-<aside class="login" aria-label="login">
-  <% if (!user) { %>
-  <a href="/login" alt="login">login</a>
-  <% } else { %>
-  <%= user.username %>
-  <a href="/profile" alt="profile">profile</a>
-  <a href="/logout" alt="logout">logout</a>
-  <a href="/admin" alt="admin">admin</a>
-  <% } %>
-</aside>
-<aside class="github" aria-label="github">
-  <span class="k"> | <a href="/kpop" alt="kpop">kpop</a>
-    | <a href="/food" alt="food">food</a> |</span>
-  <a href="/" alt="korean">dev ko</a> |
-  <a href="/en" alt="english">dev en</a>
-  <a href="https://github.com/kenu/youtb" target="_blank">
-    <img src="/images/github-mark.svg" class="github-logo" alt="fork in github"></a>
-</aside>
 <div class="ad">
   <div class="ad-title" style="display: inline;">
     - <a href="https://inf.run/LPpDg" target="_blank" alt="VS Code에서 쉽게 사용하는 Git">VS Code에서 쉽게 사용하는 Git:

@@ -3,7 +3,6 @@
 body {
   font-family: 'Pretendard SemiBold', 'Arial', sans-serif;
   margin: 0;
-  padding: 3.1em 0.2rem;
 }
 
 h1 {
@@ -71,6 +70,13 @@ a:hover {
   width: 30rem;
 }
 
+.github {
+  position: fixed;
+  top: 0;
+  right: 0.3rem;
+  z-index: 100;
+}
+
 .github-logo {
   width: 2.3em;
 }
@@ -80,22 +86,20 @@ a:hover {
   vertical-align: bottom;
 }
 
-.github {
-  position: fixed;
-  top: 3.5rem;
-  right: 4.5rem;
-  background-color: #f9000010;
-  padding: 4px;
+.main-nav {
+  position: sticky;
+  top: 2.5rem;
+  background-color: #f9000020;
+  padding: 0.4rem;
+  text-align: right;
   z-index: 11;
 }
 
-.login {
-  position: fixed;
-  top: 3.5rem;
-  right: 0.5rem;
-  background-color: #f9000040;
-  padding: 4px;
-  z-index: 11;
+#title {
+  padding: 0.2rem;
+}
+.title {
+  font-size: larger;
 }
 
 #count {
@@ -117,14 +121,6 @@ a:hover {
 .profile {
   width: 1.2rem;
   vertical-align: bottom;
-}
-
-.k {
-  background-color: #fabe98;
-}
-
-section#title {
-  margin: 4rem 0 0;
 }
 
 #list li a {
@@ -171,16 +167,17 @@ li button.transcript {
 
 .search {
   display: block;
-  margin-bottom: 1rem;
+  margin: 3.3rem auto 0.8rem;
+  padding: 0.2rem;
 }
 
 .search #keyword {
-  font-size: 2rem;
-  width: 100%;
+  font-size: 1.2rem;
+  width: 50%;
 }
 
 .search button {
-  font-size: 2rem;
+  font-size: 1.2rem;
 }
 
 .search .hash-list {
@@ -200,7 +197,8 @@ li button.transcript {
   }
 
   .title {
-    padding: 0.5rem 2.5rem;
+    margin: 0;
+    padding: 0.2rem 2.5rem;
   }
 
   .profile {
