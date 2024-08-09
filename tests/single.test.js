@@ -1,4 +1,4 @@
-const youtube = require('./youtub')
+import youtube from './youtub'
 
 test('channel', channel)
 

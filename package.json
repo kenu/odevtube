@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "test": "jest --verbose --coverage tests/test.test.js"
+    "test": "node --verbose --experimental-vm-modules node_modules/jest/bin/jest.js --coverage tests/test.test.js"
   },
   "dependencies": {
     "axios": "^1.6.8",
