@@ -9,3 +9,5 @@ sonar-project.properties
 .scannerwork
 .env
 codebase.md
+.DS_Store
+.Thumbs.db
