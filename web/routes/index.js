@@ -170,7 +170,7 @@ router.get(
     let prevSession = req.session
     req.session.regenerate((err) => {
       Object.assign(req.session, prevSession)
-      res.redirect('/')
+      res.redirect('/admin')
     })
   }
 )
