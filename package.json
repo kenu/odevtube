@@ -12,7 +12,8 @@
     "node-html-parser": "^6.1.13",
     "nodemailer": "^6.9.13",
     "openai": "^4.38.2",
-    "sequelize": "^6.37.3"
+    "sequelize": "^6.37.3",
+    "youtube-transcript": "^1.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.24.4",
