@@ -1,6 +1,7 @@
 import express from 'express'
 import dayjs from 'dayjs'
 import passport from 'passport'
+import { YoutubeTranscript } from 'youtube-transcript'
 import dao from '../../youtubeDao.js'
 
 const router = express.Router()
@@ -119,7 +120,6 @@ function building(list) {
   })
 }
 
-import fetchTranscript from '../utils/transcript.js'
 import summarize from '../utils/summary.js'
 router.get('/transcript/:videoId', async function (req, res, next) {
   const videoId = req.params.videoId
@@ -129,33 +129,35 @@ router.get('/transcript/:videoId', async function (req, res, next) {
     res.json({ videoId, summary: item.summary, text: item.content })
     return
   }
-  // if empty get from youtube web
-  // save with videoId
+  await upsertTranscript(res, videoId)
+
+})
+
+async function upsertTranscript(res, videoId) {
   try {
-    const pattern = /(니다|하죠|하겠죠|고요|까요|네요|데요|세요|아요|어요)\s/g
-    let transcript = await fetchTranscript(videoId)
-    transcript = transcript.replaceAll(pattern, '$1. ')
-    const cmd =
-      "3줄 단문에, 명사형 어미로 요약(예)'있습니다.' 대신 '있음', '설명드립니다' 대신 '설명함' :\n"
+    const pattern = /(니다|이죠|하죠|하겠죠|고요|까요|네요|데요|세요|에요|아요|어요)\s/g
+    const transcript = await YoutubeTranscript.fetchTranscript(videoId)
+    let fullText = transcript.map((item) => item.text).join(' ')
+    fullText = fullText.replaceAll(pattern, '$1. ')
+    const cmd = "3줄 단문에, 명사형 어미로 요약(예)'있습니다.' 대신 '있음', '설명드립니다' 대신 '설명함' :\n"
     const messages = [
       {
         role: 'system',
-        content: cmd + transcript,
+        content: cmd + fullText,
       },
     ]
-    const result = await summarize(messages)
-    let summary = result[0].message.content
+    const summary = await summarize(messages)
     await dao.createTranscript({
       videoId,
-      content: transcript,
+      content: fullText,
       summary: summary,
     })
-    res.json({ videoId, summary, text: transcript })
+    res.json({ videoId, summary, text: fullText })
   } catch (error) {
     console.log(error)
     res.json({ videoId, summary: '', text: 'Not Available' })
   }
-})
+}
 
 router.get('/login', function (req, res) {
   res.render('login')

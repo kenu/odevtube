@@ -6,7 +6,7 @@
 - YouTube Data API v3를 활성화
 - 프로젝트에서 신규 API 키를 생성
   - 환경변수 YOUTUBE_API_KEY 설정
-- [package.json](https://github.com/kenu/youtb/blob/main/package.json)에 youtube-api를 추가 `"googleapis": "^134.0.0"`
+- [package.json](https://github.com/kenu/odevtube/blob/main/package.json)에 youtube-api를 추가 `"googleapis": "^134.0.0"`
 
 ```
   {

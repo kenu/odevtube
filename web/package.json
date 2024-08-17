@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "nodemon ./bin/youtb.js"
+    "dev": "nodemon ./bin/odevtube.js"
   },
   "dependencies": {
     "body-parser": "^1.20.2",

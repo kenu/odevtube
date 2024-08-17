@@ -1,12 +1,12 @@
 #!/bin/zsh
 . ~/.zshrc
 
-cd ~/git/youtb
+cd ~/git/odevtube
 git pull origin main
 pnpm i
-cd ~/git/youtb/web
+cd ~/git/odevtube/web
 pnpm i
-pm2 restart youtb --update-env
+pm2 restart odevtube --update-env
 sleep 2
 pm2 list
 
