@@ -151,8 +151,8 @@ async function upsertTranscript(res, videoId) {
     })
     res.json({ videoId, summary, text: fullText })
   } catch (error) {
-    console.log(error)
-    res.json({ videoId, summary: '', text: 'Not Available' })
+    console.error(error)
+    res.json({ videoId, summary: '', text: 'Not Available ' + error.message })
   }
 }
 
