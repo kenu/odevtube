@@ -1,7 +1,7 @@
 import express from 'express'
 import dayjs from 'dayjs'
 import passport from 'passport'
-import { YoutubeTranscript } from 'youtube-transcript'
+import { getFullText } from '../utils/transcriptUtil.js'
 import dao from '../../youtubeDao.js'
 
 const router = express.Router()
@@ -135,10 +135,7 @@ router.get('/transcript/:videoId', async function (req, res, next) {
 
 async function upsertTranscript(res, videoId) {
   try {
-    const pattern = /(니다|이죠|하죠|하겠죠|고요|까요|네요|데요|세요|에요|아요|어요)\s/g
-    const transcript = await YoutubeTranscript.fetchTranscript(videoId)
-    let fullText = transcript.map((item) => item.text).join(' ')
-    fullText = fullText.replaceAll(pattern, '$1. ')
+    let fullText = await getFullText(videoId)
     const cmd = "3줄 단문에, 명사형 어미로 요약(예)'있습니다.' 대신 '있음', '설명드립니다' 대신 '설명함' :\n"
     const messages = [
       {
