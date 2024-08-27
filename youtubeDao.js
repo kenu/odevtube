@@ -124,7 +124,7 @@ async function findAndCountAllVideo(
   category,
   lang,
   offset = 0,
-  pageSize = 30
+  pageSize = 60
 ) {
   return await Video.findAndCountAll({
     include: [

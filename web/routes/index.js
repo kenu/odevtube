@@ -14,8 +14,7 @@ router.get('/', async function (req, res, next) {
   const hashList = ['AI', 'spring', '자바스크립트']
   const isApi = req.query.a === '1'
   const page = parseInt(req.query.page) || 1
-  const pageSize = 30
-  await goRenderPage(req, res, uri, '', title, hashList, isApi, page, pageSize)
+  await goRenderPage(req, res, uri, '', title, hashList, isApi, page)
 })
 
 router.get('/en', async function (req, res, next) {
@@ -25,8 +24,7 @@ router.get('/en', async function (req, res, next) {
   const lang = 'en'
   const isApi = req.query.a === '1'
   const page = parseInt(req.query.page) || 1
-  const pageSize = 30
-  await goRenderPage(req, res, uri, lang, title, hashList, isApi, page, pageSize)
+  await goRenderPage(req, res, uri, lang, title, hashList, isApi, page)
 })
 
 router.get('/food', async function (req, res, next) {
@@ -35,18 +33,16 @@ router.get('/food', async function (req, res, next) {
   const hashList = ['시장', '백종원', '간식']
   const isApi = req.query.a === '1'
   const page = parseInt(req.query.page) || 1
-  const pageSize = 30
-  await goRenderPage(req, res, uri, '', title, hashList, isApi, page, pageSize)
+  await goRenderPage(req, res, uri, '', title, hashList, isApi, page)
 })
 
 router.get('/kpop', async function (req, res, next) {
   const uri = 'kpop'
   const title = 'K-POP YouTube Videos'
-  const hashList = ['M/V', 'Official', 'ILLIT', 'BTS']
+  const hashList = ['M/V', 'Official', '뉴진스', 'BTS']
   const isApi = req.query.a === '1'
   const page = parseInt(req.query.page) || 1
-  const pageSize = 30
-  await goRenderPage(req, res, uri, '', title, hashList, isApi, page, pageSize)
+  await goRenderPage(req, res, uri, '', title, hashList, isApi, page)
 })
 
 async function goRenderPage(
@@ -57,11 +53,11 @@ async function goRenderPage(
   title,
   hashList,
   isApi = false,
-  page,
-  pageSize
+  page
 ) {
   const locale = lang === 'en' ? 'en_US' : 'ko_KR'
   const stime = Date.now()
+  const pageSize = 60
   const data = await dao.getPagedVideos({
     category: uri,
     lang,

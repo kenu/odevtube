@@ -17,7 +17,7 @@ router.get('/admin', async function (req, res, next) {
   if (!page) {
     page = 1
   }
-  const pageSize = 30
+  const pageSize = 60
   const data = await dao.getPagedVideos({
     category,
     lang,
