@@ -71,3 +71,27 @@ function decideSwitch(currentCell, nextCell, columnIndex, dir) {
   return shouldSwitch
 }
 
+// 슬라이딩 메뉴 토글 기능
+window.onload = function () {
+  document.querySelector('.menu-toggle').addEventListener('click', function () {
+    document.querySelector('.sliding-menu').classList.toggle('open')
+  })
+}
+
+function remove(videoId) {
+  if (confirm('Are you sure?')) {
+    fetch('/api/video', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        videoId,
+      },
+    }).then(function (response) {
+      if (response.ok) {
+        location.reload()
+      } else {
+        alert('Something went wrong, please try again later.')
+      }
+    })
+  }
+}

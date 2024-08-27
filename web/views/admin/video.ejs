@@ -7,66 +7,10 @@
   <title>Admin Video</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/admin.css">
-  <style>
-    /* 슬라이딩 메뉴 스타일 */
-    .menu-toggle {
-      position: fixed;
-      left: 10px;
-      top: 10px;
-      z-index: 999;
-      background: #333;
-      color: white;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-    }
-
-    .sliding-menu {
-      position: fixed;
-      left: -250px;
-      top: 0;
-      width: 250px;
-      height: 100%;
-      background: #333;
-      transition: 0.3s;
-      z-index: 998;
-      padding-top: 60px;
-    }
-
-    .sliding-menu.open {
-      left: 0;
-    }
-
-    .sliding-menu a {
-      display: block;
-      color: white;
-      padding: 10px 15px;
-      text-decoration: none;
-    }
-
-    .sliding-menu a:hover {
-      background: #444;
-    }
-
-    /* 본문 조정 */
-    body {
-      padding-left: 20px;
-    }
-  </style>
 </head>
 
 <body>
-  <button class="menu-toggle">☰</button>
-
-  <nav class="sliding-menu">
-    <a href="/admin">홈</a>
-    <a href="/admin/channel">채널</a>
-    <a href="/admin?c=kpop">K-pop</a>
-    <a href="/admin?c=food">음식</a>
-    <a href="/admin?c=dev&l=en">Dev (EN)</a>
-    <a href="/admin">Dev (KO)</a>
-  </nav>
-
+  <% include ./nav %>
   <h1>Admin Video</h1>
   <section>
     <% if (!user) { %>
@@ -143,30 +87,7 @@
       </div>
     </div>
   </section>
-  <script>
-    // 슬라이딩 메뉴 토글 기능
-    document.querySelector('.menu-toggle').addEventListener('click', function() {
-      document.querySelector('.sliding-menu').classList.toggle('open');
-    });
-
-    function remove(videoId) {
-      if (confirm('Are you sure?')) {
-        fetch('/api/video', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            videoId
-          }
-        }).then(function(response) {
-          if (response.ok) {
-            location.reload();
-          } else {
-            alert('Something went wrong, please try again later.');
-          }
-        });
-      }
-    }
-  </script>
+  <script src="/js/admin.js"></script>
 </body>
 
 </html>
