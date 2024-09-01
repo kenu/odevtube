@@ -55,23 +55,27 @@ async function goRenderPage(
   isApi = false,
   page
 ) {
-  const locale = lang === 'en' ? 'en_US' : 'ko_KR'
-  const stime = Date.now()
-  const pageSize = 60
+  const locale = lang === 'en' ? 'en_US' : 'ko_KR';
+  const stime = Date.now();
+  const pageSize = 60;
+  const searchKeyword = req.query.search || '';
+
   const data = await dao.getPagedVideos({
     category: uri,
     lang,
     page,
     pageSize,
-  })
-  const etime = Date.now()
-  console.log('elapsed time: ', etime - stime)
-  const user = req.user
-  building(data.rows)
-  const totalPages = Math.ceil(data.count / pageSize)
+    searchKeyword,
+  });
+
+  const etime = Date.now();
+  console.log('elapsed time: ', etime - stime);
+  const user = req.user;
+  building(data.rows);
+  const totalPages = Math.ceil(data.count / pageSize);
 
   if (isApi) {
-    res.json(data.rows)
+    res.json(data.rows);
   } else {
     res.render('index', {
       title,
@@ -84,22 +88,8 @@ async function goRenderPage(
       currentPage: page,
       totalPages,
       pageSize,
-    })
-  }
-}
-
-const cache = {}
-async function getAllVideos(uri, lang) {
-  const key = uri + lang
-  const interval = Date.now() - cache[key]?.timestamp
-  const isAvailable = interval < 1000 * 60 * 20 // 20mins inner
-  if (cache[key] && isAvailable) {
-    return cache[key]
-  } else {
-    const list = await dao.findAllVideo(uri, lang)
-    cache[key] = list
-    cache[key].timestamp = Date.now()
-    return list
+      searchKeyword, // Pass the search keyword to the view
+    });
   }
 }
 
@@ -126,7 +116,6 @@ router.get('/transcript/:videoId', async function (req, res, next) {
     return
   }
   await upsertTranscript(res, videoId)
-
 })
 
 async function upsertTranscript(res, videoId) {

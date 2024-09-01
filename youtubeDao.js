@@ -108,36 +108,51 @@ async function findAllVideo(category, lang) {
     order: [['publishedAt', 'DESC']],
   })
 }
-
 async function getPagedVideos(options) {
-  const offset = (options.page - 1) * options.pageSize
+  const offset = (options.page - 1) * options.pageSize;
   const result = await findAndCountAllVideo(
     options.category,
     options.lang,
     offset,
-    options.pageSize
-  )
-  return result
+    options.pageSize,
+    options.searchKeyword
+  );
+  return result;
 }
 
 async function findAndCountAllVideo(
   category,
   lang,
   offset = 0,
-  pageSize = 60
+  pageSize = 60,
+  searchKeyword = ''
 ) {
+  let whereCondition = {};
+  if (searchKeyword) {
+    whereCondition = {
+      [Sequelize.Op.or]: [
+        { title: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
+        { '$Channel.title$': { [Sequelize.Op.like]: `%${searchKeyword}%` } }
+      ]
+    };
+  }
+
   return await Video.findAndCountAll({
     include: [
       {
         model: Channel,
-        where: { category: category || 'dev', lang: lang || 'ko' },
+        where: {
+          category: category || 'dev',
+          lang: lang || 'ko'
+        },
         required: true,
       },
     ],
+    where: whereCondition,
     order: [['publishedAt', 'DESC']],
     offset: offset,
     limit: pageSize,
-  })
+  });
 }
 
 async function findOneByChannelId(channelId) {

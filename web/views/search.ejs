@@ -1,10 +1,11 @@
 <section class="search">
-  <div class="search-title">
-  <input type="text" id="keyword" placeholder="search keyword" autocomplete="off">
-  <button id="searchButton">검색</button>
-  <button onclick="clearKeyword()">esc X</button>
-  <span id="channelLink"></span>
-</div>
+  <form action="" method="GET">
+    <input type="text" id="keyword" name="search" value="<%= searchKeyword %>" placeholder="search keyword" autocomplete="off">
+    <input type="hidden" name="page" value="1">
+    <button type="submit" id="searchButton">검색</button>
+    <button type="button" onclick="clearKeyword()">esc X</button>
+    <span id="channelLink"></span>
+  </form>
   <div class="btn-group">
     <tags class="hash-list">
     <% hashList.forEach(h => { %>

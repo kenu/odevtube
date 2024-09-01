@@ -41,8 +41,9 @@
     ➡️ <a href="https://www.youtube.com/playlist?list=PLQu3_HfiL3GQnaFfT7CAfrWMyhoWL7khJ" title="2022 교차편집 모음 (2022 Stage mix playlist)" style="padding-left: 1rem;">2022 교차편집 모음 (2022 Stage mix playlist)</a>
   </section>
   <% } %>
+
   <ul id="list">
-    <% list.forEach(video=> { %>
+    <% list.forEach(video => { %>
     <% include ./video.ejs %>
     <% }) %>
   </ul>
@@ -50,21 +51,21 @@
   <hr />
   <div class="pagination">
     <% if (currentPage > 1) { %>
-    <a href="?page=1">First</a>
-    <a href="?page=<%= currentPage - 1 %>">Previous</a>
+    <a href="?page=1<%= searchKeyword ? '&search=' + encodeURIComponent(searchKeyword) : '' %>">First</a>
+    <a href="?page=<%= currentPage - 1 %><%= searchKeyword ? '&search=' + encodeURIComponent(searchKeyword) : '' %>">Previous</a>
     <% } %>
 
     <% for(let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
     <% if (i === currentPage) { %>
     <span class="current"><%= i %></span>
     <% } else { %>
-    <a href="?page=<%= i %>"><%= i %></a>
+    <a href="?page=<%= i %><%= searchKeyword ? '&search=' + encodeURIComponent(searchKeyword) : '' %>"><%= i %></a>
     <% } %>
     <% } %>
 
     <% if (currentPage < totalPages) { %>
-    <a href="?page=<%= currentPage + 1 %>">Next</a>
-    <a href="?page=<%= totalPages %>">Last</a>
+    <a href="?page=<%= currentPage + 1 %><%= searchKeyword ? '&search=' + encodeURIComponent(searchKeyword) : '' %>">Next</a>
+    <a href="?page=<%= totalPages %><%= searchKeyword ? '&search=' + encodeURIComponent(searchKeyword) : '' %>">Last</a>
     <% } %>
   </div>
   <% include ./aside.ejs %>
