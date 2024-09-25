@@ -7,23 +7,23 @@
     "dev": "nodemon ./bin/odevtube.js"
   },
   "dependencies": {
-    "body-parser": "^1.20.2",
+    "body-parser": "^1.20.3",
     "connect-ensure-login": "^0.1.1",
-    "cookie-parser": "~1.4.4",
-    "dayjs": "^1.11.10",
+    "cookie-parser": "~1.4.6",
+    "dayjs": "^1.11.13",
     "debug": "~2.6.9",
     "dotenv": "^16.4.5",
-    "ejs": "~2.6.1",
-    "express": "~4.16.1",
+    "ejs": "~2.6.2",
+    "express": "~4.16.4",
     "express-session": "^1.18.0",
     "http-errors": "~1.6.3",
-    "mariadb": "^3.2.3",
+    "mariadb": "^3.3.2",
     "morgan": "~1.9.1",
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",
-    "sequelize": "^6.37.1"
+    "sequelize": "^6.37.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.7"
   }
 }
