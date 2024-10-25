@@ -21,42 +21,4 @@
         d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
     </svg>
   </button>
-
-  <!-- 댓글 섹션 추가 -->
-  <div class="comments-section">
-    <button class="toggle-comments" onclick="toggleComments(this)">댓글 보기</button>
-    <div class="comments-container" style="display: none;">
-      <textarea class="comment-input" placeholder="댓글을 입력하세요"></textarea>
-      <button class="submit-comment" onclick="submitComment(this)">댓글 달기</button>
-      <ul class="comments-list">
-        <!-- 댓글들이 여기에 추가됩니다 -->
-      </ul>
-    </div>
-  </div>
-
-  <script>
-    function toggleComments(button) {
-      const container = button.nextElementSibling;
-      if (container.style.display === "none") {
-        container.style.display = "block";
-        button.textContent = "댓글 숨기기";
-      } else {
-        container.style.display = "none";
-        button.textContent = "댓글 보기";
-      }
-    }
-
-    function submitComment(button) {
-      const container = button.closest('.comments-container');
-      const input = container.querySelector('.comment-input');
-      const commentsList = container.querySelector('.comments-list');
-
-      if (input.value.trim() !== "") {
-        const li = document.createElement('li');
-        li.textContent = input.value;
-        commentsList.appendChild(li);
-        input.value = "";
-      }
-    }
-  </script>
 </li>
