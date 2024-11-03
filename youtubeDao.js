@@ -156,7 +156,7 @@ async function findAndCountAllVideo(
         required: true,
       },
     ],
-    where: whereCondition,
+    where: whereClause,
     order: [['publishedAt', 'DESC']],
     offset: offset,
     limit: pageSize,
