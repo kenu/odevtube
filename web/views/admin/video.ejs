@@ -44,7 +44,7 @@
       <tbody>
         <% videos.forEach(function(video) { %>
         <tr>
-          <td><a href="<%= video.uri %>#<%= video.Channel.title %>" title="<%= video.Channel.title %>" target="_blank">
+          <td><a href="/admin?channel=<%= video.Channel.id %>" title="<%= video.Channel.title %>">
               <img src="<%= video.Channel.thumbnail %>" alt="" class="thumbnail">
               <%= video.Channel.title %>
             </a></td>

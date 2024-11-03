@@ -11,6 +11,7 @@ router.use(passport.initialize())
 router.use(passport.session())
 
 router.get('/admin', async function (req, res, next) {
+  const channelId = req.query.channel;
   const category = req.query.c
   const lang = req.query.l
   let page = +req.query.p
@@ -18,12 +19,14 @@ router.get('/admin', async function (req, res, next) {
     page = 1
   }
   const pageSize = 60
-  const data = await dao.getPagedVideos({
+  const whereClause = {
     category,
     lang,
     page,
     pageSize: pageSize,
-  })
+    channelId,
+  }
+  const data = await dao.getPagedVideos(whereClause)
   const videos = data.rows
   videos.forEach((v) => {
     v.pubdate = dayjs(v.publishedAt).format('MM-DD HH:mm:ss')
