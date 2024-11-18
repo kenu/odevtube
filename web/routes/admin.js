@@ -38,10 +38,12 @@ router.get('/admin', async function (req, res, next) {
   let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2))
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
   const area = `c=${category || 'dev'}&l=${lang || 'ko'}` + '&'
+  const channel = channelId ? `channel=${channelId}&` : ''
   res.render('admin/video', {
     videos,
     user: req.user,
     area,
+    channel,
     currentPage: page,
     totalPages,
     startPage,

@@ -44,7 +44,7 @@
       <tbody>
         <% videos.forEach(function(video) { %>
         <tr>
-          <td><a href="/admin?channel=<%= video.Channel.id %>" title="<%= video.Channel.title %>">
+          <td><a href="/admin?channel=<%= video.Channel.id %>&<%= area %>" title="<%= video.Channel.title %>">
               <img src="<%= video.Channel.thumbnail %>" alt="" class="thumbnail">
               <%= video.Channel.title %>
             </a></td>
@@ -70,19 +70,22 @@
     <div class="pagination-wrapper">
       <div class="pagination">
         <% if (currentPage> 1) { %>
-        <a href="/admin?<%= area %>p=1" class="latest">Latest</a>
-        <a href="/admin?<%= area %>p=<%= currentPage - 1 %>" class="prev">Prev</a>
+        <a href="/admin?<%= channel + area %>p=1" class="latest">Latest</a>
+        <a href="/admin?<%= channel + area %>p=<%= currentPage - 1 %>" class="prev">Prev</a>
         <% } %>
         <% for (let i=startPage; i <=endPage; i++) { %>
-        <a href="/admin?<%= area %>p=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
+        <a href="/admin?<%= channel + area %>p=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
           <%= i %>
         </a>
         <% } %>
         <% if (currentPage < totalPages) { %>
-        <a href="/admin?<%= area %>p=<%= currentPage + 1 %>" class="next">Next</a>
-        <a href="/admin?<%= area %>p=<%= totalPages %>" class="end">
+        <a href="/admin?<%= channel + area %>p=<%= currentPage + 1 %>" class="next">Next</a>
+        <a href="/admin?<%= channel + area %>p=<%= totalPages %>" class="end">
           <%= totalPages %>
         </a>
+        <% } %>
+        <% if (channel) { %> |
+        <a href="/admin?<%= area %>" class="latest">Clear</a>
         <% } %>
       </div>
     </div>
