@@ -12,6 +12,7 @@ router.use(passport.session())
 
 router.get('/admin', async function (req, res, next) {
   const channelId = req.query.channel;
+  const channelQuery = req.query.q;
   const category = req.query.c
   const lang = req.query.l
   let page = +req.query.p
@@ -25,6 +26,7 @@ router.get('/admin', async function (req, res, next) {
     page,
     pageSize: pageSize,
     channelId,
+    channelQuery,
   }
   const data = await dao.getPagedVideos(whereClause)
   const videos = data.rows
@@ -39,11 +41,13 @@ router.get('/admin', async function (req, res, next) {
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
   const area = `c=${category || 'dev'}&l=${lang || 'ko'}` + '&'
   const channel = channelId ? `channel=${channelId}&` : ''
+  const query = channelQuery ? `q=${channelQuery}&` : ''
   res.render('admin/video', {
     videos,
     user: req.user,
     area,
     channel,
+    query,
     currentPage: page,
     totalPages,
     startPage,

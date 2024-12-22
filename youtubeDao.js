@@ -108,6 +108,7 @@ async function findAllVideo(category, lang) {
     order: [['publishedAt', 'DESC']],
   })
 }
+
 async function getPagedVideos(options) {
   const offset = (options.page - 1) * options.pageSize;
   const result = await findAndCountAllVideo(
@@ -115,7 +116,7 @@ async function getPagedVideos(options) {
     options.lang,
     offset,
     options.pageSize,
-    options.searchKeyword,
+    options.channelQuery,
     options.channelId
   );
   return result;
@@ -126,22 +127,21 @@ async function findAndCountAllVideo(
   lang,
   offset = 0,
   pageSize = 60,
-  searchKeyword = '',
+  channelQuery = '',
   channelId
 ) {
   let whereClause = {};
-  if (searchKeyword) {
+  
+  if (channelQuery) {
     whereClause = {
-      [Sequelize.Op.or]: [
-        { title: { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-        { '$Channel.title$': { [Sequelize.Op.like]: `%${searchKeyword}%` } }
-      ]
+      '$Channel.title$': { [Sequelize.Op.like]: `%${channelQuery}%` }
     };
   }
+  
   if (channelId) {
     whereClause = {
       ...whereClause,
-      '$Channel.id$': channelId
+      '$Channel.channelId$': channelId
     };
   }
 

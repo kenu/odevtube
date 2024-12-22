@@ -7,6 +7,36 @@
   <title>Admin Video</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    .search-container {
+      margin: 20px 0;
+      padding: 10px;
+      text-align: center;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+    }
+
+    .search-container input {
+      padding: 8px;
+      margin-right: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 250px;
+    }
+
+    .search-container button {
+      padding: 8px 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .search-container button:hover {
+      background-color: #218838;
+    }
+  </style>
 </head>
 
 <body>
@@ -31,6 +61,10 @@
   <nav>
     <a href="/admin/channel">채널</a>
   </nav>
+  <div class="search-container">
+    <input type="text" id="channelSearch" placeholder="채널명을 입력하세요">
+    <button onclick="searchByChannelName()">검색</button>
+  </div>
   <section>
     <h3>Latest videos</h3>
     <table class="videos">
@@ -91,6 +125,20 @@
     </div>
   </section>
   <script src="/js/admin.js"></script>
+  <script>
+    function searchByChannelName() {
+      const channelName = document.getElementById('channelSearch').value;
+      if (channelName) {
+        window.location.href = `/admin?q=${encodeURIComponent(channelName)}&<%= area %>`;
+      }
+    }
+
+    document.getElementById('channelSearch').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        searchByChannelName();
+      }
+    });
+  </script>
 </body>
 
 </html>
