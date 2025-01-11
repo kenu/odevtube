@@ -60,7 +60,7 @@ async function goRenderPage(
   const pageSize = 60;
   const searchKeyword = req.query.search || '';
 
-  const data = await dao.getPagedVideos({
+  const data = await dao.getPagedVideosWithSearch({
     category: uri,
     lang,
     page,

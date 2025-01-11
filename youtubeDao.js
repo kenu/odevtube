@@ -122,22 +122,43 @@ async function getPagedVideos(options) {
   return result;
 }
 
+async function getPagedVideosWithSearch(options) {
+  const offset = (options.page - 1) * options.pageSize;
+  const result = await findAndCountAllVideo(
+    options.category,
+    options.lang,
+    offset,
+    options.pageSize,
+    options.channelQuery,
+    options.channelId,
+    options.searchKeyword
+  );
+  return result;
+}
+
 async function findAndCountAllVideo(
   category,
   lang,
   offset = 0,
   pageSize = 60,
   channelQuery = '',
-  channelId
+  channelId,
+  searchKeyword
 ) {
   let whereClause = {};
-  
+
   if (channelQuery) {
     whereClause = {
       '$Channel.title$': { [Sequelize.Op.like]: `%${channelQuery}%` }
     };
   }
-  
+
+  if (searchKeyword) {
+    whereClause = {
+      '$Video.title$': { [Sequelize.Op.like]: `%${searchKeyword}%` }
+    };
+  }
+
   if (channelId) {
     whereClause = {
       ...whereClause,
@@ -260,6 +281,7 @@ export default {
   findAllVideo,
   findAndCountAllVideo,
   getPagedVideos,
+  getPagedVideosWithSearch,
   newList,
   findTranscriptByVideoId,
   createTranscript,
