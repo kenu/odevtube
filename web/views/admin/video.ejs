@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Video</title>
+  <title>Admin Video1</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/admin.css">
   <style>
@@ -103,22 +103,24 @@
     </div>
     <div class="pagination-wrapper">
       <div class="pagination">
-        <% if (currentPage> 1) { %>
-        <a href="/admin?<%= channel + area %>p=1" class="latest">Latest</a>
-        <a href="/admin?<%= channel + area %>p=<%= currentPage - 1 %>" class="prev">Prev</a>
+        <%
+          const params = channel + area + query;
+          if (currentPage> 1) { %>
+        <a href="/admin?<%= params %>p=1" class="latest">Latest</a>
+        <a href="/admin?<%= params %>p=<%= currentPage - 1 %>" class="prev">Prev</a>
         <% } %>
         <% for (let i=startPage; i <=endPage; i++) { %>
-        <a href="/admin?<%= channel + area %>p=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
+        <a href="/admin?<%= params %>p=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>">
           <%= i %>
         </a>
         <% } %>
         <% if (currentPage < totalPages) { %>
-        <a href="/admin?<%= channel + area %>p=<%= currentPage + 1 %>" class="next">Next</a>
-        <a href="/admin?<%= channel + area %>p=<%= totalPages %>" class="end">
+        <a href="/admin?<%= params %>p=<%= currentPage + 1 %>" class="next">Next</a>
+        <a href="/admin?<%= params %>p=<%= totalPages %>" class="end">
           <%= totalPages %>
         </a>
         <% } %>
-        <% if (channel) { %> |
+        <% if (query) { %> |
         <a href="/admin?<%= area %>" class="latest">Clear</a>
         <% } %>
       </div>
