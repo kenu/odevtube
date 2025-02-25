@@ -11,4 +11,4 @@ sleep 2
 pm2 list
 
 
-curl -X POST -H 'Content-type: application/json' --data '{"content":"Deploy Finished!\nhttps://mp4.okdevtv.com/"}' $KENUWEBHOOK
+curl -X POST -H 'Content-type: application/json' --data '{"content":"📦 Deploy Finished!\nhttps://mp4.okdevtv.com/"}' $WEBHOOK_DISCORD_MP4_URL
