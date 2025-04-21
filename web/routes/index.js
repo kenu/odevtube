@@ -4,6 +4,9 @@ import passport from 'passport'
 import { getFullText } from '../utils/transcriptUtil.js'
 import dao from '../../youtubeDao.js'
 
+// Add a counter to track page calls
+let pageCallCounter = 0;
+
 const router = express.Router()
 router.use(passport.initialize())
 router.use(passport.session())
@@ -55,6 +58,21 @@ async function goRenderPage(
   isApi = false,
   page
 ) {
+  // Increment the page call counter
+  pageCallCounter++;
+  
+  // Check if garbage collection should be triggered
+  if (pageCallCounter >= 10) {
+    if (global.gc) {
+      console.log('Triggering garbage collection after 10 page calls');
+      global.gc();
+    } else {
+      console.log('Manual garbage collection not available. Run with --expose-gc flag to enable.');
+    }
+    // Reset the counter
+    pageCallCounter = 0;
+  }
+  
   const locale = lang === 'en' ? 'en_US' : 'ko_KR';
   const stime = Date.now();
   const pageSize = 60;
