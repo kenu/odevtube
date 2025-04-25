@@ -131,7 +131,7 @@
     function searchByChannelName() {
       const channelName = document.getElementById('channelSearch').value;
       if (channelName) {
-        window.location.href = `/admin?q=${encodeURIComponent(channelName)}&<%= area %>`;
+        window.location.href = `/admin?q=${encodeURIComponent(channelName)}&<%- area %>`;
       }
     }
 
