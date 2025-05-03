@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes } from 'sequelize'
 const sequelize = new Sequelize(
-  process.env.YOUDB_NAME || 'youtubedb',
+  process.env.YOUDB_NAME || 'odevtube',
   process.env.YOUDB_USER || 'devuser',
   process.env.YOUDB_PASS || 'devpass',
   {
