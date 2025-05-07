@@ -72,14 +72,6 @@ window.onload = function () {
       clearKeyword()
     }
   })
-
-  document.getElementById('closeModal')?.addEventListener('click', closeModal)
-  document
-    .getElementById('clipboardBtn')
-    ?.addEventListener('click', copyTranscript)
-  document
-    .getElementById('modalContent')
-    ?.addEventListener('dblclick', copyTranscript)
 }
 
 function localData() {
