@@ -13,7 +13,7 @@ router.use(passport.session())
 
 router.get('/', async function (req, res, next) {
   const uri = 'dev'
-  const title = '개발 관련 유튜브'
+  const title = '개발 관련 유튜브.'
   const hashList = ['AI', 'spring', '자바스크립트']
   const isApi = req.query.a === '1'
   const page = parseInt(req.query.page) || 1
