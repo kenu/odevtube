@@ -1,10 +1,21 @@
-name: remote ssh command for deploy
+name: Deploy ODevTube
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      deploy_type:
+        description: '배포 방식 선택'
+        required: true
+        default: 'standard'
+        type: choice
+        options:
+          - standard
+          - docker
+
 jobs:
-  build:
-    name: Build
+  deploy:
+    name: Deploy Application
     runs-on: ubuntu-latest
     steps:
       - name: SSH Remote Commands
@@ -15,4 +26,10 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            ./scripts/deploy-odevtube.sh
+            if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.deploy_type }}" == "docker" ]]; then
+              echo "🐳 Docker 배포 실행 중..."
+              ./scripts/deploy-docker.sh
+            else
+              echo "📦 표준 배포 실행 중..."
+              ./scripts/deploy-odevtube.sh
+            fi
