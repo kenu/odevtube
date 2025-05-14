@@ -1,0 +1,18 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    environment:  # 환경변수
+      MYSQL_DATABASE: odevtube
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpass
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_HOST: "%"
+      TZ: Asia/Seoul
+    command: # 명령어 실행 - characterset 지정
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --lower_case_table_names=1
+    platform: linux/x86_64 #apple silicon에서 플랫폼을 명시해주지 않으면 에러남
+    ports:
+      - "3306:3306"
+    container_name: mariadb

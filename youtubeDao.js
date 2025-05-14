@@ -155,7 +155,10 @@ async function findAndCountAllVideo(
 
   if (searchKeyword) {
     whereClause = {
-      '$Video.title$': { [Sequelize.Op.like]: `%${searchKeyword}%` }
+      [Sequelize.Op.or]: [
+        { '$Video.title$': { [Sequelize.Op.like]: `%${searchKeyword}%` } },
+        { '$Channel.title$': { [Sequelize.Op.like]: `%${searchKeyword}%` } }
+      ]
     };
   }
 
