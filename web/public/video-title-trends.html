@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ODevTube 최근 3달 영상 제목 트렌드</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-cloud@1.2.5/build/d3.layout.cloud.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="css/odevtube-common.css">
+    <script src="js/odevtube-utils.js"></script>
+    <style>
+        .keyword-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .keyword {
+            padding: 8px 15px;
+            background-color: #e9f5e9;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        .trend-comparison {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .trend-column {
+            flex: 1;
+            min-width: 300px;
+            margin: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .trend-title {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        .trend-item {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .trend-item:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+        }
+        .wordcloud-container {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+            position: relative;
+        }
+        #march-wordcloud, #april-wordcloud, #may-wordcloud {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ODevTube 최근 3달 영상 제목 트렌드 분석</h1>
+        
+        <div class="tab-container">
+            <button class="tab active" onclick="showTab('overview', 'section')">종합 분석</button>
+            <button class="tab" onclick="showTab('march', 'section')">3월 트렌드</button>
+            <button class="tab" onclick="showTab('april', 'section')">4월 트렌드</button>
+            <button class="tab" onclick="showTab('may', 'section')">5월 트렌드</button>
+        </div>
+        
+        <div id="overview-section" class="chart-section active">
+            <h2>최근 3달 영상 제목 트렌드 종합 분석</h2>
+            
+            <div class="trend-comparison">
+                <div class="trend-column">
+                    <h3 class="trend-title">3월 주요 키워드</h3>
+                    <div class="keyword-container">
+                        <div class="keyword">AI</div>
+                        <div class="keyword">GPT-4.5</div>
+                        <div class="keyword">Claude 3.7</div>
+                        <div class="keyword">HTML/CSS</div>
+                        <div class="keyword">자바스크립트</div>
+                    </div>
+                    <div class="trend-item">AI 신기술 출시 (GPT-4.5, Claude 3.7)</div>
+                    <div class="trend-item">웹 개발 기초 강의 (HTML, CSS, 자바스크립트)</div>
+                    <div class="trend-item">AI 이미지 생성 관련 콘텐츠</div>
+                </div>
+                
+                <div class="trend-column">
+                    <h3 class="trend-title">4월 주요 키워드</h3>
+                    <div class="keyword-container">
+                        <div class="keyword">MCP</div>
+                        <div class="keyword">자동화</div>
+                        <div class="keyword">리액트</div>
+                        <div class="keyword">SCSS</div>
+                        <div class="keyword">스타벅스</div>
+                    </div>
+                    <div class="trend-item">MCP 서버 구축 및 활용법</div>
+                    <div class="trend-item">자동화 도구 (n8n, 메이크)</div>
+                    <div class="trend-item">스타벅스 반응형 웹사이트 모작 강의</div>
+                </div>
+                
+                <div class="trend-column">
+                    <h3 class="trend-title">5월 주요 키워드</h3>
+                    <div class="keyword-container">
+                        <div class="keyword">AWS</div>
+                        <div class="keyword">S3</div>
+                        <div class="keyword">보안</div>
+                        <div class="keyword">PMD</div>
+                        <div class="keyword">TypeScript</div>
+                    </div>
+                    <div class="trend-item">AWS 서비스 활용 (S3, 파일 업로드)</div>
+                    <div class="trend-item">보안 관련 콘텐츠 (PMD 보안약점 진단)</div>
+                    <div class="trend-item">TypeScript 강의 시리즈</div>
+                </div>
+            </div>
+            
+            <h3>월별 주요 트렌드 비교</h3>
+            <p style="text-align: center; margin: 20px 0;">
+                3월은 GPT-4.5, Claude 3.7 등 새로운 AI 모델 출시에 관한 콘텐츠가 많았으며, 4월은 MCP 서버와 자동화 도구 활용법에 대한 콘텐츠가 증가했습니다. 5월에는 AWS 서비스 활용과 보안 관련 콘텐츠가 두드러졌습니다. 전반적으로 AI 기술과 웹 개발 기초 강의는 꾸준히 인기를 유지하고 있습니다.
+            </p>
+        </div>
+        
+        <div id="march-section" class="chart-section">
+            <h2>2025년 3월 영상 제목 트렌드</h2>
+            <div class="wordcloud-container">
+                <div id="march-wordcloud"></div>
+            </div>
+            
+            <h3>3월 주요 트렌드</h3>
+            <div class="trend-item">GPT-4.5와 Claude 3.7 등 신규 AI 모델 출시 및 리뷰</div>
+            <div class="trend-item">HTML, CSS, 자바스크립트 기초 강의 시리즈</div>
+            <div class="trend-item">AI 이미지 생성 도구 비교 및 활용법</div>
+            <div class="trend-item">MySQL 데이터베이스 강의</div>
+            <div class="trend-item">개발자 커리어 및 취업 관련 콘텐츠</div>
+            
+            <h3>3월 인기 제목 유형</h3>
+            <div class="trend-item">"XXX 강의" - 체계적인 교육 콘텐츠</div>
+            <div class="trend-item">"AI가 XXX 한다면?" - AI 활용 시나리오</div>
+            <div class="trend-item">"개발자를 위한 XXX 팁" - 실용적 조언</div>
+        </div>
+        
+        <div id="april-section" class="chart-section">
+            <h2>2025년 4월 영상 제목 트렌드</h2>
+            <div class="wordcloud-container">
+                <div id="april-wordcloud"></div>
+            </div>
+            
+            <h3>4월 주요 트렌드</h3>
+            <div class="trend-item">MCP 서버 구축 및 활용법 튜토리얼</div>
+            <div class="trend-item">n8n, 메이크 등 자동화 도구 활용법</div>
+            <div class="trend-item">SCSS를 이용한 스타벅스 반응형 웹사이트 모작 강의</div>
+            <div class="trend-item">리액트 19버전 강의</div>
+            <div class="trend-item">CRUD 기반 자바 텍스트게시판 구현 시리즈</div>
+            
+            <h3>4월 인기 제목 유형</h3>
+            <div class="trend-item">"XXX 반응형 모작" - 실전 웹 개발 프로젝트</div>
+            <div class="trend-item">"XXX 자동화" - 개발 생산성 향상 콘텐츠</div>
+            <div class="trend-item">"XXX 구현" - 실습 중심 강의</div>
+        </div>
+        
+        <div id="may-section" class="chart-section">
+            <h2>2025년 5월 영상 제목 트렌드</h2>
+            <div class="wordcloud-container">
+                <div id="may-wordcloud"></div>
+            </div>
+            
+            <h3>5월 주요 트렌드</h3>
+            <div class="trend-item">AWS S3 서비스 활용 및 파일 업로드 구현</div>
+            <div class="trend-item">PMD를 활용한 소프트웨어 보안약점 진단</div>
+            <div class="trend-item">TypeScript 강의 시리즈</div>
+            <div class="trend-item">AI 코드 에디터 및 코딩 도구</div>
+            <div class="trend-item">HTTPS 인증서 생성 및 설정</div>
+            
+            <h3>5월 인기 제목 유형</h3>
+            <div class="trend-item">"XXX 보안" - 보안 관련 콘텐츠</div>
+            <div class="trend-item">"AWS XXX" - 클라우드 서비스 활용법</div>
+            <div class="trend-item">"test PMD로 XXX" - 보안약점 진단 시리즈</div>
+        </div>
+    </div>
+
+    <script>
+        // 페이지 특정 함수를 공통 함수로 대체
+        function showSection(sectionName) {
+            showTab(sectionName, 'section');
+        }
+
+        // 워드 클라우드 데이터
+        const marchWords = [
+            {text: "AI", size: 100},
+            {text: "GPT-4.5", size: 90},
+            {text: "Claude", size: 85},
+            {text: "HTML", size: 80},
+            {text: "CSS", size: 75},
+            {text: "자바스크립트", size: 70},
+            {text: "MySQL", size: 65},
+            {text: "강의", size: 60},
+            {text: "기초", size: 55},
+            {text: "이미지", size: 50},
+            {text: "개발자", size: 45},
+            {text: "커리어", size: 40},
+            {text: "취업", size: 35},
+            {text: "ChatGPT", size: 30},
+            {text: "Gemini", size: 25}
+        ];
+
+        const aprilWords = [
+            {text: "MCP", size: 100},
+            {text: "자동화", size: 90},
+            {text: "SCSS", size: 85},
+            {text: "스타벅스", size: 80},
+            {text: "반응형", size: 75},
+            {text: "리액트", size: 70},
+            {text: "n8n", size: 65},
+            {text: "메이크", size: 60},
+            {text: "CRUD", size: 55},
+            {text: "자바", size: 50},
+            {text: "게시판", size: 45},
+            {text: "구현", size: 40},
+            {text: "Claude", size: 35},
+            {text: "튜토리얼", size: 30},
+            {text: "웹훅", size: 25}
+        ];
+
+        const mayWords = [
+            {text: "AWS", size: 100},
+            {text: "S3", size: 90},
+            {text: "보안", size: 85},
+            {text: "PMD", size: 80},
+            {text: "TypeScript", size: 75},
+            {text: "파일업로드", size: 70},
+            {text: "HTTPS", size: 65},
+            {text: "인증서", size: 60},
+            {text: "보안약점", size: 55},
+            {text: "진단", size: 50},
+            {text: "AI코딩", size: 45},
+            {text: "GitHub", size: 40},
+            {text: "Actions", size: 35},
+            {text: "배포", size: 30},
+            {text: "CI/CD", size: 25}
+        ];
+
+        // 워드 클라우드 생성 함수
+        function createWordCloud(elementId, words) {
+            const width = document.getElementById(elementId).offsetWidth;
+            const height = document.getElementById(elementId).offsetHeight;
+            
+            d3.select(`#${elementId}`).selectAll("*").remove();
+            
+            d3.layout.cloud()
+                .size([width, height])
+                .words(words)
+                .padding(5)
+                .rotate(() => ~~(Math.random() * 2) * 90)
+                .font("Impact")
+                .fontSize(d => d.size)
+                .on("end", draw)
+                .start();
+                
+            function draw(words) {
+                d3.select(`#${elementId}`)
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .append("g")
+                    .attr("transform", `translate(${width/2},${height/2})`)
+                    .selectAll("text")
+                    .data(words)
+                    .enter()
+                    .append("text")
+                    .style("font-size", d => `${d.size/4}px`)
+                    .style("font-family", "Impact")
+                    .style("fill", () => {
+                        const colors = ["#4CAF50", "#2196F3", "#FF9800", "#9C27B0", "#3F51B5"];
+                        return colors[Math.floor(Math.random() * colors.length)];
+                    })
+                    .attr("text-anchor", "middle")
+                    .attr("transform", d => `translate(${d.x},${d.y})rotate(${d.rotate})`)
+                    .text(d => d.text);
+            }
+        }
+
+        // 페이지 로드 시 워드 클라우드 생성
+        window.onload = function() {
+            setTimeout(() => {
+                createWordCloud("march-wordcloud", marchWords);
+                createWordCloud("april-wordcloud", aprilWords);
+                createWordCloud("may-wordcloud", mayWords);
+            }, 100);
+        };
+
+        // 창 크기 변경 시 워드 클라우드 다시 그리기
+        window.addEventListener('resize', function() {
+            if (document.getElementById('march-section').classList.contains('active')) {
+                createWordCloud("march-wordcloud", marchWords);
+            } else if (document.getElementById('april-section').classList.contains('active')) {
+                createWordCloud("april-wordcloud", aprilWords);
+            } else if (document.getElementById('may-section').classList.contains('active')) {
+                createWordCloud("may-wordcloud", mayWords);
+            }
+        });
+    </script>
+</body>
+</html>

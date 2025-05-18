@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ODevTube 비디오 통계</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/odevtube-common.css">
+    <script src="js/odevtube-utils.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>ODevTube 비디오 통계</h1>
+        
+        <div class="tab-container">
+            <button class="tab active" onclick="showTab('yearly', 'chart')">연도별 통계</button>
+            <button class="tab" onclick="showTab('monthly', 'chart')">월별 통계</button>
+            <button class="tab" onclick="showTab('recent', 'chart')">최근 3년 월별 통계</button>
+        </div>
+        
+        <div id="yearly-chart" class="chart-section active">
+            <div class="chart-container">
+                <canvas id="yearlyChart"></canvas>
+            </div>
+            <div class="summary">
+                <h3>연도별 비디오 통계 요약</h3>
+                <p>2010년부터 2025년까지의 비디오 수집 추세를 보여줍니다. <span class="highlight">2021년</span>부터 급격한 성장이 시작되었으며, <span class="highlight">2024년</span>에는 11,628개의 비디오로 폭발적인 성장을 보였습니다. 2025년은 5월까지 이미 5,046개의 비디오가 수집되어 연간 약 12,000개의 비디오를 수집할 페이스입니다.</p>
+            </div>
+        </div>
+        
+        <div id="monthly-chart" class="chart-section">
+            <div class="chart-container">
+                <canvas id="monthlyChart"></canvas>
+            </div>
+            <div class="summary">
+                <h3>월별 비디오 통계 요약</h3>
+                <p>2010년 7월부터 2025년 5월까지의 월별 비디오 수집 추세를 보여줍니다. 최근 몇 년간 월별 수집량이 크게 증가했으며, <span class="highlight">2024년 10월</span>에는 1,281개로 가장 많은 비디오가 수집되었습니다.</p>
+            </div>
+        </div>
+        
+        <div id="recent-chart" class="chart-section">
+            <div class="chart-container">
+                <canvas id="recentChart"></canvas>
+            </div>
+            <div class="summary">
+                <h3>최근 3년 월별 비디오 통계 요약</h3>
+                <p>2023년부터 2025년까지의 최근 3년간 월별 비디오 수집 추세를 보여줍니다. 이 기간 동안 월 평균 <span class="highlight">700개 이상</span>의 비디오가 수집되었으며, 2024년 5월에는 최고 <span class="highlight">1,249개</span>의 비디오가 수집되었습니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 연도별 데이터
+        const yearlyData = {
+            labels: ['2010', '2011', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
+            datasets: [{
+                label: '비디오 수',
+                data: [7, 1, 1, 7, 16, 19, 68, 205, 440, 356, 891, 1749, 3808, 11628, 5046],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        // 월별 데이터 (너무 많아서 일부만 표시)
+        const monthlyData = {
+            labels: [
+                '2010-07', '2010-08', '2010-09', '2010-10', '2011-05', '2013-08', '2014-08', '2014-09', '2014-11', '2014-12', 
+                '2015-02', '2015-05', '2015-07', '2015-08', '2015-09', '2015-11', '2015-12', '2016-01', '2016-04', '2016-07', 
+                '2016-09', '2016-10', '2016-12', '2017-01', '2017-02', '2017-03', '2017-05', '2017-06', '2017-07', '2017-08', 
+                '2017-09', '2017-11', '2017-12', '2018-01', '2018-02', '2018-03', '2018-04', '2018-05', '2018-06', '2018-07', 
+                '2018-08', '2018-09', '2018-10', '2018-11', '2018-12', '2019-01', '2019-02', '2019-03', '2019-04', '2019-05', 
+                '2019-06', '2019-07', '2019-08', '2019-09', '2019-10', '2019-11', '2019-12', '2020-01', '2020-02', '2020-03', 
+                '2020-04', '2020-05', '2020-06', '2020-07', '2020-08', '2020-09', '2020-10', '2020-11', '2020-12', '2021-01', 
+                '2021-02', '2021-03', '2021-04', '2021-05', '2021-06', '2021-07', '2021-08', '2021-09', '2021-10', '2021-11', 
+                '2021-12', '2022-01', '2022-02', '2022-03', '2022-04', '2022-05', '2022-06', '2022-07', '2022-08', '2022-09', 
+                '2022-10', '2022-11', '2022-12', '2023-01', '2023-02', '2023-03', '2023-04', '2023-05', '2023-06', '2023-07', 
+                '2023-08', '2023-09', '2023-10', '2023-11', '2023-12', '2024-01', '2024-02', '2024-03', '2024-04', '2024-05', 
+                '2024-06', '2024-07', '2024-08', '2024-09', '2024-10', '2024-11', '2024-12', '2025-01', '2025-02', '2025-03', 
+                '2025-04', '2025-05'
+            ],
+            datasets: [{
+                label: '비디오 수',
+                data: [
+                    1, 4, 1, 1, 1, 1, 1, 1, 2, 3, 
+                    1, 6, 1, 1, 2, 2, 3, 3, 1, 11, 
+                    1, 2, 1, 12, 3, 1, 5, 2, 9, 23, 
+                    8, 4, 1, 7, 3, 8, 5, 4, 5, 52, 
+                    24, 51, 12, 22, 12, 29, 44, 25, 58, 47, 
+                    30, 36, 36, 33, 33, 31, 38, 32, 25, 24, 
+                    22, 26, 24, 30, 33, 35, 38, 29, 38, 57, 
+                    58, 65, 79, 127, 65, 69, 83, 66, 72, 45, 
+                    98, 80, 102, 83, 111, 82, 140, 153, 194, 149, 
+                    236, 231, 188, 193, 219, 284, 278, 286, 259, 292, 
+                    378, 371, 375, 372, 501, 542, 632, 785, 887, 1249, 
+                    1139, 859, 987, 944, 1281, 1185, 1138, 1040, 1212, 1240, 
+                    1119, 435
+                ],
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                pointRadius: 0
+            }]
+        };
+
+        // 최근 3년 데이터 추출
+        const recentLabels = monthlyData.labels.filter(label => label.startsWith('2023') || label.startsWith('2024') || label.startsWith('2025'));
+        const recentData = monthlyData.datasets[0].data.slice(-recentLabels.length);
+
+        const recentMonthlyData = {
+            labels: recentLabels,
+            datasets: [{
+                label: '비디오 수',
+                data: recentData,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        // 차트 생성 함수
+        function createCharts() {
+            // 연도별 차트
+            const yearlyCtx = document.getElementById('yearlyChart').getContext('2d');
+            const yearlyChart = new Chart(yearlyCtx, {
+                type: 'bar',
+                data: yearlyData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '비디오 수'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '연도'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '연도별 비디오 통계'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `비디오 수: ${context.parsed.y.toLocaleString()}개`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 월별 차트
+            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            const monthlyChart = new Chart(monthlyCtx, {
+                type: 'line',
+                data: monthlyData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '비디오 수'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                maxRotation: 90,
+                                minRotation: 90,
+                                autoSkip: true,
+                                maxTicksLimit: 20
+                            },
+                            title: {
+                                display: true,
+                                text: '연월'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '월별 비디오 통계 (2010-2025)'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `비디오 수: ${context.parsed.y.toLocaleString()}개`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 최근 3년 월별 차트
+            const recentCtx = document.getElementById('recentChart').getContext('2d');
+            const recentChart = new Chart(recentCtx, {
+                type: 'bar',
+                data: recentMonthlyData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '비디오 수'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                maxRotation: 90,
+                                minRotation: 90
+                            },
+                            title: {
+                                display: true,
+                                text: '연월'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '최근 3년 월별 비디오 통계 (2023-2025)'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `비디오 수: ${context.parsed.y.toLocaleString()}개`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 탭 전환 함수
+        // 페이지 특정 함수를 공통 함수로 대체
+        function showChart(chartType) {
+            showTab(chartType, 'chart');
+        }
+
+        // 페이지 로드 시 차트 생성
+        window.onload = createCharts;
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+body {
+    font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1, h2, h3 {
+    color: #333;
+    text-align: center;
+}
+h1 {
+    margin-bottom: 30px;
+}
+.tab-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #eee;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    margin: 0 5px;
+    font-weight: bold;
+}
+.tab.active {
+    background-color: #4CAF50;
+    color: white;
+}
+.chart-section {
+    display: none;
+    margin-bottom: 40px;
+}
+.chart-section.active {
+    display: block;
+}
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 400px;
+    margin-bottom: 50px;
+}
+.summary {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+    line-height: 1.6;
+}
+.highlight {
+    color: #4CAF50;
+    font-weight: bold;
+}
