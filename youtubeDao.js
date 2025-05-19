@@ -273,6 +273,61 @@ async function createAccount(data) {
   await Account.upsert(data)
 }
 
+async function getVideosCount() {
+  const result = await Video.count();
+  return result;
+}
+
+async function getChannelsCount() {
+  const result = await Channel.count();
+  return result;
+}
+
+async function getYearlyVideoStats() {
+  const result = await Video.findAll({
+    attributes: [
+      [sequelize.fn('YEAR', sequelize.col('publishedAt')), 'year'],
+      [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+    ],
+    group: [sequelize.fn('YEAR', sequelize.col('publishedAt'))],
+    order: [[sequelize.fn('YEAR', sequelize.col('publishedAt')), 'ASC']],
+    raw: true
+  });
+  return result;
+}
+
+async function getMonthlyVideoStats(months = 12) {
+  const result = await Video.findAll({
+    attributes: [
+      [sequelize.fn('strftime', '%Y-%m', sequelize.col('publishedAt')), 'month'],
+      [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+    ],
+    where: {
+      publishedAt: {
+        [Sequelize.Op.gte]: new Date(new Date().setMonth(new Date().getMonth() - months + 1))
+      }
+    },
+    group: ['month'],
+    order: [['month', 'DESC']],
+    raw: true
+  });
+  return result;
+}
+
+async function getTopChannels(limit = 10) {
+  const result = await Video.findAll({
+    attributes: [
+      'customUrl',
+      [sequelize.fn('COUNT', sequelize.col('Video.id')), 'video_count']
+    ],
+    group: ['customUrl'],
+    order: [[sequelize.literal('video_count'), 'DESC']],
+    limit: limit,
+    raw: true
+  });
+  return result;
+}
+
 export default {
   create,
   findOneByChannelId,
@@ -290,4 +345,9 @@ export default {
   createTranscript,
   removeTranscript,
   createAccount,
+  getVideosCount,
+  getChannelsCount,
+  getYearlyVideoStats,
+  getMonthlyVideoStats,
+  getTopChannels
 }

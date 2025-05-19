@@ -198,4 +198,41 @@ router.get('/logout', function (req, res, next) {
   })
 })
 
+router.get('/statistics', async function (req, res, next) {
+  try {
+    // Get total videos count
+    const totalVideos = (await dao.getVideosCount()) || 0;
+    
+    // Get unique channels count
+    const totalChannels = (await dao.getChannelsCount()) || 0;
+    
+    // Calculate average videos per channel
+    const avgVideosPerChannel = totalChannels > 0 ? totalVideos / totalChannels : 0;
+    
+    // Get yearly stats
+    const yearlyStats = await dao.getYearlyVideoStats();
+    
+    // Get monthly stats (last 12 months)
+    const monthlyStats = await dao.getMonthlyVideoStats(12);
+    
+    // Get top channels
+    const topChannels = await dao.getTopChannels(10);
+    
+    res.render('statistics', { 
+      user: req.user,
+      stats: {
+        totalVideos,
+        totalChannels,
+        avgVideosPerChannel,
+        yearlyStats,
+        monthlyStats,
+        topChannels
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching statistics:', error);
+    next(error);
+  }
+});
+
 export default router

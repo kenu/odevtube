@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<% include ./header.ejs %>
+
+<body>
+  <section id="title">
+    <h1 class="title">
+      <a href="javascript:window.scrollTo(0,0)">
+        <img src="https://okdevtv.com/images/logo.webp" alt="okdevtv" class="okdevtv-logo" />
+        odevtube: 통계
+      </a>
+    </h1>
+    <div class="github">
+      <a href="https://github.com/kenu/odevtube" target="_blank">
+        <img src="/images/github-mark.svg" class="github-logo" alt="fork in github"></a>
+    </div>
+  </section>
+  <nav class="main-nav">
+    <aside class="login" aria-label="login">
+      <% if (!user) { %>
+      <a href="/login" alt="login">login</a>
+      <% } else { %>
+      <%= user.username %>
+      <a href="/profile" alt="profile">profile</a>
+      <a href="/logout" alt="logout">logout</a>
+      <a href="/admin" alt="admin">admin</a>
+      <% } %>
+    </aside>
+    <aside aria-label="menu">
+      | <a href="/" alt="home">홈</a>
+      | <a href="/video-statistics.html" alt="video statistics">통계</a>
+      | <a href="/video-title-trends.html" alt="video title trends">트렌드</a>
+      | <a href="/kpop" alt="kpop">kpop</a>
+      | <a href="/food" alt="food">food</a>
+      | <a href="/" alt="korean">ko</a>
+      | <a href="/en" alt="english">en</a>
+    </aside>
+  </nav>
+
+  <div class="container mt-5">
+    <h2 class="mb-4">비디오 통계</h2>
+    
+    <!-- Overall Stats -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4>전체 통계</h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="stat-card">
+              <h3><%= stats.totalVideos.toLocaleString() %></h3>
+              <p>전체 비디오 수</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="stat-card">
+              <h3><%= stats.totalChannels %></h3>
+              <p>채널 수</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="stat-card">
+              <h3><%= stats.avgVideosPerChannel.toFixed(1) %></h3>
+              <p>채널당 평균 비디오</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Yearly Stats -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4>연도별 업로드 현황</h4>
+      </div>
+      <div class="card-body">
+        <canvas id="yearlyChart" height="100"></canvas>
+      </div>
+    </div>
+
+    <!-- Monthly Stats -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4>최근 1년간 월별 업로드 추이</h4>
+      </div>
+      <div class="card-body">
+        <canvas id="monthlyChart" height="100"></canvas>
+      </div>
+    </div>
+
+    <!-- Top Channels -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4>상위 채널별 비디오 수</h4>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>순위</th>
+                <th>채널</th>
+                <th>비디오 수</th>
+                <th>점유율</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% stats.topChannels.forEach((channel, index) => { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= channel.customUrl %></td>
+                <td><%= channel.video_count.toLocaleString() %></td>
+                <td>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" 
+                         style="width: <%= (channel.video_count / stats.totalVideos * 100).toFixed(1) %>%"
+                         aria-valuenow="<%= channel.video_count %>" 
+                         aria-valuemin="0" 
+                         aria-valuemax="<%= stats.totalVideos %>">
+                      <%= (channel.video_count / stats.totalVideos * 100).toFixed(1) %>%
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% include ./footer.ejs %>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Yearly Chart
+    const yearlyCtx = document.getElementById('yearlyChart').getContext('2d');
+    new Chart(yearlyCtx, {
+      type: 'bar',
+      data: {
+        labels: <%= JSON.stringify(stats.yearlyStats.map(item => item.year)) %>,
+        datasets: [{
+          label: '업로드 수',
+          data: <%= JSON.stringify(stats.yearlyStats.map(item => item.count)) %>,
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Monthly Chart
+    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(monthlyCtx, {
+      type: 'line',
+      data: {
+        labels: <%= JSON.stringify(stats.monthlyStats.map(item => item.month)) %>,
+        datasets: [{
+          label: '업로드 수',
+          data: <%= JSON.stringify(stats.monthlyStats.map(item => item.count)) %>,
+          fill: false,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+
+  <style>
+    .stat-card {
+      text-align: center;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .stat-card h3 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 0.5rem;
+    }
+    .stat-card p {
+      color: #6c757d;
+      margin-bottom: 0;
+    }
+    .progress {
+      height: 25px;
+    }
+    .progress-bar {
+      color: #000;
+      font-weight: bold;
+    }
+  </style>
+</body>
+</html>
