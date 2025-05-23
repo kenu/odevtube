@@ -60,7 +60,7 @@
             margin: 20px 0;
             position: relative;
         }
-        #march-wordcloud, #april-wordcloud, #may-wordcloud {
+        #month1-wordcloud, #month2-wordcloud, #month3-wordcloud {
             width: 100%;
             height: 100%;
         }
@@ -68,16 +68,34 @@
 </head>
 <body>
     <div class="container">
-        <h1>ODevTube 최근 3달 영상 제목 트렌드 분석</h1>
+        <h1>ODevTube 최근 3달 영상 제목 트렌드 분석 <a href="/" style="font-size: 0.8rem; margin-left: 10px;">🏠 홈으로</a></h1>
         
-        <div class="tab-container">
-            <button class="tab active" onclick="showTab('overview', 'section')">종합 분석</button>
-            <button class="tab" onclick="showTab('march', 'section')">3월 트렌드</button>
-            <button class="tab" onclick="showTab('april', 'section')">4월 트렌드</button>
-            <button class="tab" onclick="showTab('may', 'section')">5월 트렌드</button>
+        <div class="month-selector" style="margin: 20px 0; text-align: center;">
+            <label for="month-select">기준 월 선택: </label>
+            <select id="month-select" onchange="updateMonths()">
+                <option value="3">3월</option>
+                <option value="4">4월</option>
+                <option value="5" selected>5월</option>
+                <option value="6">6월</option>
+                <option value="7">7월</option>
+                <option value="8">8월</option>
+                <option value="9">9월</option>
+                <option value="10">10월</option>
+                <option value="11">11월</option>
+                <option value="12">12월</option>
+                <option value="1">1월</option>
+                <option value="2">2월</option>
+            </select>
         </div>
         
-        <div id="overview-section" class="chart-section active">
+        <div class="tab-container">
+            <button class="tab" id="overview-tab" onclick="switchTab('overview')">종합 분석</button>
+            <button class="tab" id="month1-tab" onclick="switchTab('month1')"><span id="month1-name">4월</span> 트렌드</button>
+            <button class="tab active" id="month2-tab" onclick="switchTab('month2')"><span id="month2-name">5월</span> 트렌드</button>
+            <button class="tab" id="month3-tab" onclick="switchTab('month3')"><span id="month3-name">6월</span> 트렌드</button>
+        </div>
+        
+        <div id="overview-section" class="chart-section">
             <h2>최근 3달 영상 제목 트렌드 종합 분석</h2>
             
             <div class="trend-comparison">
@@ -130,10 +148,10 @@
             </p>
         </div>
         
-        <div id="march-section" class="chart-section">
-            <h2>2025년 3월 영상 제목 트렌드</h2>
+        <div id="month1-section" class="chart-section">
+            <h2>2025년 <span class="month1-title">3월</span> 영상 제목 트렌드</h2>
             <div class="wordcloud-container">
-                <div id="march-wordcloud"></div>
+                <div id="month1-wordcloud"></div>
             </div>
             
             <h3>3월 주요 트렌드</h3>
@@ -149,10 +167,10 @@
             <div class="trend-item">"개발자를 위한 XXX 팁" - 실용적 조언</div>
         </div>
         
-        <div id="april-section" class="chart-section">
-            <h2>2025년 4월 영상 제목 트렌드</h2>
+        <div id="month2-section" class="chart-section active">
+            <h2>2025년 <span class="month2-title">4월</span> 영상 제목 트렌드</h2>
             <div class="wordcloud-container">
-                <div id="april-wordcloud"></div>
+                <div id="month2-wordcloud"></div>
             </div>
             
             <h3>4월 주요 트렌드</h3>
@@ -168,10 +186,10 @@
             <div class="trend-item">"XXX 구현" - 실습 중심 강의</div>
         </div>
         
-        <div id="may-section" class="chart-section">
-            <h2>2025년 5월 영상 제목 트렌드</h2>
+        <div id="month3-section" class="chart-section">
+            <h2>2025년 <span class="month3-title">5월</span> 영상 제목 트렌드</h2>
             <div class="wordcloud-container">
-                <div id="may-wordcloud"></div>
+                <div id="month3-wordcloud"></div>
             </div>
             
             <h3>5월 주요 트렌드</h3>
@@ -289,23 +307,201 @@
             }
         }
 
-        // 페이지 로드 시 워드 클라우드 생성
-        window.onload = function() {
-            setTimeout(() => {
-                createWordCloud("march-wordcloud", marchWords);
-                createWordCloud("april-wordcloud", aprilWords);
-                createWordCloud("may-wordcloud", mayWords);
-            }, 100);
-        };
 
+        // 월별 데이터 저장을 위한 객체
+        const monthlyData = {
+            '1': [
+                {text: "신년", size: 100},
+                {text: "계획", size: 90},
+                {text: "개발자", size: 85},
+                {text: "시작", size: 80},
+                {text: "언어", size: 75},
+                {text: "프로젝트", size: 70},
+                {text: "기초", size: 65},
+                {text: "프로그래밍", size: 60},
+                {text: "강의", size: 55},
+                {text: "자바", size: 50}
+            ],
+            '2': [
+                {text: "개발환경", size: 100},
+                {text: "설정", size: 90},
+                {text: "툴", size: 85},
+                {text: "에디터", size: 80},
+                {text: "프레임워크", size: 75},
+                {text: "입문", size: 70},
+                {text: "실습", size: 65},
+                {text: "개발자", size: 60},
+                {text: "강의", size: 55},
+                {text: "프로젝트", size: 50}
+            ],
+            '3': marchWords,
+            '4': aprilWords,
+            '5': mayWords,
+            '6': [
+                {text: "서버", size: 100},
+                {text: "배포", size: 90},
+                {text: "Docker", size: 85},
+                {text: "Kubernetes", size: 80},
+                {text: "클라우드", size: 75},
+                {text: "DevOps", size: 70},
+                {text: "CI/CD", size: 65},
+                {text: "자동화", size: 60},
+                {text: "테스트", size: 55},
+                {text: "모니터링", size: 50}
+            ],
+            '7': [
+                {text: "성능", size: 100},
+                {text: "최적화", size: 90},
+                {text: "알고리즘", size: 85},
+                {text: "데이터", size: 80},
+                {text: "구조", size: 75},
+                {text: "메모리", size: 70},
+                {text: "관리", size: 65},
+                {text: "디버깅", size: 60},
+                {text: "프로파일링", size: 55},
+                {text: "캡스톤", size: 50}
+            ],
+            '8': [
+                {text: "모바일", size: 100},
+                {text: "앱", size: 90},
+                {text: "하이브리드", size: 85},
+                {text: "Flutter", size: 80},
+                {text: "React Native", size: 75},
+                {text: "생산성", size: 70},
+                {text: "시장", size: 65},
+                {text: "배포", size: 60},
+                {text: "개발자", size: 55},
+                {text: "실습", size: 50}
+            ],
+            '9': [
+                {text: "데이터베이스", size: 100},
+                {text: "SQL", size: 90},
+                {text: "NoSQL", size: 85},
+                {text: "설계", size: 80},
+                {text: "관계형", size: 75},
+                {text: "문서형", size: 70},
+                {text: "최적화", size: 65},
+                {text: "인덱스", size: 60},
+                {text: "쿼리", size: 55},
+                {text: "성능", size: 50}
+            ],
+            '10': [
+                {text: "보안", size: 100},
+                {text: "취약점", size: 90},
+                {text: "인증", size: 85},
+                {text: "암호화", size: 80},
+                {text: "HTTPS", size: 75},
+                {text: "OAuth", size: 70},
+                {text: "권한", size: 65},
+                {text: "세션", size: 60},
+                {text: "토큰", size: 55},
+                {text: "JWT", size: 50}
+            ],
+            '11': [
+                {text: "프론트엔드", size: 100},
+                {text: "UI/UX", size: 90},
+                {text: "반응형", size: 85},
+                {text: "디자인", size: 80},
+                {text: "프레임워크", size: 75},
+                {text: "React", size: 70},
+                {text: "Vue", size: 65},
+                {text: "Angular", size: 60},
+                {text: "컴포넌트", size: 55},
+                {text: "상태관리", size: 50}
+            ],
+            '12': [
+                {text: "연말", size: 100},
+                {text: "회고", size: 90},
+                {text: "정리", size: 85},
+                {text: "계획", size: 80},
+                {text: "트렌드", size: 75},
+                {text: "전망", size: 70},
+                {text: "기술", size: 65},
+                {text: "발전", size: 60},
+                {text: "시장", size: 55},
+                {text: "커리어", size: 50}
+            ]
+        };
+        
+        // 월 선택에 따른 화면 업데이트 함수
+        function updateMonths() {
+            const selectedMonth = parseInt(document.getElementById('month-select').value);
+            
+            // 선택된 월을 기준으로 3개월 계산
+            const month1 = selectedMonth - 2 <= 0 ? selectedMonth - 2 + 12 : selectedMonth - 2;
+            const month2 = selectedMonth - 1 <= 0 ? selectedMonth - 1 + 12 : selectedMonth - 1;
+            const month3 = selectedMonth;
+            
+            // 탭 이름 업데이트
+            document.getElementById('month1-name').textContent = month1 + '월';
+            document.getElementById('month2-name').textContent = month2 + '월';
+            document.getElementById('month3-name').textContent = month3 + '월';
+            
+            // 섹션 제목 업데이트
+            document.querySelectorAll('.month1-title').forEach(el => el.textContent = month1 + '월');
+            document.querySelectorAll('.month2-title').forEach(el => el.textContent = month2 + '월');
+            document.querySelectorAll('.month3-title').forEach(el => el.textContent = month3 + '월');
+            
+            // 워드 클라우드 업데이트 - 지연 시간 추가
+            setTimeout(() => {
+                createWordCloud('month1-wordcloud', monthlyData[month1.toString()]);
+                createWordCloud('month2-wordcloud', monthlyData[month2.toString()]);
+                createWordCloud('month3-wordcloud', monthlyData[month3.toString()]);
+            }, 100);
+            
+            // 종합 분석 섹션 업데이트 (예시)
+            document.querySelector('#overview-section h2').textContent = 
+                `최근 3달(${month1}월-${month3}월) 영상 제목 트렌드 종합 분석`;
+        }
+        
+        // 탭 전환 함수 - 새로 정의
+        function switchTab(tabName) {
+            // 모든 탭과 섹션 비활성화
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.chart-section').forEach(section => section.classList.remove('active'));
+            
+            // 선택한 탭과 섹션 활성화
+            document.getElementById(tabName + '-tab').classList.add('active');
+            document.getElementById(tabName + '-section').classList.add('active');
+            
+            // 워드 클라우드 다시 그리기
+            if (tabName === 'month1') {
+                const month1 = document.getElementById('month1-name').textContent.replace('월', '');
+                setTimeout(() => createWordCloud('month1-wordcloud', monthlyData[month1]), 50);
+            } else if (tabName === 'month2') {
+                const month2 = document.getElementById('month2-name').textContent.replace('월', '');
+                setTimeout(() => createWordCloud('month2-wordcloud', monthlyData[month2]), 50);
+            } else if (tabName === 'month3') {
+                const month3 = document.getElementById('month3-name').textContent.replace('월', '');
+                setTimeout(() => createWordCloud('month3-wordcloud', monthlyData[month3]), 50);
+            }
+        }
+        
+        // 페이지 로드 시 차트 생성 및 초기화
+        window.onload = function() {
+            // 기본 선택 월을 6월로 설정
+            document.getElementById('month-select').value = '6';
+            
+            // 월 업데이트 함수 호출
+            setTimeout(() => {
+                updateMonths();
+                // 초기 탭 설정
+                switchTab('month2');
+            }, 200);
+        };
+        
         // 창 크기 변경 시 워드 클라우드 다시 그리기
         window.addEventListener('resize', function() {
-            if (document.getElementById('march-section').classList.contains('active')) {
-                createWordCloud("march-wordcloud", marchWords);
-            } else if (document.getElementById('april-section').classList.contains('active')) {
-                createWordCloud("april-wordcloud", aprilWords);
-            } else if (document.getElementById('may-section').classList.contains('active')) {
-                createWordCloud("may-wordcloud", mayWords);
+            // 현재 활성화된 탭 확인
+            if (document.getElementById('month1-tab').classList.contains('active')) {
+                const month1 = document.getElementById('month1-name').textContent.replace('월', '');
+                setTimeout(() => createWordCloud("month1-wordcloud", monthlyData[month1]), 50);
+            } else if (document.getElementById('month2-tab').classList.contains('active')) {
+                const month2 = document.getElementById('month2-name').textContent.replace('월', '');
+                setTimeout(() => createWordCloud("month2-wordcloud", monthlyData[month2]), 50);
+            } else if (document.getElementById('month3-tab').classList.contains('active')) {
+                const month3 = document.getElementById('month3-name').textContent.replace('월', '');
+                setTimeout(() => createWordCloud("month3-wordcloud", monthlyData[month3]), 50);
             }
         });
     </script>
