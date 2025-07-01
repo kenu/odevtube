@@ -12,7 +12,15 @@ function search() {
 function getFilteredHtml(keyword, list) {
   const filtered = [...list].filter(function (e) {
     const text = e.innerText.toLowerCase()
-    return text.includes(keyword)
+    
+    // Special handling for hashtag searches
+    if (keyword.startsWith('#')) {
+      const tag = keyword.substring(1).toLowerCase()
+      // Look for the tag with or without the # symbol
+      return text.includes('#' + tag) || text.includes(tag)
+    } else {
+      return text.includes(keyword)
+    }
   })
   let htmlFiltered = ''
   filtered.forEach(function (e) {
@@ -44,14 +52,19 @@ function showChannel(name, customUrl) {
 
 function processHash() {
   const hash = decodeURIComponent(location.hash)?.replace('#', '')
-  keywordEl.value = hash
+  // If hash is not empty, prepend # to make it a proper hashtag search
+  if (hash) {
+    keywordEl.value = '#' + hash
+  } else {
+    keywordEl.value = ''
+  }
   search()
 }
 
 window.addEventListener('popstate', function (event) {
   const hash = decodeURIComponent(location.hash)?.replace('#', '')
   if (hash) {
-    keywordEl.value = hash
+    keywordEl.value = '#' + hash
   } else {
     document.getElementById('channelLink').innerHTML = ''
     keywordEl.value = ''

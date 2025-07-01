@@ -154,12 +154,23 @@ async function findAndCountAllVideo(
   }
 
   if (searchKeyword) {
-    whereClause = {
-      [Sequelize.Op.or]: [
-        { '$Video.title$': { [Sequelize.Op.like]: `%${searchKeyword}%` } },
-        { '$Channel.title$': { [Sequelize.Op.like]: `%${searchKeyword}%` } }
-      ]
-    };
+    // Check if the search keyword starts with # for hashtag search
+    if (searchKeyword.startsWith('#')) {
+      const tag = searchKeyword.substring(1); // Remove the # symbol
+      whereClause = {
+        [Sequelize.Op.or]: [
+          { '$Video.title$': { [Sequelize.Op.like]: `%#${tag}%` } },
+          { '$Video.title$': { [Sequelize.Op.like]: `%${tag}%` } }
+        ]
+      };
+    } else {
+      whereClause = {
+        [Sequelize.Op.or]: [
+          { '$Video.title$': { [Sequelize.Op.like]: `%${searchKeyword}%` } },
+          { '$Channel.title$': { [Sequelize.Op.like]: `%${searchKeyword}%` } }
+        ]
+      };
+    }
   }
 
   if (channelId) {
