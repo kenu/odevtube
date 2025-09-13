@@ -185,15 +185,6 @@ li button.transcript {
   font-size: 1.2rem;
 }
 
-.search .hash-list {
-  display: block;
-}
-
-.search .hash-list a {
-  display: inline-block;
-  margin-right: 5px;
-}
-
 /* Desktop styles */
 @media only screen and (min-width: 992px) {
   body {
@@ -228,14 +219,6 @@ li button.transcript {
   #channelLink {
     height: 3rem;
     background-color: #fabe9833;
-  }
-
-  .search .hash-list {
-    margin: 0.3rem 0.1rem 0.1rem 0.1rem;
-  }
-
-  .search .hash-list a {
-    display: inline-block;
   }
 
   ul {

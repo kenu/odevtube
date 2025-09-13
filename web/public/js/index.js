@@ -9,29 +9,8 @@ function search() {
   document.getElementById('list').innerHTML = htmlFiltered
 }
 
-function getFilteredHtml(keyword, list) {
-  const filtered = [...list].filter(function (e) {
-    const text = e.innerText.toLowerCase()
-    
-    // Special handling for hashtag searches
-    if (keyword.startsWith('#')) {
-      const tag = keyword.substring(1).toLowerCase()
-      // Look for the tag with or without the # symbol
-      return text.includes('#' + tag) || text.includes(tag)
-    } else {
-      return text.includes(keyword)
-    }
-  })
-  let htmlFiltered = ''
-  filtered.forEach(function (e) {
-    htmlFiltered += e.outerHTML
-  })
-  return { htmlFiltered }
-}
-
 function clearKeyword() {
   keywordEl.value = ''
-  location.hash = ''
   document.getElementById('channelLink').innerHTML = ''
   search()
 }
@@ -42,7 +21,6 @@ function showChannel(name, customUrl) {
   window.scrollTo(0, 0)
   const html = `<a href="https://www.youtube.com/${customUrl}" target="_blank">➡️<em> ${name}</em></a>`
   document.getElementById('channelLink').innerHTML = html
-  location.hash = name
   wcs?.event('showChannel', name)
   gtag('event', 'level_end', {
     level_name: '시작됩니다...' + name,
@@ -50,34 +28,11 @@ function showChannel(name, customUrl) {
   })
 }
 
-function processHash() {
-  const hash = decodeURIComponent(location.hash)?.replace('#', '')
-  // If hash is not empty, prepend # to make it a proper hashtag search
-  if (hash) {
-    keywordEl.value = '#' + hash
-  } else {
-    keywordEl.value = ''
-  }
-  search()
-}
-
-window.addEventListener('popstate', function (event) {
-  const hash = decodeURIComponent(location.hash)?.replace('#', '')
-  if (hash) {
-    keywordEl.value = '#' + hash
-  } else {
-    document.getElementById('channelLink').innerHTML = ''
-    keywordEl.value = ''
-  }
-  search()
-})
 // global element
 let keywordEl
 window.onload = function () {
   keywordEl = document.getElementById('keyword')
   keywordEl.addEventListener('keyup', search)
-
-  processHash()
 
   // whole page event listener escape keyup clean keyword
   document.addEventListener('keyup', function (e) {
