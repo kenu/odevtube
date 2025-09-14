@@ -16,15 +16,12 @@ async function getNewHourly() {
     content: 'Data Added!\n' + messages.join('\n'),
   }
 
-  axios
-    .post(webhookUrl, data)
-    .then((response) => {
-      console.log('Message sent successfully!')
-      console.log('Status Code:', response.status)
-    })
-    .catch((error) => {
-      console.error('Error sending message:', error)
-    })
+  try {
+    const response = await axios.post(webhookUrl, data)
+    console.log('Message sent successfully!', response.data) // Added logging
+  } catch (error) {
+    console.error('Error sending message:', error)
+  }
 }
 
 getNewHourly()
