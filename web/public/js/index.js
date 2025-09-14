@@ -5,8 +5,6 @@ function search() {
   if (!repo.length) {
     repo = document.querySelectorAll('#list>li')
   }
-  const { htmlFiltered } = getFilteredHtml(keyword, repo)
-  document.getElementById('list').innerHTML = htmlFiltered
 }
 
 function clearKeyword() {
