@@ -11,6 +11,15 @@ const router = express.Router()
 router.use(passport.initialize())
 router.use(passport.session())
 
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     description: Returns the homepage
+ *     responses:
+ *       200:
+ *         description: hello world
+ */
 router.get('/', async function (req, res, _next) {
   const uri = 'dev'
   const title = '개발 관련 유튜브.'

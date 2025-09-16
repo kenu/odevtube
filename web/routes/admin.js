@@ -68,12 +68,45 @@ router.get('/admin/channel', async function (req, res, next) {
   })
 })
 
+/**
+ * @swagger
+ * /api/video:
+ *   delete:
+ *     description: Deletes a video
+ *     parameters:
+ *       - name: videoid
+ *         in: header
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: video deleted
+ */
 router.delete('/api/video', auth, async function (req, res, next) {
   const videoId = req.headers.videoid
   const result = await vapi.remove(videoId)
   res.json(result)
 })
 
+/**
+ * @swagger
+ * /api/channel:
+ *   post:
+ *     description: Creates a channel
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               channelId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: channel created
+ */
 router.post('/api/channel', async function (req, res, next) {
   const channelId = req.body.channelId
   let channel

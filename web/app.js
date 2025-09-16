@@ -77,6 +77,24 @@ app.use('/', indexRouter)
 import adminRouter from './routes/admin.js'
 app.use('/', adminRouter)
 
+import swaggerUi from 'swagger-ui-express'
+import swaggerJsdoc from 'swagger-jsdoc'
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Odevtube API',
+      version: '1.0.0',
+    },
+  },
+  apis: ['./routes/*.js'], // files containing annotations as above
+};
+
+const openapiSpec = swaggerJsdoc(options)
+app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(openapiSpec))
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404))
