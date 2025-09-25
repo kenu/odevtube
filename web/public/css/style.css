@@ -1,41 +1,66 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
 body {
-  font-family: 'Verdana', sans-serif;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   margin: 0;
-  background-color: ivory;
+  background-color: #f9f9f9;
+  color: #333;
+  line-height: 1.5;
 }
 
 h1 {
   position: fixed;
   top: 0;
-  margin-top: 0;
+  margin: 0;
   left: 0;
   width: 100%;
-  background-color: #fffd;
-  color: #fff;
+  background-color: #fff;
+  color: #ff0000;
   z-index: 10;
+  padding: 15px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 60px;
+  box-sizing: border-box;
 }
 
 ul {
   list-style: none;
-  padding: 0;
+  padding: 0 10px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(40%, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+  margin: 0 auto;
+  max-width: 1800px;
 }
 
 li {
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
-  margin: 0.6rem 0.1rem;
-  min-height: 12rem;
-  padding: 0.2rem 0.1rem 1.4rem;
+  margin: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+li:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 img {
   width: 100%;
   height: auto;
-  border-radius: 6.5%;
+  display: block;
+  border-radius: 0;
+  transition: opacity 0.2s;
+}
+
+li:hover img {
+  opacity: 0.9;
 }
 
 a {
@@ -93,11 +118,14 @@ a:hover {
 
 .main-nav {
   position: sticky;
-  top: 2.5rem;
-  background-color: #f9000020;
-  padding: 0.4rem;
-  text-align: right;
+  top: 60px;
+  background-color: #fff;
+  padding: 10px 20px;
   z-index: 11;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 }
 
 #title {
@@ -171,14 +199,43 @@ li button.transcript {
 }
 
 .search {
-  display: block;
-  margin: 3.3rem auto 0.8rem;
-  padding: 0.2rem;
+  display: flex;
+  justify-content: center;
+  margin: 1rem auto;
+  padding: 0.5rem 1rem;
+  max-width: 800px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .search #keyword {
-  font-size: 1.2rem;
-  width: 50%;
+  font-size: 1rem;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 24px 0 0 24px;
+  width: 70%;
+  max-width: 600px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search #keyword:focus {
+  border-color: #ff0000;
+  box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.1);
+}
+
+.search button {
+  padding: 0 20px;
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 0 24px 24px 0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.search button:hover {
+  background-color: #cc0000;
 }
 
 .search button {
