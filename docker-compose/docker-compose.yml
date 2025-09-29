@@ -12,7 +12,9 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
       - --lower_case_table_names=1
-    platform: linux/x86_64 #apple silicon에서 플랫폼을 명시해주지 않으면 에러남
+    platform: linux/arm64 #apple silicon에서 플랫폼을 명시해주지 않으면 에러남
     ports:
       - "3306:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     container_name: mariadb
