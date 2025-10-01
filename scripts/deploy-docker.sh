@@ -11,12 +11,12 @@ git pull origin main
 
 # Docker 컨테이너 재시작
 echo "🐳 Docker 컨테이너 재시작 중..."
-docker-compose down
-docker-compose up -d --build
+docker compose down
+docker compose up -d --build
 
 # 배포 상태 확인
 echo "✅ 배포 상태 확인:"
-docker-compose ps
+docker compose ps
 
 echo "📦 Docker 배포 완료!"
 

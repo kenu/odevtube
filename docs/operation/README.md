@@ -37,7 +37,7 @@ df -h
 2. 설정 파일 백업
 ```bash
 cp .env .env.backup
-cp docker-compose.yml docker-compose.yml.backup
+cp docker compose.yml docker compose.yml.backup
 ```
 
 3. 백업 파일 외부 저장소 전송
@@ -52,8 +52,8 @@ cp docker-compose.yml docker-compose.yml.backup
 1. 최신 백업에서 데이터 복원
 2. 애플리케이션 재시작
 ```bash
-docker-compose down
-docker-compose up -d
+docker compose down
+docker compose up -d
 ```
 
 ## 정기 유지보수
@@ -66,8 +66,8 @@ docker-compose up -d
 sudo apt update && sudo apt upgrade -y
 
 # Docker 이미지 업데이트
-docker-compose pull
-docker-compose up -d
+docker compose pull
+docker compose up -d
 ```
 
 2. 의존성 패키지 업데이트
@@ -94,10 +94,10 @@ find /path/to/logs -name "*.log" -mtime +30 -delete
 1. 애플리케이션이 응답하지 않는 경우
 ```bash
 # 컨테이너 재시작
-docker-compose restart
+docker compose restart
 
 # 로그 확인
-docker-compose logs -f
+docker compose logs -f
 ```
 
 2. 메모리 부족 문제

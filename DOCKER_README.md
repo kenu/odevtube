@@ -27,7 +27,7 @@ cp .env.example .env
 다음 명령어로 Docker 이미지를 빌드하고 컨테이너를 실행합니다:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 이 명령어는 백그라운드에서 애플리케이션과 데이터베이스를 실행합니다.
@@ -41,19 +41,19 @@ docker-compose up -d
 ### 로그 확인
 
 ```bash
-docker-compose logs -f app
+docker compose logs -f app
 ```
 
 ### 컨테이너 중지
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ### 컨테이너 재시작
 
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 ### 이미지 재빌드 및 컨테이너 재시작
@@ -61,7 +61,7 @@ docker-compose restart
 코드를 변경한 후 이미지를 재빌드하고 컨테이너를 재시작하려면:
 
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 ## 데이터베이스 백업 및 복원

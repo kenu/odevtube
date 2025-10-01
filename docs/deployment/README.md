@@ -47,7 +47,7 @@ git pull origin main
 
 4. Docker 컨테이너 빌드 및 실행
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 ### GitHub Actions를 통한 자동 배포
@@ -78,7 +78,7 @@ EXPOSE 4000
 CMD ["pnpm", "start"]
 ```
 
-### docker-compose.yml
+### docker compose.yml
 ```yaml
 version: '3'
 services:
@@ -125,7 +125,7 @@ jobs:
           script: |
             cd /path/to/odevtube
             git pull origin main
-            docker-compose up -d --build
+            docker compose up -d --build
 ```
 
 ## 환경 변수 설정
@@ -141,10 +141,10 @@ jobs:
 
 - Docker 로그 확인:
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 - 애플리케이션 상태 확인:
 ```bash
-docker-compose ps
+docker compose ps
 ```

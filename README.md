@@ -15,10 +15,10 @@
 ## Build and Run
 
 - .env 파일을 생성하고 YOUTUBE_API_KEY를 설정 # .env.example 참고
-- docker-compose를 사용하여 MariaDB 실행
+- docker compose를 사용하여 MariaDB 실행
 ```sh
-cd docker-compose
-docker-compose up -d
+cd docker compose
+docker compose up -d
 ```
 - web 폴더에서 npm install 후 npm run dev 실행
 ```sh
