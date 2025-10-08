@@ -15,6 +15,12 @@ const channels = {
       'UCg-p3lQIqmhh7gHpyaOmOiQ',
     ],
   ],
+  drama: [
+    [
+      'UC0JXED-EfkwAZguqUwvm1hw',
+      'UCY-e7xKANnXvWddLGDdCroQ',
+    ],
+  ],
   kpop: [
     [
       'UCe52oeb7Xv_KaJsEzcKXJJg',

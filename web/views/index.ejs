@@ -28,19 +28,15 @@
       <% } %>
     </aside>
     <aside aria-label="menu">
+      | <a href="/drama" alt="drama">drama</a>
       | <a href="/kpop" alt="kpop">kpop</a>
       | <a href="/food" alt="food">food</a>
-      | <a href="/" alt="korean">ko</a>
-      | <a href="/en" alt="english">en</a>
+      | <a href="/" alt="korean">ko dev</a>
+      | <a href="/en" alt="english">en dev</a>
     </aside>
 </nav>
 
   <% include ./search.ejs %>
-  <% if (uri === 'kpop' ) { %>
-  <section style="background-color: #FABE98; margin-bottom: 2.2rem; padding: 0.45rem;">
-    ➡️ <a href="https://www.youtube.com/playlist?list=PLQu3_HfiL3GQnaFfT7CAfrWMyhoWL7khJ" title="2022 교차편집 모음 (2022 Stage mix playlist)" style="padding-left: 1rem;">2022 교차편집 모음 (2022 Stage mix playlist)</a>
-  </section>
-  <% } %>
 
   <ul id="list">
     <% list.forEach(video => { %>

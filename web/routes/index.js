@@ -45,6 +45,14 @@ router.get('/food', async function (req, res, _next) {
   await goRenderPage(req, res, uri, '', title, isApi, page)
 })
 
+router.get('/drama', async function (req, res, _next) {
+  const uri = 'drama'
+  const title = 'K-Drama YouTube Videos'
+  const isApi = req.query.a === '1'
+  const page = parseInt(req.query.page) || 1
+  await goRenderPage(req, res, uri, '', title, isApi, page)
+})
+
 router.get('/kpop', async function (req, res, _next) {
   const uri = 'kpop'
   const title = 'K-POP YouTube Videos'
