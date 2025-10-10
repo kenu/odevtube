@@ -17,7 +17,7 @@ COPY . .
 ENV NODE_ENV=production
 
 # 포트 노출
-EXPOSE 3000
+EXPOSE 4000
 
 # 앱 실행
 CMD ["node", "web/bin/odevtube.js"]

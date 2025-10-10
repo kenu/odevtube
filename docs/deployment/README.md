@@ -73,7 +73,7 @@ RUN npm install -g pnpm && pnpm install
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 4000
 
 CMD ["pnpm", "start"]
 ```
@@ -85,7 +85,7 @@ services:
   odevtube:
     build: .
     ports:
-      - "3000:3000"
+      - "4000:4000"
     environment:
       - NODE_ENV=production
     restart: always
