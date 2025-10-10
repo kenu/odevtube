@@ -64,7 +64,7 @@ ODevTube는 GitHub Actions를 사용하여 자동 배포 파이프라인이 구�
 
 ### Dockerfile
 ```dockerfile
-FROM node:16-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -108,7 +108,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '20'
           
       - name: Install dependencies
         run: npm install -g pnpm && pnpm install
