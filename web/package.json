@@ -9,23 +9,23 @@
   "dependencies": {
     "body-parser": "^1.20.3",
     "connect-ensure-login": "^0.1.1",
-    "cookie-parser": "~1.4.6",
-    "dayjs": "^1.11.13",
+    "cookie-parser": "~1.4.7",
+    "dayjs": "^1.11.18",
     "debug": "~2.6.9",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "ejs": "~2.6.2",
     "express": "~4.16.4",
-    "express-session": "^1.18.0",
+    "express-session": "^1.18.2",
     "http-errors": "~1.6.3",
-    "mariadb": "^3.3.2",
+    "mariadb": "^3.4.5",
     "morgan": "~1.9.1",
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",
-    "sequelize": "^6.37.3",
+    "sequelize": "^6.37.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.10"
   }
 }
