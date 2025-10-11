@@ -205,7 +205,7 @@ async function findAllChannelList(dayOffset) {
       from channels c
       left join videos y on c.id = y.ChannelId
       group by c.id
-      order by publishedAt desc;
+      order by y.publishedAt desc;
     `,
     {
       type: sequelize.QueryTypes.SELECT,

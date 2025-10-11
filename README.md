@@ -18,11 +18,15 @@
 ```
 
 ## DB
-
+- `docker-compose/docker-compose.yml`을 참고
+- `docker-compose/init.sql`을 참고
 ```sql
 create database odevtube default character set utf8mb4 collate utf8mb4_unicode_ci;
 GRANT ALL PRIVILEGES ON odevtube.* TO devuser@localhost IDENTIFIED BY 'devpass';
 ```
+- `cd docker-compose`
+- `docker-compose up -d`로 실행
+- `docker-compose down`로 종료
 
 ## LICENSE
 
