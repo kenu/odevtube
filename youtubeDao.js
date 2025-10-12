@@ -198,15 +198,12 @@ async function findAllChannelList(dayOffset) {
   // Query to get the channel list and the last update
   const list = await sequelize.query(
     `select
-        max(y.publishedAt) publishedAt,
-        count(y.id) cnt,
-        'aaa' a,
-        c.*
+        max(y.publishedAt) publishedAt, count(y.id) cnt,
+        c.id, c.channelId, c.title, c.thumbnail, c.customUrl, c.lang, c.category, c.createdAt, c.updatedAt
       from channels c
       left join videos y on c.id = y.ChannelId
       group by c.id
-      order by y.publishedAt desc;
-    `,
+      order by y.publishedAt desc;`,
     {
       type: sequelize.QueryTypes.SELECT,
     }
