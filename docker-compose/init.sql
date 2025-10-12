@@ -11,7 +11,7 @@ CREATE TABLE accounts (
 
 CREATE TABLE channels (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  channelId VARCHAR(255) NOT NULL,
+  channelId VARCHAR(255) UNIQUE NOT NULL,
   title VARCHAR(255),
   customUrl VARCHAR(255),
   thumbnail VARCHAR(255),
