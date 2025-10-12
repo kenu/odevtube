@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 
-<% include ./header.ejs %>
+<% include('header.ejs') %>
 
 <body>
   <section id="title">
@@ -35,7 +35,7 @@
     </aside>
 </nav>
 
-  <% include ./search.ejs %>
+  <% include('search.ejs') %>
   <% if (uri === 'kpop' ) { %>
   <section style="background-color: #FABE98; margin-bottom: 2.2rem; padding: 0.45rem;">
     ➡️ <a href="https://www.youtube.com/playlist?list=PLQu3_HfiL3GQnaFfT7CAfrWMyhoWL7khJ" title="2022 교차편집 모음 (2022 Stage mix playlist)" style="padding-left: 1rem;">2022 교차편집 모음 (2022 Stage mix playlist)</a>
@@ -44,7 +44,7 @@
 
   <ul id="list">
     <% list.forEach(video => { %>
-    <% include ./video.ejs %>
+    <% include('video.ejs') %>
     <% }) %>
   </ul>
   <hr />
@@ -68,13 +68,13 @@
     <a href="?page=<%= totalPages %><%= searchKeyword ? '&search=' + encodeURIComponent(searchKeyword) : '' %>">Last</a>
     <% } %>
   </div>
-  <% include ./aside.ejs %>
+  <% include('aside.ejs') %>
   <hr />
   <hr />
   <hr />
   <hr />
 </body>
-<% include ./footer.ejs %>
+<% include('footer.ejs') %>
 <script src="https://js.sentry-cdn.com/<%= process.env.YOUTUBE_SENTRY %>.min.js" crossorigin="anonymous"></script>
 
 </html>
