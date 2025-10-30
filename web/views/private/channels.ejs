@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ko">
+<%- include('../header.ejs') %>
+
+<body>
+  <div class="container">
+  <section id="title">
+    <h1 class="title">
+      <a href="javascript:window.scrollTo(0,0)">
+        <img src="https://okdevtv.com/images/logo.webp" alt="okdevtv" class="okdevtv-logo" />
+        odevtube: <%= title %>
+      </a>
+    </h1>
+    <div class="github">
+      <a href="https://github.com/kenu/odevtube" target="_blank">
+        <img src="/images/github-mark.svg" class="github-logo" alt="fork in github">
+      </a>
+    </div>
+  </section>
+
+  <nav class="main-nav">
+    <aside class="login" aria-label="login">
+      <% if (!user) { %>
+        <a href="/login" alt="login">login</a>
+      <% } else { %>
+        <%= user.username %>
+        <a href="/profile" alt="profile">profile</a>
+        <a href="/private/channels" alt="my channels">my channels</a>
+        <a href="/logout" alt="logout">logout</a>
+        <% if (user.role === 'admin') { %>
+          <a href="/admin" alt="admin">admin</a>
+        <% } %>
+      <% } %>
+    </aside>
+  </nav>
+
+  <main class="container">
+    <div class="list-tabs">
+      <button class="list-type-tab active" data-list-type="favorite">⭐ Favorites</button>
+      <button class="list-type-tab" data-list-type="watchlist">📝 Watch Later</button>
+    </div>
+    
+    <h2>My Channel Lists</h2>
+    
+    <div class="channel-lists">
+      <div class="channel-list">
+        <h3>My Favorites</h3>
+        <div class="channel-list-content" id="favoriteChannels">
+          <!-- Favorite channels will be loaded here -->
+          <p>No favorite channels yet. Add some channels to your favorites!</p>
+        </div>
+      </div>
+      
+      <div class="channel-list">
+        <h3>My Watchlist</h3>
+        <div class="channel-list-content" id="watchlistChannels">
+          <!-- Watchlist channels will be loaded here -->
+          <p>No channels in your watchlist yet. Add some channels to watch later!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="add-channel">
+      <h3>Add Channel to List</h3>
+      <div class="channel-input">
+        <input type="text" id="channelId" placeholder="Enter YouTube Channel ID or URL">
+        <select id="listType">
+          <option value="favorites">Add to Favorites</option>
+          <option value="watchlist">Add to Watchlist</option>
+        </select>
+        <button id="addChannelBtn">Add Channel</button>
+      </div>
+    </div>
+  </main>
+
+  <div id="mp4Modal" class="modal">
+    <!-- Modal content will be loaded here -->
+  </div>
+
+  <style>
+    /* Alert styles */
+    .alert {
+      padding: 12px 20px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      color: white;
+      transition: opacity 0.3s ease;
+    }
+    
+    .alert-success {
+      background-color: #4CAF50;
+    }
+    
+    .alert-error {
+      background-color: #f44336;
+    }
+    
+    .alert-info {
+      background-color: #2196F3;
+    }
+    
+    /* Loading and empty states */
+    .loading, .empty-state {
+      padding: 20px;
+      text-align: center;
+      color: #666;
+      font-style: italic;
+    }
+    
+    .error {
+      padding: 20px;
+      text-align: center;
+      color: #f44336;
+    }
+    
+    .retry-btn {
+      margin-top: 10px;
+      padding: 5px 15px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .retry-btn:hover {
+      background-color: #d32f2f;
+    }
+    
+    /* Channel lists */
+    .channel-lists {
+      display: flex;
+      gap: 2rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    
+    .list-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .list-type-tab {
+      padding: 8px 16px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-weight: 500;
+      color: #666;
+      transition: all 0.2s;
+    }
+    
+    .list-type-tab:hover {
+      color: #2196F3;
+    }
+    
+    .list-type-tab.active {
+      color: #2196F3;
+      border-bottom-color: #2196F3;
+    }
+    
+    .channel-list {
+      flex: 1;
+      min-width: 300px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.5rem;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: box-shadow 0.2s ease;
+    }
+    
+    .channel-list:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .channel-list h3 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #f0f0f0;
+      color: #333;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .channel-list h3::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 20px;
+      background-color: #2196F3;
+      border-radius: 4px;
+    }
+    
+    .channel-list-content {
+      min-height: 200px;
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+    
+    /* Custom scrollbar */
+    .channel-list-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .channel-list-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+    
+    .channel-list-content::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 3px;
+    }
+    
+    .channel-list-content::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+    
+    /* Channel item styles */
+    .channel-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      background-color: #f9f9f9;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+    
+    .channel-item:hover {
+      background-color: #f0f7ff;
+      transform: translateX(2px);
+    }
+    
+    .channel-thumbnail {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .channel-info {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .channel-info h4 {
+      margin: 0 0 4px 0;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #333;
+    }
+    
+    .channel-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    
+    .youtube-link, 
+    .move-btn,
+    .remove-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 4px;
+      background: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      color: #666;
+      font-size: 16px;
+      padding: 0;
+    }
+    
+    .youtube-link {
+      color: #ff0000;
+    }
+    
+    .move-btn {
+      width: auto;
+      padding: 0 10px;
+      background-color: #e3f2fd;
+      color: #1976d2;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+    
+    .move-btn:hover {
+      background-color: #bbdefb;
+    }
+    
+    .remove-btn {
+      color: #f44336;
+    }
+    
+    .remove-btn:hover {
+      background-color: #ffebee;
+    }
+    
+    /* Add channel form */
+    .add-channel {
+      margin-top: 2.5rem;
+      padding: 1.5rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .add-channel h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #333;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .add-channel h3::before {
+      content: '+';
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 50%;
+      font-size: 1rem;
+      line-height: 1;
+    }
+    
+    .channel-input {
+      display: flex;
+      gap: 12px;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .channel-input input {
+      flex: 2;
+      min-width: 200px;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .channel-input input:focus {
+      outline: none;
+      border-color: #2196F3;
+      box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+    }
+    
+    .channel-input select {
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background-color: white;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    
+    .channel-input select:focus {
+      outline: none;
+      border-color: #2196F3;
+    }
+    
+    #addChannelBtn {
+      padding: 0.75rem 1.5rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    #addChannelBtn:hover {
+      background-color: #43A047;
+    }
+    
+    #addChannelBtn:active {
+      transform: translateY(1px);
+    }
+    
+    #addChannelBtn:disabled {
+      background-color: #a5d6a7;
+      cursor: not-allowed;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .channel-lists {
+        flex-direction: column;
+      }
+      
+      .channel-input {
+        flex-direction: column;
+      }
+      
+      .channel-input input,
+      .channel-input select,
+      #addChannelBtn {
+        width: 100%;
+      }
+    }
+    
+    /* Animation for channel items */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .channel-item {
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load user's channels
+      loadUserChannels();
+      
+      // Add channel button click handler
+      document.getElementById('addChannelBtn').addEventListener('click', addChannelToList);
+      
+      // Handle Enter key in input field
+      document.getElementById('channelId').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          addChannelToList();
+        }
+      });
+
+      // Add event delegation for list type tabs
+      document.querySelectorAll('.list-type-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          const listType = this.getAttribute('data-list-type');
+          document.querySelectorAll('.list-type-tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          document.querySelectorAll('.channel-list').forEach(list => list.style.display = 'none');
+          document.getElementById(`${listType}Channels`).parentElement.style.display = 'block';
+        });
+      });
+    });
+    
+    async function loadUserChannels() {
+      const favoritesContainer = document.getElementById('favoriteChannels');
+      const watchlistContainer = document.getElementById('watchlistChannels');
+      
+      // Show loading state
+      favoritesContainer.innerHTML = '<div class="loading">Loading your favorite channels...</div>';
+      watchlistContainer.innerHTML = '<div class="loading">Loading your watchlist channels...</div>';
+      
+      try {
+        // Load favorites
+        const favResponse = await fetch('/api/user/channels?listType=favorites');
+        const favData = await favResponse.json();
+        updateChannelList('favoriteChannels', favData.channels || []);
+        
+        // Load watchlist
+        const watchResponse = await fetch('/api/user/channels?listType=watchlist');
+        const watchData = await watchResponse.json();
+        updateChannelList('watchlistChannels', watchData.channels || []);
+        
+        // If no channels in any list, show appropriate message
+        if ((!favData.channels || favData.channels.length === 0) && 
+            (!watchData.channels || watchData.channels.length === 0)) {
+          favoritesContainer.innerHTML = `
+            <div class="empty-state">
+              <p>You don't have any channels yet.</p>
+              <p>Add channels using the form below to get started!</p>
+            </div>`;
+        }
+      } catch (error) {
+        console.error('Error loading channels:', error);
+        favoritesContainer.innerHTML = `
+          <div class="error">
+            <p>Failed to load your channels. Please try refreshing the page.</p>
+            <button onclick="loadUserChannels()" class="retry-btn">Retry</button>
+          </div>`;
+      }
+    }
+    
+    function updateChannelList(containerId, channels) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      
+      if (!channels || channels.length === 0) {
+        const listType = containerId.replace('Channels', '').toLowerCase();
+        container.innerHTML = `
+          <div class="empty-state">
+            <p>No channels in your ${listType} yet.</p>
+            <p>Add some channels using the form below!</p>
+          </div>`;
+        return;
+      }
+      
+      const channelItems = channels.map(channel => `
+        <div class="channel-item" data-channel-id="${channel.channelId}">
+          <img src="${channel.channelThumbnail || '/images/default-channel.png'}" 
+               alt="${channel.channelTitle}" 
+               class="channel-thumbnail"
+               onerror="this.src='/images/default-channel.png'"
+               loading="lazy">
+          <div class="channel-info">
+            <h4>${channel.channelTitle || 'Unnamed Channel'}</h4>
+            <div class="channel-actions">
+              <a href="https://youtube.com/channel/${channel.channelId}" 
+                 target="_blank" 
+                 class="youtube-link"
+                 title="Open on YouTube">
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                  <path fill="currentColor" d="M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z" />
+                </svg>
+              </a>
+              <button class="move-btn" 
+                      data-channel-id="${channel.channelId}" 
+                      data-current-list="${containerId.replace('Channels', '').toLowerCase()}"
+                      title="Move to ${containerId.includes('favorite') ? 'Watchlist' : 'Favorites'}">
+                ${containerId.includes('favorite') ? '📝 Watch Later' : '⭐ Add to Favorites'}
+              </button>
+              <button class="remove-btn" 
+                      data-channel-id="${channel.channelId}" 
+                      data-list-type="${containerId.replace('Channels', '').toLowerCase()}"
+                      title="Remove from list">
+                ×
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      
+      container.innerHTML = channelItems;
+      
+      // Add event listeners to remove buttons
+      container.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const channelId = this.getAttribute('data-channel-id');
+          const listType = this.getAttribute('data-list-type');
+          removeChannelFromList(channelId, listType);
+        });
+      });
+      
+      // Add event listeners to move buttons
+      container.querySelectorAll('.move-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const channelId = this.getAttribute('data-channel-id');
+          const fromList = this.getAttribute('data-current-list');
+          const toList = fromList === 'favorite' ? 'watchlist' : 'favorite';
+          
+          try {
+            const response = await fetch(`/api/user/channels/${channelId}/move`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                fromList,
+                toList
+              })
+            });
+            
+            if (!response.ok) {
+              throw new Error('Failed to move channel');
+            }
+            
+            // Reload the lists
+            loadUserChannels();
+          } catch (error) {
+            console.error('Error moving channel:', error);
+            alert('Failed to move channel: ' + error.message);
+          }
+        });
+      });
+    }
+    
+    async function addChannelToList() {
+      const channelInput = document.getElementById('channelId');
+      const listType = document.getElementById('listType').value;
+      const channelId = extractChannelId(channelInput.value.trim());
+      const addButton = document.getElementById('addChannelBtn');
+      
+      if (!channelId) {
+        showAlert('Please enter a valid YouTube channel ID or URL', 'error');
+        return;
+      }
+      
+      // Show loading state
+      const originalText = addButton.textContent;
+      addButton.disabled = true;
+      addButton.textContent = 'Adding...';
+      
+      try {
+        const response = await fetch('/api/user/channels', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            channelId,
+            listType
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.error || 'Failed to add channel');
+        }
+        
+        // Reload channels
+        await loadUserChannels();
+        
+        // Clear input
+        channelInput.value = '';
+        
+        // Show success message
+        showAlert(`Channel added to ${listType === 'favorites' ? 'favorites' : 'watchlist'}!`, 'success');
+        
+        // Scroll to the updated list
+        const listContainer = document.getElementById(`${listType}Channels`);
+        if (listContainer) {
+          listContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+      } catch (error) {
+        console.error('Error adding channel:', error);
+        showAlert('Failed to add channel: ' + (error.message || 'Unknown error'), 'error');
+      } finally {
+        // Restore button state
+        addButton.disabled = false;
+        addButton.textContent = originalText;
+      }
+    }
+    
+    async function removeChannelFromList(channelId, listType) {
+      if (!confirm('Are you sure you want to remove this channel from the list?')) {
+        return;
+      }
+      
+      try {
+        const response = await fetch(`/api/user/channels/${channelId}?listType=${listType}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'same-origin'
+        });
+        
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to remove channel');
+        }
+        
+        // Reload channels
+        await loadUserChannels();
+        
+        // Show success message
+        showAlert('Channel removed successfully!', 'success');
+      } catch (error) {
+        console.error('Error removing channel:', error);
+        showAlert('Failed to remove channel: ' + (error.message || 'Unknown error'), 'error');
+      }
+    }
+    
+    // Show a temporary alert message
+    function showAlert(message, type = 'info') {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type}`;
+      alertDiv.textContent = message;
+      
+      // Add to the top of the page
+      const container = document.querySelector('main.container');
+      container.insertBefore(alertDiv, container.firstChild);
+      
+      // Remove after 5 seconds
+      setTimeout(() => {
+        alertDiv.style.opacity = '0';
+        setTimeout(() => alertDiv.remove(), 300);
+      }, 5000);
+    }
+    
+    function extractChannelId(input) {
+      // Handle full YouTube channel URL
+      const urlMatch = input.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^\"&?\/ ]{11})/i);
+      if (urlMatch && urlMatch[1]) {
+        return urlMatch[1];
+      }
+      
+      // Handle channel ID or custom URL
+      const channelMatch = input.match(/(?:youtube\.com\/(?:c\/|channel\/|user\/))?([^\/&?\s]+)/i);
+      if (channelMatch) {
+        return channelMatch[1];
+      }
+      
+      // Assume it's already a channel ID
+      return input;
+    }
+  </script>
+</body>
+</html>

@@ -23,8 +23,11 @@
       <% } else { %>
       <%= user.username %>
       <a href="/profile" alt="profile">profile</a>
+      <a href="/private/channels" alt="my channels">my channels</a>
       <a href="/logout" alt="logout">logout</a>
+      <% if (user.role === 'admin') { %>
       <a href="/admin" alt="admin">admin</a>
+      <% } %>
       <% } %>
     </aside>
     <aside aria-label="menu">

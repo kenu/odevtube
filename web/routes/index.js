@@ -1,8 +1,10 @@
-import express from 'express'
-import dayjs from 'dayjs'
-import passport from 'passport'
-import { getFullText } from '../utils/transcriptUtil.js'
-import dao from '../../youtubeDao.js'
+import express from 'express';
+import dayjs from 'dayjs';
+import passport from 'passport';
+import { getFullText } from '../utils/transcriptUtil.js';
+import dao from '../../youtubeDao.js';
+import { syncDatabase } from '../../database.js';
+import userChannelsRouter from './api/userChannels.js';
 
 // Add a counter to track page calls
 let pageCallCounter = 0;
@@ -152,6 +154,21 @@ async function upsertTranscript(res, videoId) {
     res.json({ videoId, summary: '', text: 'Not Available ' + error.message })
   }
 }
+
+// Initialize database when the server starts
+syncDatabase().catch(console.error);
+
+// API Routes
+router.use('/api/user/channels', userChannelsRouter);
+
+// Private channel management
+router.get('/private/channels', isAuthenticated, function (req, res) {
+  res.render('private/channels', { 
+    title: 'My Channels', 
+    user: req.user,
+    YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY || ''
+  });
+})
 
 router.get('/login', function (req, res) {
   res.render('login')
