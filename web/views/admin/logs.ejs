@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그 조회</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    .logs-container {
+      padding: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .filter-section {
+      background: var(--search-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .filter-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .filter-group label {
+      color: var(--text-color);
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .filter-group select,
+    .filter-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    .btn-filter {
+      background-color: #2196f3;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    .btn-filter:hover {
+      background-color: #0b7dda;
+    }
+
+    .btn-export {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn-export:hover {
+      background-color: #45a049;
+    }
+
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: var(--bg-color);
+    }
+
+    .log-table th,
+    .log-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--input-border);
+    }
+
+    .log-table th {
+      background: var(--thead-bg);
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+    }
+
+    .log-table tr:hover {
+      background: var(--table-hover);
+    }
+
+    .log-level {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .log-level.info {
+      background-color: #2196f3;
+      color: white;
+    }
+
+    .log-level.warning {
+      background-color: #ff9800;
+      color: white;
+    }
+
+    .log-level.error {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .log-level.success {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .log-message {
+      font-family: monospace;
+      font-size: 13px;
+      max-width: 400px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .expand-btn {
+      background: none;
+      border: none;
+      color: #2196f3;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include('nav.ejs') %>
+  <div class="logs-container">
+    <h1>📝 로그 조회</h1>
+    
+    <section>
+      <% if (!user) { %>
+      <p>Welcome! Please <a href="/login">log in</a>.</p>
+      <% } else { %>
+      <p>Hello, <%= user.username %>. <a href="/logout">logout</a>. <a href="/profile">profile</a>.</p>
+      <% } %>
+    </section>
+
+    <div class="filter-section">
+      <h2>필터</h2>
+      <div class="filter-group">
+        <div>
+          <label for="logLevel">로그 레벨</label>
+          <select id="logLevel">
+            <option value="">전체</option>
+            <option value="info">INFO</option>
+            <option value="warning">WARNING</option>
+            <option value="error">ERROR</option>
+            <option value="success">SUCCESS</option>
+          </select>
+        </div>
+        <div>
+          <label for="logSource">소스</label>
+          <select id="logSource">
+            <option value="">전체</option>
+            <option value="api">API</option>
+            <option value="auth">인증</option>
+            <option value="database">데이터베이스</option>
+            <option value="system">시스템</option>
+          </select>
+        </div>
+        <div>
+          <label for="startDate">시작 날짜</label>
+          <input type="datetime-local" id="startDate">
+        </div>
+        <div>
+          <label for="endDate">종료 날짜</label>
+          <input type="datetime-local" id="endDate">
+        </div>
+      </div>
+      <div>
+        <button class="btn-filter" onclick="filterLogs()">조회</button>
+        <button class="btn-export" onclick="exportLogs()">CSV 내보내기</button>
+      </div>
+    </div>
+
+    <div>
+      <h2>로그 목록 (총 <%= logs ? logs.length : 0 %>건)</h2>
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th>시간</th>
+            <th>레벨</th>
+            <th>소스</th>
+            <th>사용자</th>
+            <th>메시지</th>
+            <th>상세</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (logs && logs.length > 0) { 
+            logs.forEach(function(log) { %>
+          <tr>
+            <td><%= log.timestamp %></td>
+            <td><span class="log-level <%= log.level %>"><%= log.level %></span></td>
+            <td><%= log.source %></td>
+            <td><%= log.user || 'N/A' %></td>
+            <td class="log-message" title="<%= log.message %>"><%= log.message %></td>
+            <td><button class="expand-btn" onclick="showDetails('<%= log.id %>')">보기</button></td>
+          </tr>
+          <% }); } else { %>
+          <tr>
+            <td colspan="6" style="text-align: center;">로그 데이터가 없습니다.</td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+  <script>
+    function filterLogs() {
+      const level = document.getElementById('logLevel').value;
+      const source = document.getElementById('logSource').value;
+      const startDate = document.getElementById('startDate').value;
+      const endDate = document.getElementById('endDate').value;
+      
+      let url = '/admin/logs?';
+      if (level) url += `level=${level}&`;
+      if (source) url += `source=${source}&`;
+      if (startDate) url += `start=${startDate}&`;
+      if (endDate) url += `end=${endDate}&`;
+      
+      window.location.href = url;
+    }
+
+    function exportLogs() {
+      alert('로그를 CSV 파일로 내보냅니다.');
+      window.location.href = '/admin/logs/export';
+    }
+
+    function showDetails(logId) {
+      alert(`로그 ID ${logId}의 상세 정보를 표시합니다.`);
+    }
+
+    // 현재 시간을 기본값으로 설정
+    document.getElementById('endDate').value = new Date().toISOString().slice(0, 16);
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    document.getElementById('startDate').value = yesterday.toISOString().slice(0, 16);
+  </script>
+</body>
+
+</html>

@@ -1,10 +1,17 @@
-<button class="menu-toggle">☰</button>
+<button type="button" class="menu-toggle">☰</button>
+<button type="button" class="theme-toggle" onclick="toggleTheme(); return false;">🌓 테마</button>
 
 <nav class="sliding-menu">
   <a href="/">홈</a>
   <a href="/admin">비디오</a>
   <a href="/admin/channel">채널</a>
   <a href="/profile">프로필</a>
+  <hr>
+  <strong style="color: #4caf50; padding: 10px 15px; display: block;">🔧 관리자 기능</strong>
+  <a href="/admin/stats">📊 사용자 통계 관리</a>
+  <a href="/admin/security">🔐 보안 설정 관리</a>
+  <a href="/admin/logs">📝 로그 조회</a>
+  <a href="/admin/settings">⚙️ 시스템 설정</a>
   <hr>
   <a href="/admin">Dev (KO)</a>
   <a href="/admin?c=dev&l=en">Dev (EN)</a>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시스템 설정</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    .settings-container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .settings-section {
+      background: var(--search-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .settings-section h2 {
+      margin-top: 0;
+      color: var(--text-color);
+      border-bottom: 2px solid var(--input-border);
+      padding-bottom: 10px;
+    }
+
+    .setting-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 20px;
+      margin: 15px 0;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--input-border);
+    }
+
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+
+    .setting-label {
+      font-weight: bold;
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .setting-label small {
+      font-weight: normal;
+      color: #888;
+      margin-top: 5px;
+    }
+
+    .setting-control input[type="text"],
+    .setting-control input[type="number"],
+    .setting-control input[type="email"],
+    .setting-control select,
+    .setting-control textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    .setting-control textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .setting-control input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .btn-save {
+      background-color: #4caf50;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    .btn-save:hover {
+      background-color: #45a049;
+    }
+
+    .btn-reset {
+      background-color: #f44336;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn-reset:hover {
+      background-color: #da190b;
+    }
+
+    .action-buttons {
+      text-align: right;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid var(--input-border);
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .status-indicator.online {
+      background-color: #4caf50;
+    }
+
+    .status-indicator.offline {
+      background-color: #f44336;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include('nav.ejs') %>
+  <div class="settings-container">
+    <h1>⚙️ 시스템 설정</h1>
+    
+    <section>
+      <% if (!user) { %>
+      <p>Welcome! Please <a href="/login">log in</a>.</p>
+      <% } else { %>
+      <p>Hello, <%= user.username %>. <a href="/logout">logout</a>. <a href="/profile">profile</a>.</p>
+      <% } %>
+    </section>
+
+    <div class="settings-section">
+      <h2>일반 설정</h2>
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>사이트 제목</span>
+          <small>브라우저 탭에 표시되는 제목</small>
+        </div>
+        <div class="setting-control">
+          <input type="text" id="siteTitle" value="ODevTube Admin">
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>사이트 설명</span>
+          <small>검색 엔진에 표시될 설명</small>
+        </div>
+        <div class="setting-control">
+          <textarea id="siteDescription">개발자를 위한 비디오 플랫폼</textarea>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>페이지당 항목 수</span>
+          <small>목록에 표시할 항목 개수</small>
+        </div>
+        <div class="setting-control">
+          <input type="number" id="itemsPerPage" value="60" min="10" max="100">
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>타임존</span>
+          <small>시스템 시간대 설정</small>
+        </div>
+        <div class="setting-control">
+          <select id="timezone">
+            <option value="Asia/Seoul" selected>한국 (UTC+9)</option>
+            <option value="America/New_York">뉴욕 (UTC-5)</option>
+            <option value="Europe/London">런던 (UTC+0)</option>
+            <option value="Asia/Tokyo">도쿄 (UTC+9)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h2>이메일 설정</h2>
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>SMTP 서버</span>
+          <small>이메일 발송 서버 주소</small>
+        </div>
+        <div class="setting-control">
+          <input type="text" id="smtpServer" value="smtp.gmail.com">
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>SMTP 포트</span>
+          <small>서버 포트 번호</small>
+        </div>
+        <div class="setting-control">
+          <input type="number" id="smtpPort" value="587">
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>발신자 이메일</span>
+          <small>시스템에서 발송하는 이메일 주소</small>
+        </div>
+        <div class="setting-control">
+          <input type="email" id="senderEmail" value="noreply@odevtube.com">
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>이메일 알림</span>
+          <small>시스템 이벤트 이메일 알림</small>
+        </div>
+        <div class="setting-control">
+          <input type="checkbox" id="emailNotifications" checked>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h2>API 설정</h2>
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>YouTube API 키</span>
+          <small>YouTube 데이터 API v3 키</small>
+        </div>
+        <div class="setting-control">
+          <input type="text" id="youtubeApiKey" value="<%= process.env.YOUTUBE_API_KEY || '' %>">
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>API 요청 제한</span>
+          <small>분당 최대 요청 수</small>
+        </div>
+        <div class="setting-control">
+          <input type="number" id="apiRateLimit" value="100" min="10" max="1000">
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>API 상태</span>
+          <small>현재 API 서비스 상태</small>
+        </div>
+        <div class="setting-control">
+          <span class="status-indicator online"></span>
+          <span>정상 작동 중</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h2>크론 작업 설정</h2>
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>자동 업데이트</span>
+          <small>비디오 자동 업데이트 활성화</small>
+        </div>
+        <div class="setting-control">
+          <input type="checkbox" id="autoUpdate" checked>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>업데이트 주기</span>
+          <small>크론 작업 실행 간격 (시간)</small>
+        </div>
+        <div class="setting-control">
+          <input type="number" id="updateInterval" value="1" min="1" max="24">
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>데이터베이스 백업</span>
+          <small>자동 백업 활성화</small>
+        </div>
+        <div class="setting-control">
+          <input type="checkbox" id="autoBackup" checked>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h2>성능 설정</h2>
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>캐시 활성화</span>
+          <small>응답 속도 향상을 위한 캐싱</small>
+        </div>
+        <div class="setting-control">
+          <input type="checkbox" id="enableCache" checked>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>캐시 유효 시간</span>
+          <small>캐시 만료 시간 (초)</small>
+        </div>
+        <div class="setting-control">
+          <input type="number" id="cacheExpiry" value="3600" min="60" max="86400">
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>압축 활성화</span>
+          <small>gzip 압축으로 전송량 감소</small>
+        </div>
+        <div class="setting-control">
+          <input type="checkbox" id="enableCompression" checked>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn-save" onclick="saveSettings()">💾 설정 저장</button>
+      <button class="btn-reset" onclick="resetSettings()">🔄 초기화</button>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+  <script>
+    function saveSettings() {
+      const settings = {
+        siteTitle: document.getElementById('siteTitle').value,
+        siteDescription: document.getElementById('siteDescription').value,
+        itemsPerPage: document.getElementById('itemsPerPage').value,
+        timezone: document.getElementById('timezone').value,
+        smtpServer: document.getElementById('smtpServer').value,
+        smtpPort: document.getElementById('smtpPort').value,
+        senderEmail: document.getElementById('senderEmail').value,
+        emailNotifications: document.getElementById('emailNotifications').checked,
+        youtubeApiKey: document.getElementById('youtubeApiKey').value,
+        apiRateLimit: document.getElementById('apiRateLimit').value,
+        autoUpdate: document.getElementById('autoUpdate').checked,
+        updateInterval: document.getElementById('updateInterval').value,
+        autoBackup: document.getElementById('autoBackup').checked,
+        enableCache: document.getElementById('enableCache').checked,
+        cacheExpiry: document.getElementById('cacheExpiry').value,
+        enableCompression: document.getElementById('enableCompression').checked,
+      };
+      
+      console.log('Settings to save:', settings);
+      alert('설정이 저장되었습니다!');
+      
+      // 실제 구현 시 API 호출
+      // fetch('/api/settings', { method: 'POST', body: JSON.stringify(settings) })
+    }
+
+    function resetSettings() {
+      if (confirm('모든 설정을 초기값으로 되돌리시겠습니까?')) {
+        alert('설정이 초기화되었습니다.');
+        location.reload();
+      }
+    }
+  </script>
+</body>
+
+</html>

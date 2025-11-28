@@ -76,6 +76,71 @@ window.onload = function () {
   document.querySelector('.menu-toggle').addEventListener('click', function () {
     document.querySelector('.sliding-menu').classList.toggle('open')
   })
+  
+  // 저장된 테마 불러오기
+  loadTheme()
+}
+
+// 테마 관리 함수
+function toggleTheme(event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  
+  const currentTheme = localStorage.getItem('theme') || 'system'
+  let newTheme
+  
+  if (currentTheme === 'system') {
+    newTheme = 'light'
+  } else if (currentTheme === 'light') {
+    newTheme = 'dark'
+  } else {
+    newTheme = 'system'
+  }
+  
+  localStorage.setItem('theme', newTheme)
+  applyTheme(newTheme)
+  updateThemeButton(newTheme)
+}
+
+function applyTheme(theme) {
+  if (theme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark')
+  } else if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light')
+  } else {
+    // system
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light')
+  }
+}
+
+function updateThemeButton(theme) {
+  const button = document.querySelector('.theme-toggle')
+  if (button) {
+    if (theme === 'system') {
+      button.textContent = '🌓 시스템'
+    } else if (theme === 'light') {
+      button.textContent = '☀️ 라이트'
+    } else {
+      button.textContent = '🌙 다크'
+    }
+  }
+}
+
+function loadTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'system'
+  applyTheme(savedTheme)
+  updateThemeButton(savedTheme)
+  
+  // 시스템 테마 변경 감지
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    const currentTheme = localStorage.getItem('theme') || 'system'
+    if (currentTheme === 'system') {
+      applyTheme('system')
+    }
+  })
 }
 
 function remove(videoId) {

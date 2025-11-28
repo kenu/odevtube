@@ -1,7 +1,8 @@
 h1 {
-  padding: 0.4rem 3.0rem;
-  color: #333;
-  text-shadow: #888 1px 0 2px;
+  padding: 0.4rem 1rem 0.4rem 1rem;
+  color: var(--text-color);
+  text-shadow: none;
+  text-align: center;
 }
 .videos,
 .channels {
@@ -20,8 +21,9 @@ tr:hover {
 .channels td,
 .channels th {
   height: 2.1rem;
-  border-bottom: 1px solid #999;
+  border-bottom: 1px solid var(--table-border);
   padding: 2px 5px 4px;
+  color: var(--text-color);
 }
 .channels .count,
 .channels .lang,
@@ -60,10 +62,13 @@ tr:hover {
 }
 
 .pagination a {
-  color: #333;
+  color: var(--text-color);
   padding: 8px 16px;
   text-decoration: none;
   transition: background-color 0.3s;
+  background-color: var(--search-bg);
+  border: 1px solid var(--table-border);
+  margin: 0 2px;
 }
 
 .pagination a.active {
@@ -72,12 +77,16 @@ tr:hover {
 }
 
 .pagination a:hover:not(.active) {
-  background-color: #ddd;
+  background-color: var(--table-hover);
+  opacity: 0.8;
 }
 
 .pagination a.prev,
-.pagination a.next {
-  background-color: #f1f1f1;
+.pagination a.next,
+.pagination a.latest,
+.pagination a.end {
+  background-color: var(--search-bg);
+  font-weight: bold;
 }
 
 /* 슬라이딩 메뉴 스타일 */
@@ -123,4 +132,420 @@ tr:hover {
 /* 본문 조정 */
 body {
   padding-left: 20px;
+}
+
+/* 테마 설정 */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --link-color: #0066cc;
+  --header-bg: #fffd;
+  --table-border: #ccc;
+  --table-hover: rgba(131, 131, 46, 0.148);
+  --table-bg: #ffffff;
+  --thead-bg: #0ff3;
+  --menu-bg: #333;
+  --menu-text: white;
+  --search-bg: #f8f9fa;
+  --input-border: #ddd;
+  --button-bg: #28a745;
+  --button-hover: #218838;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1a1a1a;
+  --text-color: #e0e0e0;
+  --link-color: #66b3ff;
+  --header-bg: #2d2d2d;
+  --table-border: #444;
+  --table-hover: rgba(255, 255, 255, 0.15);
+  --table-bg: #252525;
+  --thead-bg: rgba(0, 255, 255, 0.15);
+  --menu-bg: #1a1a1a;
+  --menu-text: #e0e0e0;
+  --search-bg: #2d2d2d;
+  --input-border: #555;
+  --button-bg: #28a745;
+  --button-hover: #34ce57;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.videos,
+.channels {
+  border-color: var(--table-border);
+  background-color: var(--table-bg);
+}
+
+.videos thead,
+.channels thead {
+  background-color: var(--thead-bg);
+}
+
+tr:hover {
+  background-color: var(--table-hover);
+}
+
+.search-container {
+  background-color: var(--search-bg);
+}
+
+.search-container input {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border-color: var(--input-border);
+}
+
+.search-container button {
+  background-color: var(--button-bg);
+}
+
+.search-container button:hover {
+  background-color: var(--button-hover);
+}
+
+/* 링크 색상 */
+a {
+  color: var(--link-color);
+  transition: opacity 0.2s;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* 테이블 행 배경 */
+.videos tbody tr,
+.channels tbody tr {
+  background-color: var(--table-bg);
+}
+
+/* aside 스타일 */
+aside.github {
+  color: var(--text-color);
+}
+
+aside.github a {
+  color: var(--link-color);
+}
+
+/* section 스타일 */
+section {
+  color: var(--text-color);
+  position: relative;
+  z-index: 10;
+}
+
+section p {
+  color: var(--text-color);
+}
+
+section a {
+  color: var(--link-color);
+  position: relative;
+  z-index: 102;
+  pointer-events: auto;
+}
+
+/* nav 스타일 */
+nav {
+  color: var(--text-color);
+}
+
+nav a {
+  color: var(--link-color);
+}
+
+/* 입력 필드 및 버튼 공통 스타일 */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+select,
+textarea {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--input-border);
+}
+
+button {
+  background-color: var(--button-bg);
+  color: white;
+  border: none;
+}
+
+button:hover {
+  background-color: var(--button-hover);
+}
+
+/* 채널 폼 스타일 */
+section input[type="text"],
+section select {
+  padding: 8px;
+  margin-right: 8px;
+  border-radius: 4px;
+}
+
+section button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* 테마 토글 버튼 */
+.theme-toggle {
+  position: fixed;
+  top: 2.8rem;
+  background: var(--menu-bg);
+  color: var(--menu-text);
+  border: 1px solid var(--input-border);
+  padding: 6px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 13px;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  right: 0.8rem;
+  width: 66px;
+  z-index: 101;
+}
+
+.theme-toggle:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* GitHub 로고 다크모드 지원 */
+.github-logo {
+  transition: filter 0.3s ease;
+}
+
+[data-theme="dark"] .github-logo {
+  filter: invert(1);
+}
+
+/* aside.github 영역 다크모드 개선 */
+aside.github {
+  position: fixed;
+  top: 2px;
+  right: 0.5rem;
+  z-index: 100;
+  background-color: var(--header-bg);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+aside.github a {
+  color: #66b3ff;
+  margin: 0 3px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+aside.github a:hover {
+  text-decoration: underline;
+}
+
+aside.github .k {
+  color: var(--text-color);
+}
+
+[data-theme="dark"] aside.github a {
+  color: #66b3ff;
+}
+
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  body {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  .theme-toggle {
+    right: 0.5rem;
+    left: auto;
+    top: 2.3rem;
+    padding: 4px 8px;
+    font-size: 11px;
+    max-width: 80px;
+  }
+  
+  aside.github {
+    right: 0.3rem;
+    padding: 2px 4px;
+    font-size: 11px;
+    top: 1px;
+  }
+  
+  aside.github .k {
+    display: none;
+  }
+  
+  aside.github a {
+    margin: 0 2px;
+  }
+  
+  .github-logo {
+    width: 1.8em;
+  }
+  
+  h1 {
+    padding: 0.4rem 0.5rem 0.4rem 0.5rem;
+    font-size: 0.9rem;
+    text-align: center;
+    z-index: 100;
+  }
+  
+  section {
+    font-size: 12px;
+    padding: 16px 10px 0;
+  }
+  
+  section p {
+    width: 60%;
+  }
+  
+  nav {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+  
+  /* 테이블 스크롤 가능하게 */
+  .videos,
+  .channels {
+    font-size: 11px;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+  
+  .videos thead,
+  .channels thead {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .videos tbody,
+  .channels tbody {
+    display: table;
+    width: 100%;
+  }
+  
+  .videos td,
+  .videos th,
+  .channels td,
+  .channels th {
+    padding: 6px 4px;
+    font-size: 10px;
+    vertical-align: middle;
+  }
+  
+  .videos th,
+  .channels th {
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .thumbnail {
+    height: 25px;
+    width: auto;
+  }
+  
+  .channel {
+    min-width: 80px;
+  }
+  
+  .title {
+    min-width: 150px;
+  }
+  
+  .date {
+    min-width: 70px;
+  }
+  
+  h3 {
+    font-size: 1rem;
+    margin: 10px 0;
+  }
+  
+  .search-container {
+    padding: 8px;
+    margin: 10px 0;
+  }
+  
+  .search-container input {
+    width: calc(100% - 100px);
+    max-width: 200px;
+    font-size: 13px;
+    padding: 6px;
+  }
+  
+  .search-container button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  
+  .pagination {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .pagination a {
+    padding: 6px 10px;
+    font-size: 11px;
+    margin: 2px;
+  }
+  
+  .pagination a.active {
+    padding: 6px 10px;
+  }
+  
+  .pagination-wrapper {
+    overflow-x: auto;
+    padding: 10px 0;
+  }
+  
+  .menu-toggle {
+    left: 5px;
+    top: 2px;
+    padding: 4px;
+    font-size: 14px;
+  }
+  
+  .sliding-menu {
+    width: 200px;
+    font-size: 14px;
+  }
+  
+  .sliding-menu a {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  /* 테이블 링크 가독성 개선 */
+  .videos a,
+  .channels a {
+    word-break: break-word;
+    white-space: normal;
+    display: inline-block;
+    line-height: 1.3;
+  }
+  
+  .datecell {
+    font-size: 9px;
+  }
 }

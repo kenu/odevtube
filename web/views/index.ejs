@@ -4,6 +4,7 @@
 <%- include('header.ejs') %>
 
 <body>
+  <button type="button" class="theme-toggle" onclick="toggleTheme(); return false;">🌓 시스템</button>
   <section id="title">
     <h1 class="title">
       <a href="javascript:window.scrollTo(0,0)">
@@ -76,5 +77,66 @@
 </body>
 <%- include('footer.ejs') %>
 <script src="https://js.sentry-cdn.com/<%= process.env.YOUTUBE_SENTRY %>.min.js" crossorigin="anonymous"></script>
+<script>
+// 테마 관리 함수
+function toggleTheme() {
+  const currentTheme = localStorage.getItem('theme') || 'system'
+  let newTheme
+  
+  if (currentTheme === 'system') {
+    newTheme = 'light'
+  } else if (currentTheme === 'light') {
+    newTheme = 'dark'
+  } else {
+    newTheme = 'system'
+  }
+  
+  localStorage.setItem('theme', newTheme)
+  applyTheme(newTheme)
+  updateThemeButton(newTheme)
+}
+
+function applyTheme(theme) {
+  if (theme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark')
+  } else if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light')
+  } else {
+    // system
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light')
+  }
+}
+
+function updateThemeButton(theme) {
+  const button = document.querySelector('.theme-toggle')
+  if (button) {
+    if (theme === 'system') {
+      button.textContent = '🌓 시스템'
+    } else if (theme === 'light') {
+      button.textContent = '☀️ 라이트'
+    } else {
+      button.textContent = '🌙 다크'
+    }
+  }
+}
+
+function loadTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'system'
+  applyTheme(savedTheme)
+  updateThemeButton(savedTheme)
+  
+  // 시스템 테마 변경 감지
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    const currentTheme = localStorage.getItem('theme') || 'system'
+    if (currentTheme === 'system') {
+      applyTheme('system')
+    }
+  })
+}
+
+// 페이지 로드 시 테마 적용
+loadTheme()
+</script>
 
 </html>

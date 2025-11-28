@@ -1,7 +1,45 @@
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="/css/style.css">
-<div id="login-page">
-  <a href="/login/github">
-    <img src="/images/github-mark.svg" class="github-logo" title="login github">
-    Log In with GitHub</a>
-</div>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - ODevTube</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div id="login-page">
+    <h1>Welcome to ODevTube</h1>
+    <a href="/login/github">
+      <img src="/images/github-mark.svg" class="github-logo" title="login github">
+      Log In with GitHub
+    </a>
+  </div>
+
+  <script>
+    // 테마 자동 적용 (버튼 없이)
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark')
+      } else if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light')
+      } else {
+        // system
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light')
+      }
+    }
+
+    // 페이지 로드 시 저장된 테마 적용
+    const savedTheme = localStorage.getItem('theme') || 'system'
+    applyTheme(savedTheme)
+
+    // 시스템 테마 변경 감지
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      const currentTheme = localStorage.getItem('theme') || 'system'
+      if (currentTheme === 'system') {
+        applyTheme('system')
+      }
+    })
+  </script>
+</body>
+</html>

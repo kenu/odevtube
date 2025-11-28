@@ -1,9 +1,42 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
+/* 테마 설정 */
+:root {
+  --bg-color: ivory;
+  --text-color: #333;
+  --link-color: #333;
+  --header-bg: #fffd;
+  --nav-bg: #f9000020;
+  --li-bg: #f4f4f4;
+  --border-color: #ddd;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --nav-shadow: rgba(0, 0, 0, 0.15);
+  --text-shadow: rgba(0, 0, 0, 0.3);
+  --button-bg: #fff6;
+  --ad-bg: #ccebebee;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1a1a1a;
+  --text-color: #e0e0e0;
+  --link-color: #66b3ff;
+  --header-bg: #2d2d2d;
+  --nav-bg: rgba(45, 45, 45, 0.9);
+  --li-bg: #252525;
+  --border-color: #444;
+  --shadow-color: rgba(255, 255, 255, 0.1);
+  --nav-shadow: rgba(0, 0, 0, 0.5);
+  --text-shadow: rgba(0, 0, 0, 0.8);
+  --button-bg: rgba(255, 255, 255, 0.1);
+  --ad-bg: rgba(45, 45, 45, 0.95);
+}
+
 body {
   font-family: 'Verdana', sans-serif;
   margin: 0;
-  background-color: ivory;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1 {
@@ -12,8 +45,8 @@ h1 {
   margin-top: 0;
   left: 0;
   width: 100%;
-  background-color: #fffd;
-  color: #fff;
+  background-color: var(--header-bg);
+  color: var(--text-color);
   z-index: 10;
 }
 
@@ -25,11 +58,13 @@ ul {
 }
 
 li {
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 2px var(--shadow-color);
   position: relative;
   margin: 0.6rem 0.1rem;
   min-height: 12rem;
   padding: 0.2rem 0.1rem 1.4rem;
+  background-color: var(--li-bg);
+  border: 1px solid var(--border-color);
 }
 
 img {
@@ -39,7 +74,7 @@ img {
 }
 
 a {
-  color: #333;
+  color: var(--link-color);
   text-decoration: none;
 }
 
@@ -59,6 +94,12 @@ a:hover {
   display: none;
   position: fixed;
   bottom: 0;
+  background-color: var(--ad-bg);
+  color: var(--text-color);
+}
+
+.ad a {
+  color: var(--link-color);
 }
 
 .top {
@@ -67,12 +108,85 @@ a:hover {
   bottom: 1.5rem;
   padding: 10px;
   border-radius: 45%;
+  background-color: var(--button-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.top:hover {
+  opacity: 0.8;
 }
 
 #login-page {
   margin: auto;
   text-align: center;
-  width: 30rem;
+  width: 100%;
+  max-width: 30rem;
+  padding: 40px 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#login-page h1 {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  margin-bottom: 40px;
+  color: var(--text-color);
+  position: static !important;
+  background: none !important;
+  width: 100%;
+}
+
+#login-page a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background-color: var(--li-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  width: 100%;
+  max-width: 280px;
+  justify-content: center;
+}
+
+#login-page a:hover {
+  background-color: var(--button-bg);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+#login-page .github-logo {
+  width: 24px;
+  height: 24px;
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  #login-page {
+    padding: 20px 15px;
+  }
+  
+  #login-page h1 {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+  }
+  
+  #login-page a {
+    padding: 16px 24px;
+    font-size: 15px;
+    max-width: 100%;
+    width: calc(100% - 30px);
+  }
 }
 
 .github {
@@ -80,24 +194,44 @@ a:hover {
   top: 0;
   right: 0.3rem;
   z-index: 100;
+  background-color: var(--header-bg);
+  padding: 2px 8px;
+  border-radius: 4px;
 }
 
 .github-logo {
   width: 2.3em;
+  transition: filter 0.3s ease;
+}
+
+[data-theme="dark"] .github-logo {
+  filter: invert(1);
 }
 
 .okdevtv-logo {
   width: 1.3em;
   vertical-align: bottom;
+  transition: filter 0.3s ease;
+}
+
+[data-theme="dark"] .okdevtv-logo {
+  filter: invert(1);
 }
 
 .main-nav {
   position: sticky;
   top: 2.5rem;
-  background-color: #f9000020;
+  background-color: var(--nav-bg);
   padding: 0.4rem;
   text-align: right;
   z-index: 11;
+  box-shadow: 0 2px 8px var(--nav-shadow);
+  backdrop-filter: blur(10px);
+}
+
+.main-nav a {
+  text-shadow: 0 1px 2px var(--text-shadow);
+  font-weight: 500;
 }
 
 #title {
@@ -139,9 +273,11 @@ li button.transcript {
   bottom: 6px;
   right: 10px;
   padding: 4px;
-  background-color: #fff6;
-  border: 1px solid #ddd;
+  background-color: var(--button-bg);
+  border: 1px solid var(--border-color);
   border-radius: 0.3rem;
+  color: var(--text-color);
+  cursor: pointer;
 }
 
 .modal {
@@ -158,11 +294,12 @@ li button.transcript {
 
 .modal-content {
   position: relative;
-  background-color: #fefefe;
+  background-color: var(--li-bg);
   margin: 15% auto;
   padding: 20px;
-  border: 1px solid #888;
+  border: 1px solid var(--border-color);
   width: 80%;
+  color: var(--text-color);
 }
 
 .clipboard-icon {
@@ -179,10 +316,25 @@ li button.transcript {
 .search #keyword {
   font-size: 1.2rem;
   width: 50%;
+  background-color: var(--li-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  border-radius: 4px;
 }
 
 .search button {
   font-size: 1.2rem;
+  background-color: var(--button-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search button:hover {
+  opacity: 0.8;
 }
 
 /* Desktop styles */
@@ -231,11 +383,11 @@ li button.transcript {
   }
 
   li {
-    background-color: #f4f4f4;
-    border: 1px solid #ddd;
+    background-color: var(--li-bg);
+    border: 1px solid var(--border-color);
     border-radius: 3%;
     padding: 6px 10px 10px;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 2px var(--shadow-color);
     position: relative;
     width: initial;
   }
@@ -251,12 +403,43 @@ li button.transcript {
 
   .ad {
     display: block;
-    background-color: #ccebebee;
+    background-color: var(--ad-bg);
+    color: var(--text-color);
     padding: 10px 2.5rem;
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
+    border-top: 1px solid var(--border-color);
+  }
+  
+  .ad a {
+    color: var(--link-color);
+  }
+  
+  .ad code {
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+  }
+  
+  .ad button {
+    background-color: var(--button-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+  }
+  
+  .contact {
+    background-color: var(--ad-bg);
+    color: var(--text-color);
+    padding: 10px 2.5rem;
+    border-top: 1px solid var(--border-color);
+  }
+  
+  .contact a {
+    color: var(--link-color);
   }
 }
 
@@ -285,21 +468,161 @@ li button.share-twitter:hover {
 
 .pagination a,
 .pagination span {
-  color: black;
+  color: var(--text-color);
   float: left;
   padding: 8px 16px;
   text-decoration: none;
   transition: background-color 0.3s;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   margin: 0 4px;
+  background-color: var(--li-bg);
 }
 
 .pagination a:hover:not(.active) {
-  background-color: #ddd;
+  background-color: var(--button-bg);
+  opacity: 0.8;
 }
 
 .pagination .current {
   background-color: #4caf50;
   color: white;
   border: 1px solid #4caf50;
+}
+
+/* 테마 토글 버튼 */
+.theme-toggle {
+  position: fixed;
+  right: 3.5rem;
+  top: 0.2rem;
+  z-index: 101;
+  background: var(--button-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 13px;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* 모바일 최적화 */
+@media (max-width: 768px) {
+  body {
+    padding: 0 0.5rem;
+  }
+
+  h1 {
+    font-size: 1rem;
+    padding: 0.2rem 0.5rem;
+  }
+  
+  .theme-toggle {
+    right: 2.8rem;
+    top: 0.1rem;
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+  
+  .github {
+    right: 0.2rem;
+    padding: 1px 4px;
+  }
+  
+  .github-logo {
+    width: 1.8em;
+  }
+  
+  .okdevtv-logo {
+    width: 1em;
+  }
+  
+  .main-nav {
+    font-size: 13px;
+    padding: 0.3rem;
+    top: 2rem;
+  }
+  
+  .search {
+    margin: 2.5rem auto 0.5rem;
+  }
+  
+  .search #keyword {
+    font-size: 1rem;
+    width: 70%;
+    padding: 6px;
+  }
+  
+  .search button {
+    font-size: 1rem;
+    padding: 6px 12px;
+  }
+  
+  ul {
+    grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+    gap: 8px;
+    padding: 0 0.1rem;
+  }
+  
+  li {
+    margin: 0.3rem 0;
+    padding: 0.1rem 0.1rem 1rem;
+    min-height: 10rem;
+    font-size: 13px;
+  }
+  
+  .channel {
+    font-size: 12px;
+  }
+  
+  .channame {
+    font-size: 13px;
+  }
+  
+  li button.transcript {
+    padding: 3px;
+    font-size: 11px;
+    bottom: 4px;
+    right: 6px;
+  }
+  
+  .pagination a,
+  .pagination span {
+    padding: 6px 10px;
+    font-size: 12px;
+    margin: 0 2px;
+  }
+  
+  .modal-content {
+    width: 95%;
+    margin: 10% auto;
+    padding: 15px;
+    font-size: 14px;
+  }
+  
+  .ad {
+    font-size: 12px;
+    padding: 8px 1rem;
+  }
+  
+  .contact {
+    font-size: 12px;
+    padding: 8px 1rem;
+  }
+  
+  .top {
+    right: 1rem;
+    bottom: 1rem;
+    padding: 8px;
+    font-size: 13px;
+  }
 }

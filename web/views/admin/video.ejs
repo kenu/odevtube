@@ -9,24 +9,27 @@
   <link rel="stylesheet" href="/css/admin.css">
   <style>
     .search-container {
-      margin: 20px 0;
+      margin: 20px 0 0;
       padding: 10px;
       text-align: center;
-      background-color: #f8f9fa;
+      background-color: var(--search-bg);
       border-radius: 4px;
+      border: 1px solid var(--table-border);
     }
 
     .search-container input {
       padding: 8px;
       margin-right: 8px;
-      border: 1px solid #ddd;
+      border: 1px solid var(--input-border);
       border-radius: 4px;
       width: 250px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
     }
 
     .search-container button {
       padding: 8px 16px;
-      background-color: #28a745;
+      background-color: var(--button-bg);
       color: white;
       border: none;
       border-radius: 4px;
@@ -34,7 +37,7 @@
     }
 
     .search-container button:hover {
-      background-color: #218838;
+      background-color: var(--button-hover);
     }
   </style>
 </head>

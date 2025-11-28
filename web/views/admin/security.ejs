@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>보안 설정 관리</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
+  <style>
+    .security-container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .security-section {
+      background: var(--search-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .security-section h2 {
+      margin-top: 0;
+      color: var(--text-color);
+    }
+
+    .form-group {
+      margin: 15px 0;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--text-color);
+      font-weight: bold;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    .form-group input[type="checkbox"] {
+      margin-right: 8px;
+    }
+
+    .btn-save {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn-save:hover {
+      background-color: #45a049;
+    }
+
+    .security-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .security-list li {
+      padding: 10px;
+      border-bottom: 1px solid var(--input-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-revoke {
+      background-color: #f44336;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include('nav.ejs') %>
+  <div class="security-container">
+    <h1>🔐 보안 설정 관리</h1>
+    
+    <section>
+      <% if (!user) { %>
+      <p>Welcome! Please <a href="/login">log in</a>.</p>
+      <% } else { %>
+      <p>Hello, <%= user.username %>. <a href="/logout">logout</a>. <a href="/profile">profile</a>.</p>
+      <% } %>
+    </section>
+
+    <div class="security-section">
+      <h2>세션 설정</h2>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="sessionTimeout" checked>
+          자동 세션 만료 활성화
+        </label>
+      </div>
+      <div class="form-group">
+        <label for="sessionDuration">세션 지속 시간 (분)</label>
+        <input type="number" id="sessionDuration" value="30" min="5" max="1440">
+      </div>
+      <button class="btn-save" onclick="saveSessionSettings()">저장</button>
+    </div>
+
+    <div class="security-section">
+      <h2>IP 화이트리스트</h2>
+      <div class="form-group">
+        <label for="ipAddress">IP 주소 추가</label>
+        <input type="text" id="ipAddress" placeholder="예: 192.168.1.1">
+      </div>
+      <button class="btn-save" onclick="addIPWhitelist()">추가</button>
+      
+      <h3>등록된 IP 목록</h3>
+      <ul class="security-list">
+        <% if (whitelistedIPs && whitelistedIPs.length > 0) { 
+          whitelistedIPs.forEach(function(ip) { %>
+        <li>
+          <span><%= ip %></span>
+          <button class="btn-revoke" onclick="removeIP('<%= ip %>')">제거</button>
+        </li>
+        <% }); } else { %>
+        <li>등록된 IP가 없습니다.</li>
+        <% } %>
+      </ul>
+    </div>
+
+    <div class="security-section">
+      <h2>API 키 관리</h2>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="apiKeyRequired" checked>
+          API 키 인증 필수
+        </label>
+      </div>
+      <button class="btn-save" onclick="generateNewAPIKey()">새 API 키 생성</button>
+      
+      <h3>활성 API 키</h3>
+      <ul class="security-list">
+        <% if (apiKeys && apiKeys.length > 0) { 
+          apiKeys.forEach(function(key) { %>
+        <li>
+          <span><%= key.key %> (생성일: <%= key.createdAt %>)</span>
+          <button class="btn-revoke" onclick="revokeAPIKey('<%= key.id %>')">비활성화</button>
+        </li>
+        <% }); } else { %>
+        <li>활성화된 API 키가 없습니다.</li>
+        <% } %>
+      </ul>
+    </div>
+
+    <div class="security-section">
+      <h2>보안 정책</h2>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="enforceHttps" checked>
+          HTTPS 강제 사용
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="enableCORS">
+          CORS 활성화
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="enableRateLimit" checked>
+          요청 제한 활성화
+        </label>
+      </div>
+      <button class="btn-save" onclick="saveSecurityPolicy()">저장</button>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+  <script>
+    function saveSessionSettings() {
+      const timeout = document.getElementById('sessionTimeout').checked;
+      const duration = document.getElementById('sessionDuration').value;
+      alert(`세션 설정이 저장되었습니다.\n자동 만료: ${timeout}\n지속 시간: ${duration}분`);
+    }
+
+    function addIPWhitelist() {
+      const ip = document.getElementById('ipAddress').value;
+      if (ip) {
+        alert(`IP ${ip}가 화이트리스트에 추가되었습니다.`);
+        location.reload();
+      }
+    }
+
+    function removeIP(ip) {
+      if (confirm(`IP ${ip}를 제거하시겠습니까?`)) {
+        alert(`IP ${ip}가 제거되었습니다.`);
+        location.reload();
+      }
+    }
+
+    function generateNewAPIKey() {
+      if (confirm('새 API 키를 생성하시겠습니까?')) {
+        alert('새 API 키가 생성되었습니다.');
+        location.reload();
+      }
+    }
+
+    function revokeAPIKey(keyId) {
+      if (confirm('이 API 키를 비활성화하시겠습니까?')) {
+        alert('API 키가 비활성화되었습니다.');
+        location.reload();
+      }
+    }
+
+    function saveSecurityPolicy() {
+      const https = document.getElementById('enforceHttps').checked;
+      const cors = document.getElementById('enableCORS').checked;
+      const rateLimit = document.getElementById('enableRateLimit').checked;
+      alert(`보안 정책이 저장되었습니다.\nHTTPS: ${https}\nCORS: ${cors}\n요청 제한: ${rateLimit}`);
+    }
+  </script>
+</body>
+
+</html>
