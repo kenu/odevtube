@@ -219,7 +219,7 @@ a:hover {
 
 .main-nav {
   position: sticky;
-  top: 2.5rem;
+  top: 2.0rem;
   background-color: var(--nav-bg);
   padding: 0.4rem;
   text-align: right;
@@ -308,7 +308,7 @@ li button.transcript {
 
 .search {
   display: block;
-  margin: 3.3rem auto 0.8rem;
+  margin: 0.3rem auto 0.8rem;
   padding: 0.2rem;
 }
 
