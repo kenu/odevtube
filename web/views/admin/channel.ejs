@@ -60,12 +60,12 @@
       <tbody>
         <% channels.forEach(function(channel) { %>
         <tr>
-          <td><a href="<%= channel.uri %>#<%= channel.title %>" title="<%= channel.title %>" target="_blank">
+          <td><a href="<%= channel.uri %>?search=<%= channel.title %>" title="<%= channel.title %>" target="_blank">
               <img src="<%= channel.thumbnail %>" alt="<%= channel.title %>" class="thumbnail">
               <%= channel.title %>
               <img src="/images/outlink.webp" alt="" class="outlink">
             </a></td>
-          <td><a href="<%= channel.uri %>#<%= channel.title %>" title="<%= channel.title %>" target="_blank" class="channel-id">
+          <td><a href="<%= channel.uri %>?search=<%= channel.title %>" title="<%= channel.title %>" target="_blank" class="channel-id">
               <%= channel.channelId %>
             </a>
           </td>

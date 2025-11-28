@@ -78,11 +78,11 @@
       <tbody>
         <% videos.forEach(function(video) { %>
         <tr>
-          <td><a href="/admin?channel=<%= video.Channel.id %>&<%= area %>" title="<%= video.Channel.title %>">
+          <td><a href="/admin?q=<%= video.Channel.title %>&<%= area %>" title="<%= video.Channel.title %>">
               <img src="<%= video.Channel.thumbnail %>" alt="" class="thumbnail">
               <%= video.Channel.title %>
             </a></td>
-          <td><a href="<%= video.uri %>#<%= video.title %>" title="" target="_blank">
+          <td><a href="<%= video.uri %>?search=<%= video.title %>" title="" target="_blank">
               <img src="<%= video.thumbnail %>" alt="" class="thumbnail">
               <%= video.title %>
             </a>
