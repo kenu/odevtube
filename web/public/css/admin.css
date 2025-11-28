@@ -366,8 +366,8 @@ aside.github .k {
 /* 모바일 최적화 */
 @media (max-width: 768px) {
   body {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 4px;
+    padding-right: 4px;
   }
   
   .theme-toggle {
@@ -407,7 +407,7 @@ aside.github .k {
   
   section {
     font-size: 12px;
-    padding: 16px 10px 0;
+    padding: 16px 0 0;
   }
   
   section p {

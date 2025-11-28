@@ -123,9 +123,8 @@ a:hover {
   margin: auto;
   text-align: center;
   width: 100%;
-  max-width: 30rem;
-  padding: 40px 20px;
-  min-height: 100vh;
+  max-width: 22rem;
+  min-height: 30vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
