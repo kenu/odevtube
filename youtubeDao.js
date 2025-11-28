@@ -79,11 +79,18 @@ async function createVideo(data) {
   if (!data.videoId) {
     return
   }
-  const one = await Video.findOne({
-    where: { videoId: data.videoId },
-  })
-  if (!one) {
-    const result = await Video.create(data)
+  try {
+    const [video, created] = await Video.findOrCreate({
+      where: { videoId: data.videoId },
+      defaults: data,
+    })
+    return video
+  } catch (error) {
+    if (error.original?.errno === 1062) {
+      // 중복 키 에러는 무시 (이미 존재하는 비디오)
+      return null
+    }
+    throw error
   }
 }
 

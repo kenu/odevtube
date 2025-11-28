@@ -37,10 +37,10 @@ async function addVideos(channelId) {
   if (!channel) {
     return
   }
-  videos?.forEach(async (data) => {
+  for (const data of videos || []) {
     data.ChannelId = channel.id
     await dao.createVideo(data)
-  })
+  }
 }
 
 async function remove(videoId) {
