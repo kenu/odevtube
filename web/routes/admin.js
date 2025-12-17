@@ -129,22 +129,7 @@ router.get('/admin/logs', function (req, res, next) {
       user: 'user123',
       message: '로그인 실패 시도 감지'
     },
-    {
-      id: 3,
-      timestamp: dayjs().subtract(3, 'hour').format('YYYY-MM-DD HH:mm:ss'),
-      level: 'error',
-      source: 'database',
-      user: 'system',
-      message: '데이터베이스 연결 타임아웃'
-    },
-    {
-      id: 4,
-      timestamp: dayjs().subtract(4, 'hour').format('YYYY-MM-DD HH:mm:ss'),
-      level: 'success',
-      source: 'system',
-      user: 'cron',
-      message: '비디오 업데이트 작업 완료'
-    }
+    
   ]
   
   res.render('admin/logs', {

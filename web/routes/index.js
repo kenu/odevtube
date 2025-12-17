@@ -136,7 +136,7 @@ async function upsertTranscript(res, videoId) {
     const cmd = "3줄 단문에, 명사형 어미로 요약(예)'있습니다.' 대신 '있음', '설명드립니다' 대신 '설명함' :\n"
     const messages = [
       {
-        role: 'system',
+        role: 'user',
         content: cmd + fullText,
       },
     ]

@@ -88,15 +88,13 @@ function toggleTheme(event) {
     event.stopPropagation();
   }
   
-  const currentTheme = localStorage.getItem('theme') || 'system'
+  const currentTheme = localStorage.getItem('theme') || 'light'
   let newTheme
   
-  if (currentTheme === 'system') {
-    newTheme = 'light'
-  } else if (currentTheme === 'light') {
+  if (currentTheme === 'light') {
     newTheme = 'dark'
   } else {
-    newTheme = 'system'
+    newTheme = 'light'
   }
   
   localStorage.setItem('theme', newTheme)
@@ -107,40 +105,26 @@ function toggleTheme(event) {
 function applyTheme(theme) {
   if (theme === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark')
-  } else if (theme === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light')
   } else {
-    // system
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light')
+    document.documentElement.setAttribute('data-theme', 'light')
   }
 }
 
 function updateThemeButton(theme) {
   const button = document.querySelector('.theme-toggle')
   if (button) {
-    if (theme === 'system') {
-      button.textContent = '🌓 시스템'
-    } else if (theme === 'light') {
-      button.textContent = '☀️ 라이트'
+    if (theme === 'light') {
+      button.textContent = '☀️'
     } else {
-      button.textContent = '🌙 다크'
+      button.textContent = '🌙'
     }
   }
 }
 
 function loadTheme() {
-  const savedTheme = localStorage.getItem('theme') || 'system'
+  const savedTheme = localStorage.getItem('theme') || 'light'
   applyTheme(savedTheme)
   updateThemeButton(savedTheme)
-  
-  // 시스템 테마 변경 감지
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    const currentTheme = localStorage.getItem('theme') || 'system'
-    if (currentTheme === 'system') {
-      applyTheme('system')
-    }
-  })
 }
 
 function remove(videoId) {
