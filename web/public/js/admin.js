@@ -88,13 +88,15 @@ function toggleTheme(event) {
     event.stopPropagation();
   }
   
-  const currentTheme = localStorage.getItem('theme') || 'light'
+  const currentTheme = localStorage.getItem('theme') || 'system'
   let newTheme
   
-  if (currentTheme === 'light') {
+  if (currentTheme === 'system') {
+    newTheme = 'light'
+  } else if (currentTheme === 'light') {
     newTheme = 'dark'
   } else {
-    newTheme = 'light'
+    newTheme = 'system'
   }
   
   localStorage.setItem('theme', newTheme)
@@ -117,7 +119,9 @@ function applyTheme(theme) {
 function updateThemeButton(theme) {
   const button = document.querySelector('.theme-toggle')
   if (button) {
-    if (theme === 'light') {
+    if (theme === 'system') {
+      button.textContent = '🌓 시스템'
+    } else if (theme === 'light') {
       button.textContent = '☀️ 라이트'
     } else {
       button.textContent = '🌙 다크'
@@ -126,15 +130,15 @@ function updateThemeButton(theme) {
 }
 
 function loadTheme() {
-  const savedTheme = localStorage.getItem('theme') || 'light'
+  const savedTheme = localStorage.getItem('theme') || 'system'
   applyTheme(savedTheme)
   updateThemeButton(savedTheme)
   
   // 시스템 테마 변경 감지
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    const currentTheme = localStorage.getItem('theme') || 'light'
-    if (currentTheme === 'light') {
-      applyTheme('light')
+    const currentTheme = localStorage.getItem('theme') || 'system'
+    if (currentTheme === 'system') {
+      applyTheme('system')
     }
   })
 }
