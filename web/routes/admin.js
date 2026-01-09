@@ -31,8 +31,8 @@ router.get('/admin', async function (req, res, next) {
   const data = await dao.getPagedVideos(whereClause)
   const videos = data.rows
   videos.forEach((v) => {
-    v.pubdate = dayjs(v.publishedAt).format('MM-DD HH:mm:ss')
-    v.credate = dayjs(v.createdAt).format('MM-DD HH:mm:ss')
+    v.pubdate = dayjs(v.publishedAt).format('YYYY-MM-DD HH:mm:ss')
+    v.credate = dayjs(v.createdAt).format('YYYY-MM-DD HH:mm:ss')
     v.uri = util.getUri(v.Channel.category, v.Channel.lang)
   })
   const maxVisiblePages = 7
