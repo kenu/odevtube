@@ -21,7 +21,8 @@ const channels = {
       'UCaO6TYtlC8U5ttz62hTrZgg',
       'UC3IZKseVpdzPSBaWxBxundA',
     ]
-  ]
+  ],
+  actor: []
 }
 
 export default channels

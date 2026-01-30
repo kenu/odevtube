@@ -19,7 +19,7 @@ async function newList(date) {
     `select y.title, y.videoId, y.thumbnail, y.publishedAt,
     c.title ctitle, c.thumbnail cthumbnail, c.category
     from Videos y
-    join Channels c on c.id = y.ChannelId and c.lang = 'ko' and c.category in ('dev', 'food')
+    join Channels c on c.id = y.ChannelId and c.lang = 'ko' and c.category in ('dev', 'food', 'actor')
     where y.publishedAt > $date order by y.publishedAt desc;`,
     {
       bind: { date: dddd },
