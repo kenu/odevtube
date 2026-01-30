@@ -44,6 +44,14 @@ router.get('/kpop', async function (req, res, _next) {
   await goRenderPage(req, res, uri, '', title, isApi, page)
 })
 
+router.get('/actor', async function (req, res, _next) {
+  const uri = 'actor'
+  const title = '배우 관련 유튜브'
+  const isApi = req.query.a === '1'
+  const page = parseInt(req.query.page) || 1
+  await goRenderPage(req, res, uri, '', title, isApi, page)
+})
+
 async function goRenderPage(
   req,
   res,

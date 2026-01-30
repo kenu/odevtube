@@ -80,7 +80,8 @@ router.get('/admin/stats', async function (req, res, next) {
     categoryStats: [
       { category: 'dev', count: 800, percentage: 64.8 },
       { category: 'kpop', count: 300, percentage: 24.3 },
-      { category: 'food', count: 134, percentage: 10.9 }
+      { category: 'food', count: 134, percentage: 10.9 },
+      { category: 'actor', count: 0, percentage: 0.0 }
     ]
   }
   
