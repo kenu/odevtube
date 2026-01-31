@@ -1,7 +1,7 @@
 name: Deploy ODevTube
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   workflow_dispatch:
     inputs:
       deploy_type:
@@ -29,6 +29,9 @@ jobs:
             if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ github.event.inputs.deploy_type }}" == "docker" ]]; then
               echo "🐳 Docker 배포 실행 중..."
               ./scripts/deploy-docker.sh
+            elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+              echo "🧪 Dev 배포 실행 중..."
+              ./scripts/deploy-odevtube-dev.sh
             else
               echo "📦 표준 배포 실행 중..."
               ./scripts/deploy-odevtube.sh
