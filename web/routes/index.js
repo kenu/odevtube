@@ -297,6 +297,33 @@ router.post('/@:username/add-channel', connectEnsureLogin.ensureLoggedIn(), asyn
       
       await dao.create(channel);
       await dao.addChannelToAccount(user.accountId, channelData.id);
+      
+      // 채널의 최신 비디오를 DB에 저장
+      try {
+        const dbChannel = await dao.findOneByChannelId(channelData.id);
+        if (dbChannel) {
+          const videosResponse = await youtube.search.list({
+            part: 'snippet',
+            channelId: channelData.id,
+            order: 'date',
+            maxResults: 20,
+            type: 'video'
+          });
+          
+          for (const item of videosResponse.data.items) {
+            const video = {
+              videoId: item.id.videoId,
+              title: item.snippet.title,
+              thumbnail: item.snippet.thumbnails.medium.url,
+              publishedAt: item.snippet.publishedAt,
+              ChannelId: dbChannel.id
+            };
+            await dao.createVideo(video);
+          }
+        }
+      } catch (videoError) {
+        console.error('Error fetching channel videos:', videoError);
+      }
     }
   } catch (error) {
     console.error('Error adding channel:', error);
