@@ -1,75 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Profile</title>
-  <link rel="stylesheet" href="/css/profile.css">
+  <title>프로필 - <%= user.username %></title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
 </head>
-
 <body>
-  <button type="button" class="theme-toggle" onclick="toggleTheme(); return false;">🌓</button>
-  <div class="profile-container">
-    <h1>User Profile</h1>
-    <div class="profile-info">
-      <p>ID: <%= user.id %></p>
-      <p>Username: <%= user.username %></p>
-      <p>Name: <%= user.displayName %></p>
-      <% if (user.emails) { %>
-      <p>Email: <%= user.emails[0].value %></p>
-      <% } %>
-    </div>
-    <a href="/logout" class="logout-link">Log Out</a>
-    <a href="/" class="logout-link" style="margin-left: 10px;">Home</a>
-    <a href="/admin" class="logout-link" style="margin-left: 10px;">Admin</a>
-  </div>
+  <%- include('nav.ejs') %>
+  <section id="title">
+    <h1 class="title">
+      <a href="/@<%= user.username %>">
+        <img src="<%= user.photo %>" alt="<%= user.username %>" class="profile" style="vertical-align: middle; margin-right: 0.5rem; width: 48px; height: 48px; border-radius: 50%;" />
+        <%= user.username %> 프로필
+      </a>
+    </h1>
+  </section>
 
-  <script>
-    // 테마 관리 함수
-    function toggleTheme() {
-      const currentTheme = localStorage.getItem('theme') || 'light'
-      let newTheme
-      
-      if (currentTheme === 'light') {
-        newTheme = 'dark'
-      } else {
-        newTheme = 'light'
-      }
-      
-      localStorage.setItem('theme', newTheme)
-      applyTheme(newTheme)
-      updateThemeButton(newTheme)
-    }
+  <section style="padding: 1rem;">
+    <h3>기본 정보</h3>
+    <table class="channels">
+      <tbody>
+        <tr>
+          <th style="width: 120px;">사용자명</th>
+          <td><%= user.username %></td>
+        </tr>
+        <tr>
+          <th>이름</th>
+          <td><%= user.displayName %></td>
+        </tr>
+        <% if (user.emails && user.emails[0]) { %>
+        <tr>
+          <th>이메일</th>
+          <td><%= user.emails[0].value %></td>
+        </tr>
+        <% } %>
+        <tr>
+          <th>구독 등급</th>
+          <td><%= user.subscriptionTier || 'free' %></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-    function applyTheme(theme) {
-      if (theme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark')
-      } else {
-        document.documentElement.setAttribute('data-theme', 'light')
-      }
-    }
-
-    function updateThemeButton(theme) {
-      const button = document.querySelector('.theme-toggle')
-      if (button) {
-        if (theme === 'light') {
-          button.textContent = '☀️'
-        } else {
-          button.textContent = '🌙'
-        }
-      }
-    }
-
-    function loadTheme() {
-      const savedTheme = localStorage.getItem('theme') || 'light'
-      applyTheme(savedTheme)
-      updateThemeButton(savedTheme)
-    }
-
-    // 페이지 로드 시 테마 적용
-    loadTheme()
-  </script>
+  <section style="padding: 1rem;">
+    <h3>바로가기</h3>
+    <nav style="display: flex; gap: 1rem; flex-wrap: wrap;">
+      <a href="/@<%= user.username %>" class="btn">내 피드</a>
+      <a href="/@<%= user.username %>/manage" class="btn">채널 관리</a>
+      <a href="/admin" class="btn">관리자</a>
+      <a href="/logout" class="btn" style="background: #dc3545;">로그아웃</a>
+    </nav>
+  </section>
+  <%- include('footer') %>
 </body>
-
 </html>
