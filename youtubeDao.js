@@ -410,6 +410,46 @@ async function removeChannelFromAccount(accountId, channelId) {
   }
 }
 
+async function getVideosByUserChannels(username, page = 1, limit = 20) {
+  const account = await Account.findOne({ where: { username } });
+  if (!account) return { videos: [], total: 0, page, totalPages: 0 };
+
+  const channels = await account.getChannels();
+  if (channels.length === 0) return { videos: [], total: 0, page, totalPages: 0 };
+
+  const channelIds = channels.map(c => c.id);
+  const offset = (page - 1) * limit;
+
+  const { count, rows } = await Video.findAndCountAll({
+    where: { ChannelId: channelIds },
+    include: [{
+      model: Channel,
+      attributes: ['channelId', 'title', 'thumbnail', 'customUrl']
+    }],
+    order: [['publishedAt', 'DESC']],
+    limit,
+    offset
+  });
+
+  const videos = rows.map(v => ({
+    videoId: v.videoId,
+    title: v.title,
+    thumbnail: v.thumbnail,
+    publishedAt: v.publishedAt,
+    pubdate: v.publishedAt ? new Date(v.publishedAt).toISOString().split('T')[0] : '',
+    channelTitle: v.Channel?.title,
+    channelThumbnail: v.Channel?.thumbnail,
+    customUrl: v.Channel?.customUrl
+  }));
+
+  return {
+    videos,
+    total: count,
+    page,
+    totalPages: Math.ceil(count / limit)
+  };
+}
+
 async function getVideosCount() {
   const result = await Video.count();
   return result;
@@ -498,5 +538,6 @@ export default {
   removeChannelFromAccount,
   getAccountByUsername,
   getChannelsByUsername,
-  getAllUserChannels
+  getAllUserChannels,
+  getVideosByUserChannels
 }

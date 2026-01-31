@@ -34,6 +34,9 @@
         <p><%= owner.username %>님이 아직 채널을 등록하지 않았습니다.</p>
       </div>
     <% } else { %>
+      <p style="padding: 0 1rem; color: #666;">
+        총 <%= total %>개 영상 (페이지 <%= page %>/<%= totalPages %>)
+      </p>
       <ul id="list">
         <% videos.forEach(function(video) { %>
           <li data-v="<%= video.videoId %>">
@@ -53,6 +56,32 @@
           </li>
         <% }); %>
       </ul>
+      
+      <% if (totalPages > 1) { %>
+        <nav class="pagination" style="text-align: center; padding: 1rem; margin: 1rem 0;">
+          <% if (page > 1) { %>
+            <a href="/@<%= owner.username %>?page=1" style="margin: 0 0.5rem;">« 처음</a>
+            <a href="/@<%= owner.username %>?page=<%= page - 1 %>" style="margin: 0 0.5rem;">‹ 이전</a>
+          <% } %>
+          
+          <% 
+            let startPage = Math.max(1, page - 2);
+            let endPage = Math.min(totalPages, page + 2);
+          %>
+          <% for (let i = startPage; i <= endPage; i++) { %>
+            <% if (i === page) { %>
+              <strong style="margin: 0 0.5rem; padding: 0.25rem 0.5rem; background: #333; color: #fff; border-radius: 4px;"><%= i %></strong>
+            <% } else { %>
+              <a href="/@<%= owner.username %>?page=<%= i %>" style="margin: 0 0.5rem;"><%= i %></a>
+            <% } %>
+          <% } %>
+          
+          <% if (page < totalPages) { %>
+            <a href="/@<%= owner.username %>?page=<%= page + 1 %>" style="margin: 0 0.5rem;">다음 ›</a>
+            <a href="/@<%= owner.username %>?page=<%= totalPages %>" style="margin: 0 0.5rem;">마지막 »</a>
+          <% } %>
+        </nav>
+      <% } %>
     <% } %>
     <%- include('footer') %>
   </body>

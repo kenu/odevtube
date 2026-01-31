@@ -196,6 +196,9 @@ router.get(
 
 router.get('/@:username', async (req, res) => {
   const { username } = req.params;
+  const page = parseInt(req.query.page) || 1;
+  const limit = 20;
+  
   const result = await dao.getChannelsByUsername(username);
   
   if (!result) {
@@ -206,41 +209,25 @@ router.get('/@:username', async (req, res) => {
   const isOwner = req.user && req.user.username === username;
   
   if (channels.length === 0) {
-    return res.render('user-feed', { user: req.user, owner: account, videos: [], channels: [], isOwner });
+    return res.render('user-feed', { 
+      user: req.user, owner: account, videos: [], channels: [], isOwner,
+      page: 1, totalPages: 0, total: 0
+    });
   }
 
   try {
-    // 모든 채널의 최신 비디오를 가져와서 통합
-    const allVideos = [];
-    for (const channel of channels) {
-      const searchResponse = await youtube.search.list({
-        part: 'snippet',
-        channelId: channel.channelId,
-        order: 'date',
-        maxResults: 5,
-        type: 'video'
-      });
-
-      const videos = searchResponse.data.items.map(item => ({
-        videoId: item.id.videoId,
-        title: item.snippet.title,
-        thumbnail: item.snippet.thumbnails.medium.url,
-        publishedAt: item.snippet.publishedAt,
-        pubdate: new Date(item.snippet.publishedAt).toISOString().split('T')[0],
-        channelTitle: channel.title,
-        channelThumbnail: channel.thumbnail,
-        customUrl: channel.customUrl
-      }));
-      allVideos.push(...videos);
-    }
-
-    // 시간순 정렬 (최신순)
-    allVideos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-
-    res.render('user-feed', { user: req.user, owner: account, videos: allVideos, channels, isOwner });
+    const { videos, total, totalPages } = await dao.getVideosByUserChannels(username, page, limit);
+    
+    res.render('user-feed', { 
+      user: req.user, owner: account, videos, channels, isOwner,
+      page, totalPages, total
+    });
   } catch (error) {
     console.error('Error fetching videos:', error);
-    res.render('user-feed', { user: req.user, owner: account, videos: [], channels, isOwner });
+    res.render('user-feed', { 
+      user: req.user, owner: account, videos: [], channels, isOwner,
+      page: 1, totalPages: 0, total: 0
+    });
   }
 });
 
