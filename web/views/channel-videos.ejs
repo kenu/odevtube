@@ -13,7 +13,7 @@
   <body>
     <section id="title">
       <h1 class="title">
-        <a href="/my-channel">
+        <a href="/@<%= user.username %>">
           <img src="<%= channel.thumbnail %>" alt="<%= channel.title %>" class="profile" style="vertical-align: middle; margin-right: 0.5rem;" />
           <%= channel.title %>
         </a>
@@ -26,7 +26,7 @@
     </p>
     
     <p style="padding: 0 1rem;">
-      <a href="/my-channel">← 내 채널 목록으로 돌아가기</a>
+      <a href="/@<%= user.username %>">← 내 피드로 돌아가기</a>
     </p>
 
     <hr>
