@@ -3,6 +3,13 @@ import dayjs from 'dayjs'
 import passport from 'passport'
 import { getFullText } from '../utils/transcriptUtil.js'
 import dao from '../../youtubeDao.js'
+import { parseYoutubeUrl } from '../utils/uri.js'
+import youtube from '../../youtube.js'
+import Stripe from 'stripe'
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+
+
 
 // Add a counter to track page calls
 let pageCallCounter = 0;
@@ -174,7 +181,7 @@ router.get(
     let prevSession = req.session
     req.session.regenerate((err) => {
       Object.assign(req.session, prevSession)
-      res.redirect('/admin')
+      res.redirect('/my-channel')
     })
   }
 )
@@ -190,6 +197,78 @@ router.get(
     res.render('profile', { user: req.user })
   }
 )
+
+router.get('/my-channel', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const videos = await dao.getVideosByAccountId(req.user.accountId);
+  res.render('my-channel', { user: req.user, videos });
+});
+
+router.post('/my-channel/add-video', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const { videoUrl } = req.body;
+  const videoId = parseYoutubeUrl(videoUrl);
+
+  if (!videoId) {
+    // Handle invalid URL
+    return res.redirect('/my-channel');
+  }
+
+  const user = req.user;
+  const videoCount = await dao.countVideosByAccountId(user.accountId);
+
+  if (user.subscriptionTier === 'free' && videoCount >= 5) {
+    // Handle limit for free users
+    // For now, just redirect. In the future, we can show a message.
+    return res.redirect('/my-channel');
+  }
+
+  try {
+    const videoResponse = await youtube.videos.list({
+      part: 'snippet',
+      id: videoId,
+    });
+
+    if (videoResponse.data.items.length > 0) {
+      const videoData = videoResponse.data.items[0];
+      const channelResponse = await youtube.channels.list({
+          part: 'snippet',
+          id: videoData.snippet.channelId
+      });
+      const channelData = channelResponse.data.items[0];
+
+      const video = {
+        videoId: videoData.id,
+        title: videoData.snippet.title,
+        thumbnail: videoData.snippet.thumbnails.default.url,
+        publishedAt: videoData.snippet.publishedAt,
+        ChannelId: channelData.id,
+      };
+      
+      const channel = {
+          channelId: channelData.id,
+          title: channelData.snippet.title,
+          thumbnail: channelData.snippet.thumbnails.default.url,
+          customUrl: channelData.snippet.customUrl
+      }
+      
+      const savedChannel = await dao.create(channel);
+      video.ChannelId = savedChannel.id;
+      await dao.createVideo(video);
+      await dao.addVideoToAccount(user.accountId, videoId);
+    }
+  } catch (error) {
+    console.error('Error adding video:', error);
+  }
+
+  res.redirect('/my-channel');
+});
+
+router.post('/my-channel/remove-video', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const { videoId } = req.body;
+  const user = req.user;
+  await dao.removeVideoFromAccount(user.accountId, videoId);
+  res.redirect('/my-channel');
+});
+
 
 router.get('/logout', function (req, res, next) {
   req.logout((err) => {
@@ -236,5 +315,81 @@ router.get('/statistics', async function (req, res, next) {
     next(error);
   }
 });
+
+// Stripe routes
+router.get('/subscribe', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  res.render('subscribe', { user: req.user });
+});
+
+router.post('/create-checkout-session', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price: process.env.STRIPE_PRICE_ID, // Replace with your actual Price ID
+        quantity: 1,
+      },
+    ],
+    mode: 'subscription',
+    success_url: `${process.env.BASE_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.BASE_URL}/payment-cancel`,
+    client_reference_id: req.user.accountId,
+  });
+
+  res.redirect(303, session.url);
+});
+
+router.get('/payment-success', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
+  if (session.client_reference_id === req.user.accountId) {
+    const subscription = await stripe.subscriptions.retrieve(session.subscription);
+    
+    await dao.updateAccount(req.user.accountId, {
+      subscriptionTier: 'premium',
+      subscriptionExpiry: new Date(subscription.current_period_end * 1000),
+    });
+  }
+  res.redirect('/my-channel');
+});
+
+router.get('/payment-cancel', (req, res) => {
+  res.redirect('/my-channel');
+});
+
+router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    res.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
+
+  // Handle the event
+  switch (event.type) {
+    case 'invoice.payment_succeeded':
+      const invoice = event.data.object;
+      const subscription = await stripe.subscriptions.retrieve(invoice.subscription);
+      await dao.updateAccount(invoice.customer, {
+          subscriptionTier: 'premium',
+          subscriptionExpiry: new Date(subscription.current_period_end * 1000),
+      });
+      break;
+    case 'customer.subscription.deleted':
+      const subscriptionDeleted = event.data.object;
+      await dao.updateAccount(subscriptionDeleted.customer, {
+          subscriptionTier: 'free',
+          subscriptionExpiry: null,
+      });
+      break;
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+
+  res.json({received: true});
+});
+
 
 export default router

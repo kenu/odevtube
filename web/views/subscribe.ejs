@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Subscribe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
+  <link rel='stylesheet' href='/css/style.css' />
+</head>
+<body>
+  <%- include('nav.ejs') %>
+  <div class="container">
+    <h1>Subscribe to OdevTube Premium</h1>
+    <p>Upgrade to a Premium account to enjoy unlimited video registrations.</p>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Premium Plan</h5>
+        <p class="card-text">$2.00 per month</p>
+        <form action="/create-checkout-session" method="POST">
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <%- include('footer') %>
+</body>
+</html>

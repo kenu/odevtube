@@ -65,6 +65,7 @@ try {
 }
 
 passport.serializeUser(function (user, cb) {
+  user.accountId = user.id
   cb(null, user)
 })
 

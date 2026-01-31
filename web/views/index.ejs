@@ -17,25 +17,7 @@
         <img src="/images/github-mark.svg" class="github-logo" alt="fork in github"></a>
     </div>
   </section>
-  <nav class="main-nav">
-    <aside class="login" aria-label="login">
-      <% if (!user) { %>
-      <a href="/login" alt="login">login</a>
-      <% } else { %>
-      <%= user.username %>
-      <a href="/profile" alt="profile">profile</a>
-      <a href="/logout" alt="logout">logout</a>
-      <a href="/admin" alt="admin">admin</a>
-      <% } %>
-    </aside>
-    <aside aria-label="menu">
-      | <a href="/actor" alt="actor">actor</a>
-      | <a href="/kpop" alt="kpop">kpop</a>
-      | <a href="/food" alt="food">food</a>
-      | <a href="/" alt="korean">ko</a>
-      | <a href="/en" alt="english">en</a>
-    </aside>
-</nav>
+  <%- include('nav.ejs') %>
 
   <%- include('search.ejs') %>
   <% if (uri === 'kpop' ) { %>
