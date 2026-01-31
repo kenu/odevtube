@@ -30,7 +30,7 @@ function showChannel(name, customUrl) {
 let keywordEl
 window.onload = function () {
   keywordEl = document.getElementById('keyword')
-  keywordEl.addEventListener('keyup', search)
+  keywordEl?.addEventListener('keyup', search)
 
   // whole page event listener escape keyup clean keyword
   document.addEventListener('keyup', function (e) {
