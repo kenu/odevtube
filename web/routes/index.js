@@ -178,16 +178,7 @@ router.get(
   '/login/github/return',
   passport.authenticate('github', { failureRedirect: '/login' }),
   function (req, res) {
-    const username = req.user.username
-    let prevSession = req.session
-    req.session.regenerate((err) => {
-      if (err) {
-        console.error('Session regenerate error:', err)
-        return res.redirect('/')
-      }
-      Object.assign(req.session, prevSession)
-      res.redirect(`/@${username}`)
-    })
+    res.redirect(`/@${req.user.username}`)
   }
 )
 router.get('/home', function (req, res) {
