@@ -242,6 +242,13 @@ router.get('/@:username/manage', connectEnsureLogin.ensureLoggedIn(), async (req
 });
 
 router.post('/@:username/add-channel', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const { username } = req.params;
+  
+  // 본인만 채널 추가 가능
+  if (req.user.username !== username) {
+    return res.status(403).redirect(`/@${req.user.username}/manage`);
+  }
+  
   let { channelUrl } = req.body;
   
   // URL 디코딩 (한글 등 인코딩된 문자 처리)
@@ -333,8 +340,15 @@ router.post('/@:username/add-channel', connectEnsureLogin.ensureLoggedIn(), asyn
 });
 
 router.post('/@:username/remove-channel', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const { username } = req.params;
   const { channelId } = req.body;
   const user = req.user;
+  
+  // 본인만 삭제 가능
+  if (user.username !== username) {
+    return res.status(403).redirect(`/@${user.username}/manage`);
+  }
+  
   await dao.removeChannelFromAccount(user.accountId, channelId);
   res.redirect(`/@${req.user.username}/manage`);
 });
