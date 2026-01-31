@@ -82,7 +82,14 @@
             <%= channel.cnt %>
           </td>
           <td class="category">
-            <%= channel.category %>
+            <% if (channel.category) { %>
+              <%= channel.category %>
+            <% } else if (channel.addedBy) { %>
+              <a href="/@<%= channel.addedBy %>" title="<%= channel.addedBy %>님이 추가">
+                <img src="<%= channel.addedByPhoto %>" alt="<%= channel.addedBy %>" style="width: 20px; height: 20px; border-radius: 50%; vertical-align: middle;">
+                @<%= channel.addedBy %>
+              </a>
+            <% } %>
           </td>
           <td class="lang">
             <%= channel.lang %>

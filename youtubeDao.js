@@ -226,13 +226,16 @@ async function findOneByChannelId(channelId) {
 
 import dayjs from 'dayjs'
 async function findAllChannelList(dayOffset) {
-  // Query to get the channel list and the last update
+  // Query to get the channel list and the last update with user who added it
   const list = await sequelize.query(
     `select
         max(y.publishedAt) publishedAt, count(y.id) cnt,
-        c.id, c.channelId, c.title, c.thumbnail, c.customUrl, c.lang, c.category, c.createdAt, c.updatedAt
+        c.id, c.channelId, c.title, c.thumbnail, c.customUrl, c.lang, c.category, c.createdAt, c.updatedAt,
+        a.username as addedBy, a.photo as addedByPhoto
       from channels c
       left join videos y on c.id = y.ChannelId
+      left join userchannels uc on c.id = uc.ChannelId
+      left join accounts a on uc.AccountId = a.id
       group by c.id
       order by y.publishedAt desc;`,
     {
