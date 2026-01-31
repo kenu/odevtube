@@ -200,14 +200,20 @@ async function findAndCountAllVideo(
     };
   }
 
+  // category/lang 필터 조건 설정
+  const channelWhere = {};
+  if (category) {
+    channelWhere.category = category;
+  }
+  if (lang) {
+    channelWhere.lang = lang;
+  }
+  
   return await Video.findAndCountAll({
     include: [
       {
         model: Channel,
-        where: {
-          category: category || 'dev',
-          lang: lang || 'ko'
-        },
+        where: Object.keys(channelWhere).length > 0 ? channelWhere : undefined,
         required: true,
       },
     ],

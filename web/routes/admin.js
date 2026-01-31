@@ -39,7 +39,7 @@ router.get('/admin', async function (req, res, next) {
   const totalPages = Math.ceil(data.count / pageSize)
   let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2))
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
-  const area = `c=${category || 'dev'}&l=${lang || 'ko'}` + '&'
+  const area = category || lang ? `c=${category || ''}&l=${lang || ''}` + '&' : ''
   const channel = channelId ? `channel=${channelId}&` : ''
   const query = channelQuery ? `q=${channelQuery}&` : ''
   res.render('admin/video', {
