@@ -460,6 +460,29 @@ async function getChannelsCount() {
   return result;
 }
 
+async function getUsersCount() {
+  const result = await Account.count();
+  return result;
+}
+
+async function getCategoryStats() {
+  const result = await Video.findAll({
+    attributes: [
+      'category',
+      [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+    ],
+    group: ['category'],
+    raw: true
+  });
+  
+  const total = result.reduce((sum, item) => sum + parseInt(item.count), 0);
+  return result.map(item => ({
+    category: item.category || 'unknown',
+    count: parseInt(item.count),
+    percentage: total > 0 ? ((parseInt(item.count) / total) * 100).toFixed(1) : 0
+  }));
+}
+
 async function getYearlyVideoStats() {
   const result = await Video.findAll({
     attributes: [
@@ -529,6 +552,8 @@ export default {
   updateAccount,
   getVideosCount,
   getChannelsCount,
+  getUsersCount,
+  getCategoryStats,
   getYearlyVideoStats,
   getMonthlyVideoStats,
   getTopChannels,

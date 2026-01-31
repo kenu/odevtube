@@ -83,18 +83,11 @@ router.get('/admin/user-channels', async function (req, res, next) {
 
 // 사용자 통계 관리 페이지
 router.get('/admin/stats', async function (req, res, next) {
-  // 실제 데이터는 DB에서 가져와야 함
   const stats = {
-    totalUsers: 150,
-    totalVideos: await dao.getVideosCount() || 1234,
-    totalChannels: await dao.getChannelsCount() || 56,
-    todayVisitors: 45,
-    categoryStats: [
-      { category: 'dev', count: 800, percentage: 64.8 },
-      { category: 'kpop', count: 300, percentage: 24.3 },
-      { category: 'food', count: 134, percentage: 10.9 },
-      { category: 'actor', count: 0, percentage: 0.0 }
-    ]
+    totalUsers: await dao.getUsersCount() || 0,
+    totalVideos: await dao.getVideosCount() || 0,
+    totalChannels: await dao.getChannelsCount() || 0,
+    categoryStats: await dao.getCategoryStats() || []
   }
   
   res.render('admin/stats', {
