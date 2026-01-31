@@ -301,6 +301,18 @@ async function createAccount(data) {
   await Account.upsert(data)
 }
 
+async function getAccountByUsername(username) {
+  return await Account.findOne({ where: { username } });
+}
+
+async function getChannelsByUsername(username) {
+  const account = await Account.findOne({
+    where: { username },
+    include: Channel,
+  });
+  return account ? { account, channels: account.Channels } : null;
+}
+
 async function getVideosByAccountId(accountId) {
   const account = await Account.findOne({
     where: { accountId },
@@ -454,5 +466,7 @@ export default {
   getChannelsByAccountId,
   addChannelToAccount,
   countChannelsByAccountId,
-  removeChannelFromAccount
+  removeChannelFromAccount,
+  getAccountByUsername,
+  getChannelsByUsername
 }

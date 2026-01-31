@@ -470,5 +470,53 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
   res.json({received: true});
 });
 
+// 사용자 공개 피드 - /@username 형식
+router.get('/@:username', async (req, res) => {
+  const { username } = req.params;
+
+  const result = await dao.getChannelsByUsername(username);
+  
+  if (!result) {
+    return res.status(404).render('404', { message: `사용자 "${username}"을(를) 찾을 수 없습니다.` });
+  }
+
+  const { account, channels } = result;
+
+  if (channels.length === 0) {
+    return res.render('user-feed', { owner: account, videos: [], channels: [], user: req.user });
+  }
+
+  try {
+    const allVideos = [];
+    for (const channel of channels) {
+      const searchResponse = await youtube.search.list({
+        part: 'snippet',
+        channelId: channel.channelId,
+        order: 'date',
+        maxResults: 5,
+        type: 'video'
+      });
+
+      const videos = searchResponse.data.items.map(item => ({
+        videoId: item.id.videoId,
+        title: item.snippet.title,
+        thumbnail: item.snippet.thumbnails.medium.url,
+        publishedAt: item.snippet.publishedAt,
+        pubdate: new Date(item.snippet.publishedAt).toISOString().split('T')[0],
+        channelTitle: channel.title,
+        channelThumbnail: channel.thumbnail,
+        customUrl: channel.customUrl
+      }));
+      allVideos.push(...videos);
+    }
+
+    allVideos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+    res.render('user-feed', { owner: account, videos: allVideos, channels, user: req.user });
+  } catch (error) {
+    console.error('Error fetching videos:', error);
+    res.render('user-feed', { owner: account, videos: [], channels, user: req.user });
+  }
+});
 
 export default router
