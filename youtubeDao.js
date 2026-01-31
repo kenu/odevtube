@@ -468,10 +468,14 @@ async function getUsersCount() {
 async function getCategoryStats() {
   const result = await Video.findAll({
     attributes: [
-      'category',
-      [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+      [sequelize.col('Channel.category'), 'category'],
+      [sequelize.fn('COUNT', sequelize.col('Video.id')), 'count']
     ],
-    group: ['category'],
+    include: [{
+      model: Channel,
+      attributes: []
+    }],
+    group: ['Channel.category'],
     raw: true
   });
   
