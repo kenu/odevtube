@@ -17,17 +17,17 @@
       <% if (!user) { %>
       <p>Welcome! Please <a href="/login">log in</a>.</p>
       <% } else { %>
-      <p>Hello, <%= user.username %>. <a href="/logout" alt="logout">logout</a>. <a href="/my-channel">내 피드</a>.</p>
+      <p>Hello, <%= user.username %>. <a href="/logout" alt="logout">logout</a>. <a href="/@<%= user.username %>">내 피드</a>.</p>
       <% } %>
     </section>
 
     <nav>
-      <a href="/my-channel">← 내 피드로 돌아가기</a>
+      <a href="/@<%= user.username %>">← 내 피드로 돌아가기</a>
     </nav>
 
     <section>
       <h3>채널 추가</h3>
-      <form action="/my-channel/add-channel" method="POST">
+      <form action="/@<%= user.username %>/add-channel" method="POST">
         <input type="text" name="channelUrl" placeholder="YouTube 채널 URL (예: https://www.youtube.com/@channelname)" required style="padding: 0.3rem; width: 400px;">
         <button type="submit" style="padding: 0.3rem 0.6rem;">추가</button>
       </form>
@@ -53,7 +53,7 @@
           <% channels.forEach(function(channel) { %>
           <tr>
             <td>
-              <a href="/my-channel/<%= channel.channelId %>" title="<%= channel.title %>">
+              <a href="/@<%= user.username %>/<%= channel.channelId %>" title="<%= channel.title %>">
                 <img src="<%= channel.thumbnail %>" alt="<%= channel.title %>" class="thumbnail" style="width: 40px; height: 40px; border-radius: 50%; vertical-align: middle;">
                 <%= channel.title %>
               </a>
@@ -64,7 +64,7 @@
               </a>
             </td>
             <td>
-              <form action="/my-channel/remove-channel" method="POST" style="display: inline;">
+              <form action="/@<%= user.username %>/remove-channel" method="POST" style="display: inline;">
                 <input type="hidden" name="channelId" value="<%= channel.channelId %>">
                 <button type="submit" class="btn-remove">삭제</button>
               </form>

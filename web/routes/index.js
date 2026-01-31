@@ -181,7 +181,7 @@ router.get(
     let prevSession = req.session
     req.session.regenerate((err) => {
       Object.assign(req.session, prevSession)
-      res.redirect('/my-channel')
+      res.redirect(`/@${req.user.username}`)
     })
   }
 )
@@ -198,11 +198,19 @@ router.get(
   }
 )
 
-router.get('/my-channel', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
-  const channels = await dao.getChannelsByAccountId(req.user.accountId);
+router.get('/@:username', async (req, res) => {
+  const { username } = req.params;
+  const result = await dao.getChannelsByUsername(username);
+  
+  if (!result) {
+    return res.status(404).render('404', { message: `사용자 "${username}"을(를) 찾을 수 없습니다.` });
+  }
+  
+  const { account, channels } = result;
+  const isOwner = req.user && req.user.username === username;
   
   if (channels.length === 0) {
-    return res.render('my-channel-feed', { user: req.user, videos: [], channels: [] });
+    return res.render('user-feed', { user: req.user, owner: account, videos: [], channels: [], isOwner });
   }
 
   try {
@@ -233,19 +241,24 @@ router.get('/my-channel', connectEnsureLogin.ensureLoggedIn(), async (req, res) 
     // 시간순 정렬 (최신순)
     allVideos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
-    res.render('my-channel-feed', { user: req.user, videos: allVideos, channels });
+    res.render('user-feed', { user: req.user, owner: account, videos: allVideos, channels, isOwner });
   } catch (error) {
     console.error('Error fetching videos:', error);
-    res.render('my-channel-feed', { user: req.user, videos: [], channels });
+    res.render('user-feed', { user: req.user, owner: account, videos: [], channels, isOwner });
   }
 });
 
-router.get('/my-channel/manage', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+router.get('/@:username/manage', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const { username } = req.params;
+  // 본인만 관리 페이지 접근 가능
+  if (req.user.username !== username) {
+    return res.redirect(`/@${username}`);
+  }
   const channels = await dao.getChannelsByAccountId(req.user.accountId);
   res.render('my-channel-manage', { user: req.user, channels });
 });
 
-router.post('/my-channel/add-channel', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+router.post('/@:username/add-channel', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
   let { channelUrl } = req.body;
   
   // URL 디코딩 (한글 등 인코딩된 문자 처리)
@@ -265,14 +278,14 @@ router.post('/my-channel/add-channel', connectEnsureLogin.ensureLoggedIn(), asyn
   } else if (channelIdMatch) {
     channelIdentifier = channelIdMatch[1];
   } else {
-    return res.redirect('/my-channel');
+    return res.redirect(`/@${req.user.username}`);
   }
 
   const user = req.user;
   const channelCount = await dao.countChannelsByAccountId(user.accountId);
 
   if (user.subscriptionTier === 'free' && channelCount >= 5) {
-    return res.redirect('/my-channel');
+    return res.redirect(`/@${user.username}`);
   }
 
   try {
@@ -306,24 +319,24 @@ router.post('/my-channel/add-channel', connectEnsureLogin.ensureLoggedIn(), asyn
     console.error('Error adding channel:', error);
   }
 
-  res.redirect('/my-channel/manage');
+  res.redirect(`/@${req.user.username}/manage`);
 });
 
-router.post('/my-channel/remove-channel', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+router.post('/@:username/remove-channel', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
   const { channelId } = req.body;
   const user = req.user;
   await dao.removeChannelFromAccount(user.accountId, channelId);
-  res.redirect('/my-channel/manage');
+  res.redirect(`/@${req.user.username}/manage`);
 });
 
-router.get('/my-channel/:channelId', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
-  const { channelId } = req.params;
+router.get('/@:username/:channelId', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const { username, channelId } = req.params;
   const user = req.user;
   
   try {
     const channel = await dao.findOneByChannelId(channelId);
     if (!channel) {
-      return res.redirect('/my-channel');
+      return res.redirect(`/@${req.user.username}`);
     }
 
     const searchResponse = await youtube.search.list({
@@ -345,7 +358,7 @@ router.get('/my-channel/:channelId', connectEnsureLogin.ensureLoggedIn(), async 
     res.render('channel-videos', { user, channel, videos });
   } catch (error) {
     console.error('Error fetching channel videos:', error);
-    res.redirect('/my-channel');
+    res.redirect(`/@${req.user.username}`);
   }
 });
 
@@ -428,11 +441,11 @@ router.get('/payment-success', connectEnsureLogin.ensureLoggedIn(), async (req, 
       subscriptionExpiry: new Date(subscription.current_period_end * 1000),
     });
   }
-  res.redirect('/my-channel');
+  res.redirect(`/@${req.user.username}`);
 });
 
 router.get('/payment-cancel', (req, res) => {
-  res.redirect('/my-channel');
+  res.redirect(`/@${req.user.username}`);
 });
 
 router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (req, res) => {
@@ -468,55 +481,6 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
   }
 
   res.json({received: true});
-});
-
-// 사용자 공개 피드 - /@username 형식
-router.get('/@:username', async (req, res) => {
-  const { username } = req.params;
-
-  const result = await dao.getChannelsByUsername(username);
-  
-  if (!result) {
-    return res.status(404).render('404', { message: `사용자 "${username}"을(를) 찾을 수 없습니다.` });
-  }
-
-  const { account, channels } = result;
-
-  if (channels.length === 0) {
-    return res.render('user-feed', { owner: account, videos: [], channels: [], user: req.user });
-  }
-
-  try {
-    const allVideos = [];
-    for (const channel of channels) {
-      const searchResponse = await youtube.search.list({
-        part: 'snippet',
-        channelId: channel.channelId,
-        order: 'date',
-        maxResults: 5,
-        type: 'video'
-      });
-
-      const videos = searchResponse.data.items.map(item => ({
-        videoId: item.id.videoId,
-        title: item.snippet.title,
-        thumbnail: item.snippet.thumbnails.medium.url,
-        publishedAt: item.snippet.publishedAt,
-        pubdate: new Date(item.snippet.publishedAt).toISOString().split('T')[0],
-        channelTitle: channel.title,
-        channelThumbnail: channel.thumbnail,
-        customUrl: channel.customUrl
-      }));
-      allVideos.push(...videos);
-    }
-
-    allVideos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-
-    res.render('user-feed', { owner: account, videos: allVideos, channels, user: req.user });
-  } catch (error) {
-    console.error('Error fetching videos:', error);
-    res.render('user-feed', { owner: account, videos: [], channels, user: req.user });
-  }
 });
 
 export default router

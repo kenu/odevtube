@@ -24,7 +24,7 @@
     <p style="padding: 0 1rem;">
       구독 채널: <%= channels.length %>개
       <% if (user && user.username === owner.username) { %>
-        | <a href="/my-channel/manage">채널 관리 →</a>
+        | <a href="/@<%= owner.username %>/manage">채널 관리 →</a>
       <% } %>
     </p>
 
