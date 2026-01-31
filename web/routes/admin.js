@@ -69,6 +69,18 @@ router.get('/admin/channel', async function (req, res, next) {
   })
 })
 
+// 사용자별 채널 등록 현황
+router.get('/admin/user-channels', async function (req, res, next) {
+  const userChannels = await dao.getAllUserChannels();
+  userChannels.forEach((item) => {
+    item.addedDate = dayjs(item.addedAt).format('YYYY-MM-DD HH:mm');
+  });
+  res.render('admin/user-channels', {
+    userChannels,
+    user: req.user,
+  });
+});
+
 // 사용자 통계 관리 페이지
 router.get('/admin/stats', async function (req, res, next) {
   // 실제 데이터는 DB에서 가져와야 함

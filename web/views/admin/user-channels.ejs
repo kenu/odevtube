@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title>사용자별 채널 등록 현황</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <link rel='stylesheet' href='/css/style.css' />
+    <link rel='stylesheet' href='/css/admin.css' />
+  </head>
+  <body>
+    <%- include('../nav.ejs') %>
+    <h1>사용자별 채널 등록 현황</h1>
+    <section>
+      <% if (!user) { %>
+      <p>Welcome! Please <a href="/login">log in</a>.</p>
+      <% } else { %>
+      <p>Hello, <%= user.username %>. <a href="/logout" alt="logout">logout</a>.</p>
+      <% } %>
+    </section>
+
+    <nav style="margin-bottom: 1rem;">
+      <a href="/admin">비디오</a> |
+      <a href="/admin/channel">채널</a> |
+      <a href="/admin/user-channels"><strong>사용자 채널</strong></a> |
+      <a href="/admin/stats">통계</a>
+    </nav>
+
+    <section>
+      <h3>등록된 채널 (<%= userChannels.length %>개)</h3>
+      <table id="userChannelTable" class="channels">
+        <thead>
+          <tr>
+            <th class="user">사용자</th>
+            <th class="channel">채널</th>
+            <th class="customurl">URL</th>
+            <th class="date">등록일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% userChannels.forEach(function(item) { %>
+          <tr>
+            <td>
+              <a href="/@<%= item.username %>" title="<%= item.username %>의 피드">
+                <img src="<%= item.userPhoto %>" alt="<%= item.username %>" style="width: 24px; height: 24px; border-radius: 50%; vertical-align: middle;">
+                <%= item.username %>
+              </a>
+            </td>
+            <td>
+              <a href="https://youtube.com/channel/<%= item.channelId %>" target="_blank" title="<%= item.channelTitle %>">
+                <img src="<%= item.channelThumbnail %>" alt="<%= item.channelTitle %>" style="width: 32px; height: 32px; border-radius: 50%; vertical-align: middle;">
+                <%= item.channelTitle %>
+              </a>
+            </td>
+            <td>
+              <a href="https://youtube.com/<%= item.customUrl %>" target="_blank">
+                <%= item.customUrl %>
+              </a>
+            </td>
+            <td><%= item.addedDate %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% if (userChannels.length === 0) { %>
+        <p style="padding: 1rem; text-align: center;">등록된 채널이 없습니다.</p>
+      <% } %>
+    </section>
+    <%- include('../footer') %>
+  </body>
+</html>

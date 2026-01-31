@@ -373,6 +373,35 @@ async function countChannelsByAccountId(accountId) {
   return 0;
 }
 
+async function getAllUserChannels() {
+  const accounts = await Account.findAll({
+    include: {
+      model: Channel,
+      through: { attributes: ['createdAt'] }
+    },
+    order: [['createdAt', 'DESC']]
+  });
+  
+  const result = [];
+  for (const account of accounts) {
+    for (const channel of account.Channels) {
+      result.push({
+        username: account.username,
+        userPhoto: account.photo,
+        channelTitle: channel.title,
+        channelThumbnail: channel.thumbnail,
+        channelId: channel.channelId,
+        customUrl: channel.customUrl,
+        addedAt: channel.UserChannel.createdAt
+      });
+    }
+  }
+  
+  // 최신 등록순 정렬
+  result.sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
+  return result;
+}
+
 async function removeChannelFromAccount(accountId, channelId) {
   const account = await Account.findOne({ where: { accountId } });
   const channel = await Channel.findOne({ where: { channelId } });
@@ -468,5 +497,6 @@ export default {
   countChannelsByAccountId,
   removeChannelFromAccount,
   getAccountByUsername,
-  getChannelsByUsername
+  getChannelsByUsername,
+  getAllUserChannels
 }
