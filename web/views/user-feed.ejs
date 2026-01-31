@@ -58,29 +58,25 @@
       </ul>
       
       <% if (totalPages > 1) { %>
-        <nav class="pagination" style="text-align: center; padding: 1rem; margin: 1rem 0;">
+        <div class="pagination">
           <% if (page > 1) { %>
-            <a href="/@<%= owner.username %>?page=1" style="margin: 0 0.5rem;">« 처음</a>
-            <a href="/@<%= owner.username %>?page=<%= page - 1 %>" style="margin: 0 0.5rem;">‹ 이전</a>
+            <a href="/@<%= owner.username %>?page=1">First</a>
+            <a href="/@<%= owner.username %>?page=<%= page - 1 %>">Previous</a>
           <% } %>
           
-          <% 
-            let startPage = Math.max(1, page - 2);
-            let endPage = Math.min(totalPages, page + 2);
-          %>
-          <% for (let i = startPage; i <= endPage; i++) { %>
+          <% for (let i = Math.max(1, page - 2); i <= Math.min(totalPages, page + 2); i++) { %>
             <% if (i === page) { %>
-              <strong style="margin: 0 0.5rem; padding: 0.25rem 0.5rem; background: #333; color: #fff; border-radius: 4px;"><%= i %></strong>
+              <span class="current"><%= i %></span>
             <% } else { %>
-              <a href="/@<%= owner.username %>?page=<%= i %>" style="margin: 0 0.5rem;"><%= i %></a>
+              <a href="/@<%= owner.username %>?page=<%= i %>"><%= i %></a>
             <% } %>
           <% } %>
           
           <% if (page < totalPages) { %>
-            <a href="/@<%= owner.username %>?page=<%= page + 1 %>" style="margin: 0 0.5rem;">다음 ›</a>
-            <a href="/@<%= owner.username %>?page=<%= totalPages %>" style="margin: 0 0.5rem;">마지막 »</a>
+            <a href="/@<%= owner.username %>?page=<%= page + 1 %>">Next</a>
+            <a href="/@<%= owner.username %>?page=<%= totalPages %>">Last</a>
           <% } %>
-        </nav>
+        </div>
       <% } %>
     <% } %>
     <%- include('footer') %>
