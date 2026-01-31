@@ -63,8 +63,19 @@ const UserVideo = sequelize.define('UserVideo', {
   },
 })
 
+const UserChannel = sequelize.define('UserChannel', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+})
+
 Account.belongsToMany(Video, { through: UserVideo })
 Video.belongsToMany(Account, { through: UserVideo })
+
+Account.belongsToMany(Channel, { through: UserChannel })
+Channel.belongsToMany(Account, { through: UserChannel })
 
 ;(async () => {
   await sequelize.sync()
@@ -326,6 +337,37 @@ async function updateAccount(accountId, data) {
   await Account.update(data, { where: { accountId } });
 }
 
+async function getChannelsByAccountId(accountId) {
+  const account = await Account.findOne({
+    where: { accountId },
+    include: Channel,
+  });
+  return account ? account.Channels : [];
+}
+
+async function addChannelToAccount(accountId, channelId) {
+  const account = await Account.findOne({ where: { accountId } });
+  const channel = await Channel.findOne({ where: { channelId } });
+  if (account && channel) {
+    await account.addChannel(channel);
+  }
+}
+
+async function countChannelsByAccountId(accountId) {
+  const account = await Account.findOne({ where: { accountId } });
+  if (account) {
+    return await account.countChannels();
+  }
+  return 0;
+}
+
+async function removeChannelFromAccount(accountId, channelId) {
+  const account = await Account.findOne({ where: { accountId } });
+  const channel = await Channel.findOne({ where: { channelId } });
+  if (account && channel) {
+    await account.removeChannel(channel);
+  }
+}
 
 async function getVideosCount() {
   const result = await Video.count();
@@ -408,5 +450,9 @@ export default {
   getChannelsCount,
   getYearlyVideoStats,
   getMonthlyVideoStats,
-  getTopChannels
+  getTopChannels,
+  getChannelsByAccountId,
+  addChannelToAccount,
+  countChannelsByAccountId,
+  removeChannelFromAccount
 }

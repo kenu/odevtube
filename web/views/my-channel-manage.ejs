@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title>채널 관리</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <link rel='stylesheet' href='/css/style.css' />
+    <link rel='stylesheet' href='/css/admin.css' />
+  </head>
+  <body>
+    <%- include('nav.ejs') %>
+    <h1>채널 관리</h1>
+    <section>
+      <% if (!user) { %>
+      <p>Welcome! Please <a href="/login">log in</a>.</p>
+      <% } else { %>
+      <p>Hello, <%= user.username %>. <a href="/logout" alt="logout">logout</a>. <a href="/my-channel">내 피드</a>.</p>
+      <% } %>
+    </section>
+
+    <nav>
+      <a href="/my-channel">← 내 피드로 돌아가기</a>
+    </nav>
+
+    <section>
+      <h3>채널 추가</h3>
+      <form action="/my-channel/add-channel" method="POST">
+        <input type="text" name="channelUrl" placeholder="YouTube 채널 URL (예: https://www.youtube.com/@channelname)" required style="padding: 0.3rem; width: 400px;">
+        <button type="submit" style="padding: 0.3rem 0.6rem;">추가</button>
+      </form>
+      <p style="font-size: 0.9rem; color: #666;">
+        등록 가능: <%= channels.length %> / <% if (user.subscriptionTier === 'free') { %>5<% } else { %>Unlimited<% } %>
+        <% if (user.subscriptionTier === 'free') { %>
+          | <a href="/subscribe">프리미엄 업그레이드</a>
+        <% } %>
+      </p>
+    </section>
+
+    <section>
+      <h3>내 채널 목록 (<%= channels.length %>개)</h3>
+      <table id="channelTable" class="channels">
+        <thead>
+          <tr>
+            <th class="channel">채널</th>
+            <th class="customurl">URL</th>
+            <th class="action">작업</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% channels.forEach(function(channel) { %>
+          <tr>
+            <td>
+              <a href="/my-channel/<%= channel.channelId %>" title="<%= channel.title %>">
+                <img src="<%= channel.thumbnail %>" alt="<%= channel.title %>" class="thumbnail" style="width: 40px; height: 40px; border-radius: 50%; vertical-align: middle;">
+                <%= channel.title %>
+              </a>
+            </td>
+            <td>
+              <a href="https://youtube.com/<%= channel.customUrl %>" title="<%= channel.title %>" target="_blank">
+                <%= channel.customUrl %>
+              </a>
+            </td>
+            <td>
+              <form action="/my-channel/remove-channel" method="POST" style="display: inline;">
+                <input type="hidden" name="channelId" value="<%= channel.channelId %>">
+                <button type="submit" class="btn-remove">삭제</button>
+              </form>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% if (channels.length === 0) { %>
+        <p style="padding: 1rem; text-align: center;">등록된 채널이 없습니다. 위에서 채널을 추가하세요.</p>
+      <% } %>
+    </section>
+    <%- include('footer') %>
+  </body>
+</html>

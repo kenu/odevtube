@@ -199,76 +199,155 @@ router.get(
 )
 
 router.get('/my-channel', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
-  const videos = await dao.getVideosByAccountId(req.user.accountId);
-  res.render('my-channel', { user: req.user, videos });
+  const channels = await dao.getChannelsByAccountId(req.user.accountId);
+  
+  if (channels.length === 0) {
+    return res.render('my-channel-feed', { user: req.user, videos: [], channels: [] });
+  }
+
+  try {
+    // 모든 채널의 최신 비디오를 가져와서 통합
+    const allVideos = [];
+    for (const channel of channels) {
+      const searchResponse = await youtube.search.list({
+        part: 'snippet',
+        channelId: channel.channelId,
+        order: 'date',
+        maxResults: 5,
+        type: 'video'
+      });
+
+      const videos = searchResponse.data.items.map(item => ({
+        videoId: item.id.videoId,
+        title: item.snippet.title,
+        thumbnail: item.snippet.thumbnails.medium.url,
+        publishedAt: item.snippet.publishedAt,
+        pubdate: new Date(item.snippet.publishedAt).toISOString().split('T')[0],
+        channelTitle: channel.title,
+        channelThumbnail: channel.thumbnail,
+        customUrl: channel.customUrl
+      }));
+      allVideos.push(...videos);
+    }
+
+    // 시간순 정렬 (최신순)
+    allVideos.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+    res.render('my-channel-feed', { user: req.user, videos: allVideos, channels });
+  } catch (error) {
+    console.error('Error fetching videos:', error);
+    res.render('my-channel-feed', { user: req.user, videos: [], channels });
+  }
 });
 
-router.post('/my-channel/add-video', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
-  const { videoUrl } = req.body;
-  const videoId = parseYoutubeUrl(videoUrl);
+router.get('/my-channel/manage', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const channels = await dao.getChannelsByAccountId(req.user.accountId);
+  res.render('my-channel-manage', { user: req.user, channels });
+});
 
-  if (!videoId) {
-    // Handle invalid URL
+router.post('/my-channel/add-channel', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  let { channelUrl } = req.body;
+  
+  // URL 디코딩 (한글 등 인코딩된 문자 처리)
+  channelUrl = decodeURIComponent(channelUrl);
+  
+  // YouTube 채널 URL에서 채널 ID 또는 customUrl 추출
+  // 형식: https://www.youtube.com/@channelname 또는 https://www.youtube.com/channel/UCxxxx
+  let channelIdentifier = null;
+  let isCustomUrl = false;
+  
+  const customUrlMatch = channelUrl.match(/@([^\/\?\s]+)/);
+  const channelIdMatch = channelUrl.match(/channel\/([a-zA-Z0-9_-]+)/);
+  
+  if (customUrlMatch) {
+    channelIdentifier = '@' + customUrlMatch[1];
+    isCustomUrl = true;
+  } else if (channelIdMatch) {
+    channelIdentifier = channelIdMatch[1];
+  } else {
     return res.redirect('/my-channel');
   }
 
   const user = req.user;
-  const videoCount = await dao.countVideosByAccountId(user.accountId);
+  const channelCount = await dao.countChannelsByAccountId(user.accountId);
 
-  if (user.subscriptionTier === 'free' && videoCount >= 5) {
-    // Handle limit for free users
-    // For now, just redirect. In the future, we can show a message.
+  if (user.subscriptionTier === 'free' && channelCount >= 5) {
     return res.redirect('/my-channel');
   }
 
   try {
-    const videoResponse = await youtube.videos.list({
-      part: 'snippet',
-      id: videoId,
-    });
-
-    if (videoResponse.data.items.length > 0) {
-      const videoData = videoResponse.data.items[0];
-      const channelResponse = await youtube.channels.list({
-          part: 'snippet',
-          id: videoData.snippet.channelId
+    let channelResponse;
+    if (isCustomUrl) {
+      channelResponse = await youtube.channels.list({
+        part: 'snippet',
+        forHandle: channelIdentifier.substring(1),
       });
-      const channelData = channelResponse.data.items[0];
+    } else {
+      channelResponse = await youtube.channels.list({
+        part: 'snippet',
+        id: channelIdentifier,
+      });
+    }
 
-      const video = {
-        videoId: videoData.id,
-        title: videoData.snippet.title,
-        thumbnail: videoData.snippet.thumbnails.default.url,
-        publishedAt: videoData.snippet.publishedAt,
-        ChannelId: channelData.id,
-      };
+    if (channelResponse.data.items && channelResponse.data.items.length > 0) {
+      const channelData = channelResponse.data.items[0];
       
       const channel = {
-          channelId: channelData.id,
-          title: channelData.snippet.title,
-          thumbnail: channelData.snippet.thumbnails.default.url,
-          customUrl: channelData.snippet.customUrl
-      }
+        channelId: channelData.id,
+        title: channelData.snippet.title,
+        thumbnail: channelData.snippet.thumbnails.default.url,
+        customUrl: channelData.snippet.customUrl
+      };
       
-      const savedChannel = await dao.create(channel);
-      video.ChannelId = savedChannel.id;
-      await dao.createVideo(video);
-      await dao.addVideoToAccount(user.accountId, videoId);
+      await dao.create(channel);
+      await dao.addChannelToAccount(user.accountId, channelData.id);
     }
   } catch (error) {
-    console.error('Error adding video:', error);
+    console.error('Error adding channel:', error);
   }
 
-  res.redirect('/my-channel');
+  res.redirect('/my-channel/manage');
 });
 
-router.post('/my-channel/remove-video', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
-  const { videoId } = req.body;
+router.post('/my-channel/remove-channel', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const { channelId } = req.body;
   const user = req.user;
-  await dao.removeVideoFromAccount(user.accountId, videoId);
-  res.redirect('/my-channel');
+  await dao.removeChannelFromAccount(user.accountId, channelId);
+  res.redirect('/my-channel/manage');
 });
 
+router.get('/my-channel/:channelId', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const { channelId } = req.params;
+  const user = req.user;
+  
+  try {
+    const channel = await dao.findOneByChannelId(channelId);
+    if (!channel) {
+      return res.redirect('/my-channel');
+    }
+
+    const searchResponse = await youtube.search.list({
+      part: 'snippet',
+      channelId: channelId,
+      order: 'date',
+      maxResults: 20,
+      type: 'video'
+    });
+
+    const videos = searchResponse.data.items.map(item => ({
+      videoId: item.id.videoId,
+      title: item.snippet.title,
+      thumbnail: item.snippet.thumbnails.medium.url,
+      publishedAt: item.snippet.publishedAt,
+      pubdate: new Date(item.snippet.publishedAt).toISOString().split('T')[0]
+    }));
+
+    res.render('channel-videos', { user, channel, videos });
+  } catch (error) {
+    console.error('Error fetching channel videos:', error);
+    res.redirect('/my-channel');
+  }
+});
 
 router.get('/logout', function (req, res, next) {
   req.logout((err) => {

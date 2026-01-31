@@ -14,48 +14,52 @@
     <section id="title">
       <h1 class="title">
         <a href="/">
-          <%= user.username %>'s Channel
+          <%= user.username %>'s Favorite Channels
         </a>
       </h1>
     </section>
     <%- include('nav.ejs') %>
     
-    <p style="padding: 0 1rem;">Welcome to your personal channel. Here you can manage your favorite YouTube videos.</p>
+    <p style="padding: 0 1rem;">좋아하는 유튜브 채널을 등록하고 관리하세요.</p>
     
-    <h2 style="padding: 0 1rem;">Add a new video</h2>
-    <form action="/my-channel/add-video" method="POST" style="padding: 0 1rem; margin-bottom: 1rem;">
-      <input type="text" name="videoUrl" placeholder="Enter YouTube Video URL" required style="padding: 0.3rem;">
-      <button type="submit" style="padding: 0.3rem 0.6rem;">Add Video</button>
+    <h2 style="padding: 0 1rem;">채널 추가</h2>
+    <form action="/my-channel/add-channel" method="POST" style="padding: 0 1rem; margin-bottom: 1rem;">
+      <input type="text" name="channelUrl" placeholder="YouTube 채널 URL (예: https://www.youtube.com/@channelname)" required style="padding: 0.3rem; width: 350px;">
+      <button type="submit" style="padding: 0.3rem 0.6rem;">추가</button>
     </form>
 
     <hr>
 
-    <h2 style="padding: 0 1rem;">Your Videos (<%= videos.length %> / <% if (user.subscriptionTier === 'free') { %>5<% } else { %>Unlimited<% } %>)</h2>
+    <h2 style="padding: 0 1rem;">내 채널 목록 (<%= channels.length %> / <% if (user.subscriptionTier === 'free') { %>5<% } else { %>Unlimited<% } %>)</h2>
     
-    <% if (user.subscriptionTier === 'free' && videos.length >= 5) { %>
+    <% if (user.subscriptionTier === 'free' && channels.length >= 5) { %>
       <div style="background-color: #fff3cd; padding: 1rem; margin: 1rem;">
-        You have reached your 5 video limit. <a href="/subscribe">Upgrade to premium</a> for unlimited videos.
+        무료 사용자는 최대 5개 채널까지 등록 가능합니다. <a href="/subscribe">프리미엄으로 업그레이드</a>하면 무제한으로 등록할 수 있습니다.
       </div>
     <% } %>
 
     <ul id="list">
-      <% if (videos && videos.length > 0) { %>
-        <% videos.forEach(function(video) { %>
-          <li data-v="<%= video.videoId %>">
-            <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>" target="_blank">
-              <img src="<%= video.thumbnail %>" alt="<%= video.title %>" loading="lazy" />
-              <div>
-                <%= video.title %>
-              </div>
-            </a>
-            <form action="/my-channel/remove-video" method="POST" style="display: inline;">
-              <input type="hidden" name="videoId" value="<%= video.videoId %>">
-              <button type="submit" class="btn-remove">Remove</button>
+      <% if (channels && channels.length > 0) { %>
+        <% channels.forEach(function(channel) { %>
+          <li data-c="<%= channel.channelId %>">
+            <div class="channel">
+              <a href="/my-channel/<%= channel.channelId %>">
+                <img src="<%= channel.thumbnail %>" alt="<%= channel.title %>" class="profile" />
+                <span class="channame"><%= channel.title %></span>
+              </a>
+            </div>
+            <div style="margin-top: 0.5rem;">
+              <a href="/my-channel/<%= channel.channelId %>" style="font-size: 0.9rem;">최신 영상 보기 →</a>
+              | <a href="https://www.youtube.com/<%= channel.customUrl %>" target="_blank" style="font-size: 0.9rem;"><%= channel.customUrl %></a>
+            </div>
+            <form action="/my-channel/remove-channel" method="POST" style="margin-top: 0.5rem;">
+              <input type="hidden" name="channelId" value="<%= channel.channelId %>">
+              <button type="submit" class="btn-remove">삭제</button>
             </form>
           </li>
         <% }); %>
       <% } else { %>
-        <p style="padding: 1rem;">You have no videos yet. Add one using the form above.</p>
+        <p style="padding: 1rem;">등록된 채널이 없습니다. 위 폼에서 좋아하는 채널을 추가하세요.</p>
       <% } %>
     </ul>
     <%- include('footer') %>
