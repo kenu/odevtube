@@ -154,21 +154,52 @@ router.delete('/api/video', auth, async function (req, res, next) {
 })
 
 router.post('/api/channel', async function (req, res, next) {
-  const channelId = req.body.channelId
-  let channel
-  if (channelId.indexOf('@') === 0) {
-    channel = await capi.findChannelInfo(channelId)
-  } else {
-    channel = await capi.getChannelInfo(channelId)
-  }
-  channel = {
-    ...req.body,
-    ...channel,
-  }
+  try {
+    const channelId = req.body.channelId
+    let channel
+    if (channelId.indexOf('@') === 0) {
+      channel = await capi.findChannelInfo(channelId)
+    } else {
+      channel = await capi.getChannelInfo(channelId)
+    }
+    if (!channel) {
+      res.status(502).json({
+        error: 'Failed to fetch channel info',
+        channelId,
+      })
+      return
+    }
+    channel = {
+      ...req.body,
+      ...channel,
+    }
 
-  const result = await dao.create(channel)
-  await addVideos(channel.channelId)
-  res.json(result.dataValues)
+    const result = await dao.create(channel)
+    res.json(result.dataValues)
+  } catch (error) {
+    const message = error?.message || String(error)
+    const causeMessage = error?.cause?.message
+    const reason = error?.cause?.errors?.[0]?.reason
+    const status = error?.response?.status || error?.code
+
+    const isQuotaExceeded =
+      reason === 'quotaExceeded' ||
+      reason === 'dailyLimitExceeded' ||
+      (status === 403 && typeof causeMessage === 'string' && causeMessage.toLowerCase().includes('exceeded') && causeMessage.toLowerCase().includes('quota'))
+
+    if (isQuotaExceeded) {
+      res.status(429).json({
+        error: 'YouTube API quota exceeded',
+        reason: reason || 'quotaExceeded',
+        channelId: req?.body?.channelId,
+      })
+      return
+    }
+
+    res.status(500).json({
+      error: message,
+    })
+  }
 })
 
 async function addVideos(channelId) {

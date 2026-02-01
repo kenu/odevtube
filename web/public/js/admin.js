@@ -11,13 +11,25 @@ function createChannel() {
     },
     body: JSON.stringify(data),
   })
-    .then((res) => res.json())
+    .then(async (res) => {
+      const contentType = res.headers.get('content-type') || ''
+      if (!res.ok) {
+        const text = await res.text()
+        throw new Error(`HTTP ${res.status}: ${text.slice(0, 300)}`)
+      }
+      if (!contentType.includes('application/json')) {
+        const text = await res.text()
+        throw new Error(text.slice(0, 300))
+      }
+      return res.json()
+    })
     .then((res) => {
       alert('success: ' + JSON.stringify(res))
       location.reload()
     })
     .catch((err) => {
       console.error(err)
+      alert('failed: ' + (err?.message || String(err)))
     })
 }
 
