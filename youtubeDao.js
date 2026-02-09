@@ -18,7 +18,19 @@ const Channel = sequelize.define('Channel', {
   customUrl: DataTypes.STRING,
   lang: DataTypes.STRING(2),
   category: DataTypes.STRING,
+  isPublic: { type: DataTypes.BOOLEAN, defaultValue: true },
+  accountId: {
+    type: DataTypes.STRING,
+    references: {
+      model: 'Accounts', // 'Accounts' refers to table name
+      key: 'accountId',
+    },
+    allowNull: true, // Channels might not always be owned by a user
+  },
 })
+
+// Establish the association outside the define call
+Channel.belongsTo(Account, { foreignKey: 'accountId', targetKey: 'accountId' });
 
 const Video = sequelize.define('Video', {
   title: DataTypes.STRING,
@@ -138,7 +150,8 @@ async function getPagedVideosWithSearch(options) {
     options.pageSize,
     options.channelQuery,
     options.channelId,
-    options.searchKeyword
+    options.searchKeyword,
+    options.accountId
   );
   return result;
 }
@@ -150,9 +163,31 @@ async function findAndCountAllVideo(
   pageSize = 60,
   channelQuery = '',
   channelId,
-  searchKeyword
+  searchKeyword,
+  accountId // Added accountId
 ) {
   let whereClause = {};
+  let channelWhereClause = {
+    category: category || 'dev',
+    lang: lang || 'ko'
+  };
+
+  if (accountId) {
+    // If logged in, show public channels OR channels owned by the user
+    channelWhereClause = {
+      ...channelWhereClause,
+      [Sequelize.Op.or]: [
+        { isPublic: true },
+        { accountId: accountId } // Assuming Channel model has an accountId to link ownership
+      ]
+    };
+  } else {
+    // If not logged in, only show public channels
+    channelWhereClause = {
+      ...channelWhereClause,
+      isPublic: true
+    };
+  }
 
   if (channelQuery) {
     whereClause = {
@@ -180,10 +215,7 @@ async function findAndCountAllVideo(
     include: [
       {
         model: Channel,
-        where: {
-          category: category || 'dev',
-          lang: lang || 'ko'
-        },
+        where: channelWhereClause, // Use the new channelWhereClause
         required: true,
       },
     ],
@@ -206,7 +238,7 @@ async function findAllChannelList(dayOffset) {
   const list = await sequelize.query(
     `select
         max(y.publishedAt) publishedAt, count(y.id) cnt,
-        c.id, c.channelId, c.title, c.thumbnail, c.customUrl, c.lang, c.category, c.createdAt, c.updatedAt
+        c.id, c.channelId, c.title, c.thumbnail, c.customUrl, c.lang, c.category, c.createdAt, c.updatedAt, c.isPublic
       from channels c
       left join videos y on c.id = y.ChannelId
       group by c.id

@@ -3,6 +3,7 @@ function createChannel() {
     channelId: document.getElementById('channelId').value,
     lang: document.getElementById('lang').value,
     category: document.getElementById('category').value,
+    isPublic: document.getElementById('isPublic').checked ? 'on' : undefined,
   }
   fetch('/api/channel', {
     method: 'POST',

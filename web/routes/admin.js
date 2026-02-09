@@ -84,7 +84,7 @@ router.get('/admin/stats', async function (req, res, next) {
       { category: 'actor', count: 0, percentage: 0.0 }
     ]
   }
-  
+
   res.render('admin/stats', {
     user: req.user,
     ...stats
@@ -101,7 +101,7 @@ router.get('/admin/security', function (req, res, next) {
       { id: 2, key: 'sk_test_***************', createdAt: '2024-02-20' }
     ]
   }
-  
+
   res.render('admin/security', {
     user: req.user,
     ...securityData
@@ -111,7 +111,7 @@ router.get('/admin/security', function (req, res, next) {
 // 로그 조회 페이지
 router.get('/admin/logs', function (req, res, next) {
   const { level, source, start, end } = req.query
-  
+
   // 샘플 로그 데이터
   const sampleLogs = [
     {
@@ -130,9 +130,9 @@ router.get('/admin/logs', function (req, res, next) {
       user: 'user123',
       message: '로그인 실패 시도 감지'
     },
-    
+
   ]
-  
+
   res.render('admin/logs', {
     user: req.user,
     logs: sampleLogs
@@ -153,27 +153,28 @@ router.delete('/api/video', auth, async function (req, res, next) {
   res.json(result)
 })
 
-router.post('/api/channel', async function (req, res, next) {
+router.post('/api/channel', auth, async function (req, res, next) {
+  const channelId = req.body.channelId
+  let channel
+  if (channelId.indexOf('@') === 0) {
+    channel = await capi.findChannelInfo(channelId)
+  } else {
+    channel = await capi.getChannelInfo(channelId)
+  }
+  if (!channel) {
+    res.status(502).json({
+      error: 'Failed to fetch channel info',
+      channelId,
+    })
+    return
+  }
+  channel = {
+    ...req.body,
+    ...channel,
+    isPublic: req.body.isPublic === 'on' ? true : false,
+    accountId: req.user.accountId, // Add accountId from logged-in user
+  }
   try {
-    const channelId = req.body.channelId
-    let channel
-    if (channelId.indexOf('@') === 0) {
-      channel = await capi.findChannelInfo(channelId)
-    } else {
-      channel = await capi.getChannelInfo(channelId)
-    }
-    if (!channel) {
-      res.status(502).json({
-        error: 'Failed to fetch channel info',
-        channelId,
-      })
-      return
-    }
-    channel = {
-      ...req.body,
-      ...channel,
-    }
-
     const result = await dao.create(channel)
     res.json(result.dataValues)
   } catch (error) {

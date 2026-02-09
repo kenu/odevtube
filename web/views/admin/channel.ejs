@@ -43,6 +43,8 @@
       <option value="kpop">kpop</option>
       <option value="actor">actor</option>
     </select>
+    <label for="isPublic">Public:</label>
+    <input type="checkbox" id="isPublic" name="isPublic" checked>
     <button onclick="createChannel()">create</button>
   </section>
   <section>
@@ -57,6 +59,7 @@
         <th class="lang" onClick="sortTable(5)" onKeyDown="sortTable(5)">lang</th>
         <th class="date" onClick="sortTable(6)" onKeyDown="sortTable(6)">last@</th>
         <th class="date" onClick="sortTable(7)" onKeyDown="sortTable(7)">cre@</th>
+        <th class="public" onClick="sortTable(8)" onKeyDown="sortTable(8)">Public</th>
       </thead>
       <tbody>
         <% channels.forEach(function(channel) { %>
@@ -89,6 +92,9 @@
           </td>
           <td class="datecell">
             <%= channel.credate %>
+          </td>
+          <td class="publiccell">
+            <%= channel.isPublic ? 'Public' : 'Private' %>
           </td>
         </tr>
         <% }) %>

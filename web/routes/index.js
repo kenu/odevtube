@@ -81,12 +81,14 @@ async function goRenderPage(
   const pageSize = 60;
   const searchKeyword = req.query.search || '';
 
+  const user = req.user;
   const data = await dao.getPagedVideosWithSearch({
     category: uri,
     lang,
     page,
     pageSize,
     searchKeyword,
+    accountId: user?.accountId,
   });
 
   const etime = Date.now();

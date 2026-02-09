@@ -141,7 +141,7 @@ body {
   --link-color: #0066cc;
   --header-bg: #fffd;
   --table-border: #ccc;
-  --table-hover: rgba(131, 131, 46, 0.148);
+  --table-hover: rgba(131, 131, 46, 0.2);
   --table-bg: #ffffff;
   --thead-bg: #0ff3;
   --menu-bg: #333;
@@ -158,7 +158,7 @@ body {
   --link-color: #66b3ff;
   --header-bg: #2d2d2d;
   --table-border: #444;
-  --table-hover: rgba(255, 255, 255, 0.15);
+  --table-hover: rgba(255, 255, 255, 0.2);
   --table-bg: #252525;
   --thead-bg: rgba(0, 255, 255, 0.15);
   --menu-bg: #1a1a1a;
