@@ -625,3 +625,17 @@ li button.share-twitter:hover {
     font-size: 13px;
   }
 }
+
+.btn-remove {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+}
+
+.btn-remove:hover {
+  background-color: #c82333;
+}

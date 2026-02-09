@@ -63,7 +63,20 @@ const Account = sequelize.define('Account', {
   email: DataTypes.STRING,
   photo: DataTypes.STRING,
   provider: DataTypes.STRING,
+  subscriptionTier: { type: DataTypes.STRING, defaultValue: 'free' },
+  subscriptionExpiry: { type: DataTypes.DATE },
 })
+
+const UserVideo = sequelize.define('UserVideo', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+})
+
+Account.belongsToMany(Video, { through: UserVideo })
+Video.belongsToMany(Account, { through: UserVideo })
 
 ;(async () => {
   await sequelize.sync()
@@ -309,6 +322,43 @@ async function createAccount(data) {
   await Account.upsert(data)
 }
 
+async function getVideosByAccountId(accountId) {
+  const account = await Account.findOne({
+    where: { accountId },
+    include: Video,
+  });
+  return account ? account.Videos : [];
+}
+
+async function addVideoToAccount(accountId, videoId) {
+  const account = await Account.findOne({ where: { accountId } });
+  const video = await Video.findOne({ where: { videoId } });
+  if (account && video) {
+    await account.addVideo(video);
+  }
+}
+
+async function countVideosByAccountId(accountId) {
+  const account = await Account.findOne({ where: { accountId } });
+  if (account) {
+    return await account.countVideos();
+  }
+  return 0;
+}
+
+async function removeVideoFromAccount(accountId, videoId) {
+  const account = await Account.findOne({ where: { accountId } });
+  const video = await Video.findOne({ where: { videoId } });
+  if (account && video) {
+    await account.removeVideo(video);
+  }
+}
+
+async function updateAccount(accountId, data) {
+  await Account.update(data, { where: { accountId } });
+}
+
+
 async function getVideosCount() {
   const result = await Video.count();
   return result;
@@ -381,6 +431,11 @@ export default {
   createTranscript,
   removeTranscript,
   createAccount,
+  getVideosByAccountId,
+  addVideoToAccount,
+  countVideosByAccountId,
+  removeVideoFromAccount,
+  updateAccount,
   getVideosCount,
   getChannelsCount,
   getYearlyVideoStats,
