@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <title>Error - <%= error.status %></title>
+    <title>404 - Not Found</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
@@ -12,14 +12,11 @@
   <body>
     <section id="title">
       <h1 class="title">
-        <a href="/">Error - <%= error.status %></a>
+        <a href="/">404 - Not Found</a>
       </h1>
     </section>
     <div style="padding: 2rem; text-align: center;">
       <p><%= message %></p>
-      <% if (process.env.NODE_ENV !== 'production') { %>
-        <pre style="text-align: left; background: #f5f5f5; padding: 1rem; overflow: auto; max-width: 800px; margin: 1rem auto;"><%= error.stack %></pre>
-      <% } %>
       <p><a href="/">홈으로 돌아가기</a></p>
     </div>
   </body>

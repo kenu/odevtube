@@ -39,7 +39,7 @@ router.get('/admin', async function (req, res, next) {
   const totalPages = Math.ceil(data.count / pageSize)
   let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2))
   let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1)
-  const area = `c=${category || 'dev'}&l=${lang || 'ko'}` + '&'
+  const area = category || lang ? `c=${category || ''}&l=${lang || ''}` + '&' : ''
   const channel = channelId ? `channel=${channelId}&` : ''
   const query = channelQuery ? `q=${channelQuery}&` : ''
   res.render('admin/video', {
@@ -69,20 +69,25 @@ router.get('/admin/channel', async function (req, res, next) {
   })
 })
 
+// 사용자별 채널 등록 현황
+router.get('/admin/user-channels', async function (req, res, next) {
+  const userChannels = await dao.getAllUserChannels();
+  userChannels.forEach((item) => {
+    item.addedDate = dayjs(item.addedAt).format('YYYY-MM-DD HH:mm');
+  });
+  res.render('admin/user-channels', {
+    userChannels,
+    user: req.user,
+  });
+});
+
 // 사용자 통계 관리 페이지
 router.get('/admin/stats', async function (req, res, next) {
-  // 실제 데이터는 DB에서 가져와야 함
   const stats = {
-    totalUsers: 150,
-    totalVideos: await dao.getVideosCount() || 1234,
-    totalChannels: await dao.getChannelsCount() || 56,
-    todayVisitors: 45,
-    categoryStats: [
-      { category: 'dev', count: 800, percentage: 64.8 },
-      { category: 'kpop', count: 300, percentage: 24.3 },
-      { category: 'food', count: 134, percentage: 10.9 },
-      { category: 'actor', count: 0, percentage: 0.0 }
-    ]
+    totalUsers: await dao.getUsersCount() || 0,
+    totalVideos: await dao.getVideosCount() || 0,
+    totalChannels: await dao.getChannelsCount() || 0,
+    categoryStats: await dao.getCategoryStats() || []
   }
 
   res.render('admin/stats', {

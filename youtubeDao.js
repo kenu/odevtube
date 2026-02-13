@@ -11,6 +11,16 @@ const sequelize = new Sequelize(
   }
 )
 
+const Account = sequelize.define('Account', {
+  accountId: { type: DataTypes.STRING, unique: true },
+  username: DataTypes.STRING,
+  email: DataTypes.STRING,
+  photo: DataTypes.STRING,
+  provider: DataTypes.STRING,
+  subscriptionTier: { type: DataTypes.STRING, defaultValue: 'free' },
+  subscriptionExpiry: { type: DataTypes.DATE },
+})
+
 const Channel = sequelize.define('Channel', {
   channelId: { type: DataTypes.STRING, unique: true },
   title: DataTypes.STRING,
@@ -57,17 +67,15 @@ Video.belongsTo(Channel)
 Transcript.belongsTo(Video, { as: 'video', foreignKey: 'videoId' })
 Video.hasOne(Transcript, { as: 'transcripts', foreignKey: 'videoId' })
 
-const Account = sequelize.define('Account', {
-  accountId: { type: DataTypes.STRING, unique: true },
-  username: DataTypes.STRING,
-  email: DataTypes.STRING,
-  photo: DataTypes.STRING,
-  provider: DataTypes.STRING,
-  subscriptionTier: { type: DataTypes.STRING, defaultValue: 'free' },
-  subscriptionExpiry: { type: DataTypes.DATE },
+const UserVideo = sequelize.define('UserVideo', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
 })
 
-const UserVideo = sequelize.define('UserVideo', {
+const UserChannel = sequelize.define('UserChannel', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -77,6 +85,9 @@ const UserVideo = sequelize.define('UserVideo', {
 
 Account.belongsToMany(Video, { through: UserVideo })
 Video.belongsToMany(Account, { through: UserVideo })
+
+Account.belongsToMany(Channel, { through: UserChannel })
+Channel.belongsToMany(Account, { through: UserChannel })
 
 ;(async () => {
   await sequelize.sync()
@@ -224,11 +235,20 @@ async function findAndCountAllVideo(
     };
   }
 
+  // category/lang 필터 조건 설정
+  const channelWhere = {};
+  if (category) {
+    channelWhere.category = category;
+  }
+  if (lang) {
+    channelWhere.lang = lang;
+  }
+  
   return await Video.findAndCountAll({
     include: [
       {
         model: Channel,
-        where: channelWhereClause, // Use the new channelWhereClause
+        where: channelWhereClause,
         required: true,
       },
     ],
@@ -247,13 +267,16 @@ async function findOneByChannelId(channelId) {
 
 import dayjs from 'dayjs'
 async function findAllChannelList(dayOffset) {
-  // Query to get the channel list and the last update
+  // Query to get the channel list and the last update with user who added it
   const list = await sequelize.query(
     `select
         max(y.publishedAt) publishedAt, count(y.id) cnt,
-        c.id, c.channelId, c.title, c.thumbnail, c.customUrl, c.lang, c.category, c.createdAt, c.updatedAt, c.isPublic
+        c.id, c.channelId, c.title, c.thumbnail, c.customUrl, c.lang, c.category, c.createdAt, c.updatedAt, c.isPublic,
+        a.username as addedBy, a.photo as addedByPhoto
       from channels c
       left join videos y on c.id = y.ChannelId
+      left join userchannels uc on c.id = uc.ChannelId
+      left join accounts a on uc.AccountId = a.id
       group by c.id
       order by y.publishedAt desc;`,
     {
@@ -322,6 +345,18 @@ async function createAccount(data) {
   await Account.upsert(data)
 }
 
+async function getAccountByUsername(username) {
+  return await Account.findOne({ where: { username } });
+}
+
+async function getChannelsByUsername(username) {
+  const account = await Account.findOne({
+    where: { username },
+    include: Channel,
+  });
+  return account ? { account, channels: account.Channels } : null;
+}
+
 async function getVideosByAccountId(accountId) {
   const account = await Account.findOne({
     where: { accountId },
@@ -358,6 +393,106 @@ async function updateAccount(accountId, data) {
   await Account.update(data, { where: { accountId } });
 }
 
+async function getChannelsByAccountId(accountId) {
+  const account = await Account.findOne({
+    where: { accountId },
+    include: Channel,
+  });
+  return account ? account.Channels : [];
+}
+
+async function addChannelToAccount(accountId, channelId) {
+  const account = await Account.findOne({ where: { accountId } });
+  const channel = await Channel.findOne({ where: { channelId } });
+  if (account && channel) {
+    await account.addChannel(channel);
+  }
+}
+
+async function countChannelsByAccountId(accountId) {
+  const account = await Account.findOne({ where: { accountId } });
+  if (account) {
+    return await account.countChannels();
+  }
+  return 0;
+}
+
+async function getAllUserChannels() {
+  const accounts = await Account.findAll({
+    include: {
+      model: Channel,
+      through: { attributes: ['createdAt'] }
+    },
+    order: [['createdAt', 'DESC']]
+  });
+
+  const result = [];
+  for (const account of accounts) {
+    for (const channel of account.Channels) {
+      result.push({
+        username: account.username,
+        userPhoto: account.photo,
+        channelTitle: channel.title,
+        channelThumbnail: channel.thumbnail,
+        channelId: channel.channelId,
+        customUrl: channel.customUrl,
+        addedAt: channel.UserChannel.createdAt
+      });
+    }
+  }
+
+  // 최신 등록순 정렬
+  result.sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
+  return result;
+}
+
+async function removeChannelFromAccount(accountId, channelId) {
+  const account = await Account.findOne({ where: { accountId } });
+  const channel = await Channel.findOne({ where: { channelId } });
+  if (account && channel) {
+    await account.removeChannel(channel);
+  }
+}
+
+async function getVideosByUserChannels(username, page = 1, limit = 20) {
+  const account = await Account.findOne({ where: { username } });
+  if (!account) return { videos: [], total: 0, page, totalPages: 0 };
+
+  const channels = await account.getChannels();
+  if (channels.length === 0) return { videos: [], total: 0, page, totalPages: 0 };
+
+  const channelIds = channels.map(c => c.id);
+  const offset = (page - 1) * limit;
+
+  const { count, rows } = await Video.findAndCountAll({
+    where: { ChannelId: channelIds },
+    include: [{
+      model: Channel,
+      attributes: ['channelId', 'title', 'thumbnail', 'customUrl']
+    }],
+    order: [['publishedAt', 'DESC']],
+    limit,
+    offset
+  });
+
+  const videos = rows.map(v => ({
+    videoId: v.videoId,
+    title: v.title,
+    thumbnail: v.thumbnail,
+    publishedAt: v.publishedAt,
+    pubdate: v.publishedAt ? new Date(v.publishedAt).toISOString().split('T')[0] : '',
+    channelTitle: v.Channel?.title,
+    channelThumbnail: v.Channel?.thumbnail,
+    customUrl: v.Channel?.customUrl
+  }));
+
+  return {
+    videos,
+    total: count,
+    page,
+    totalPages: Math.ceil(count / limit)
+  };
+}
 
 async function getVideosCount() {
   const result = await Video.count();
@@ -367,6 +502,33 @@ async function getVideosCount() {
 async function getChannelsCount() {
   const result = await Channel.count();
   return result;
+}
+
+async function getUsersCount() {
+  const result = await Account.count();
+  return result;
+}
+
+async function getCategoryStats() {
+  const result = await Video.findAll({
+    attributes: [
+      [sequelize.col('Channel.category'), 'category'],
+      [sequelize.fn('COUNT', sequelize.col('Video.id')), 'count']
+    ],
+    include: [{
+      model: Channel,
+      attributes: []
+    }],
+    group: ['Channel.category'],
+    raw: true
+  });
+  
+  const total = result.reduce((sum, item) => sum + parseInt(item.count), 0);
+  return result.map(item => ({
+    category: item.category || 'unknown',
+    count: parseInt(item.count),
+    percentage: total > 0 ? ((parseInt(item.count) / total) * 100).toFixed(1) : 0
+  }));
 }
 
 async function getYearlyVideoStats() {
@@ -438,7 +600,17 @@ export default {
   updateAccount,
   getVideosCount,
   getChannelsCount,
+  getUsersCount,
+  getCategoryStats,
   getYearlyVideoStats,
   getMonthlyVideoStats,
-  getTopChannels
+  getTopChannels,
+  getChannelsByAccountId,
+  addChannelToAccount,
+  countChannelsByAccountId,
+  removeChannelFromAccount,
+  getAccountByUsername,
+  getChannelsByUsername,
+  getAllUserChannels,
+  getVideosByUserChannels
 }

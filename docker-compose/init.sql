@@ -5,6 +5,8 @@ CREATE TABLE accounts (
   email VARCHAR(255),
   photo VARCHAR(255),
   provider VARCHAR(255),
+  subscriptionTier VARCHAR(255) DEFAULT 'free',
+  subscriptionExpiry DATETIME,
   createdAt DATETIME,
   updatedAt DATETIME
 );
@@ -43,3 +45,34 @@ CREATE TABLE `videos` (
 INSERT INTO videos
 (title, videoId, thumbnail, publishedAt, createdAt, updatedAt, channelId)
 VALUES('🔥Data Analyst Salary in 2025  #shorts #simplilearn', 'NhMfqhT_wOk', 'https://i.ytimg.com/vi/NhMfqhT_wOk/mqdefault.jpg', '2025-09-27 01:30:10.000', '2025-09-27 02:05:19.000', '2025-09-27 02:05:19.000', 30);
+
+CREATE TABLE transcripts (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  videoId VARCHAR(255) UNIQUE NOT NULL,
+  content TEXT,
+  summary TEXT,
+  createdAt DATETIME,
+  updatedAt DATETIME
+);
+
+CREATE TABLE uservideos (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  createdAt DATETIME NOT NULL,
+  updatedAt DATETIME NOT NULL,
+  AccountId INT,
+  VideoId INT,
+  UNIQUE KEY `UserVideos_VideoId_AccountId_unique` (AccountId, VideoId),
+  FOREIGN KEY (AccountId) REFERENCES accounts (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (VideoId) REFERENCES videos (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE userchannels (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  createdAt DATETIME NOT NULL,
+  updatedAt DATETIME NOT NULL,
+  AccountId INT,
+  ChannelId INT,
+  UNIQUE KEY `UserChannels_ChannelId_AccountId_unique` (AccountId, ChannelId),
+  FOREIGN KEY (AccountId) REFERENCES accounts (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (ChannelId) REFERENCES channels (id) ON DELETE CASCADE ON UPDATE CASCADE
+);

@@ -3,8 +3,8 @@
     <% if (!user) { %>
     <a href="/login" alt="login">login</a>
     <% } else { %>
-    <%= user.username %>
-    <a href="/my-channel" alt="my channel">my channel</a>
+    <a href="/@<%= user.username %>" alt="my feed"><%= user.username %></a>
+    <a href="/@<%= user.username %>/manage" alt="my channel">my channel</a>
     <a href="/profile" alt="profile">profile</a>
     <a href="/logout" alt="logout">logout</a>
     <a href="/admin" alt="admin">admin</a>

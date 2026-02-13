@@ -1,75 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Profile</title>
-  <link rel="stylesheet" href="/css/profile.css">
+  <title>프로필 - <%= user.username %></title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .profile-page {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .profile-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      padding: 2rem;
+      color: white;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+    }
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid white;
+      margin-bottom: 1rem;
+      object-fit: cover;
+      background: #ddd;
+    }
+    .profile-name {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0.5rem 0;
+    }
+    .profile-username {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+    .profile-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+    .info-section {
+      background: var(--search-bg, #f8f9fa);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-section h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.1rem;
+      color: var(--text-color, #333);
+    }
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--input-border, #e0e0e0);
+    }
+    .info-item:last-child {
+      border-bottom: none;
+    }
+    .info-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .info-value {
+      font-weight: 500;
+      color: var(--text-color, #333);
+    }
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .action-btn.primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    .action-btn.secondary {
+      background: var(--search-bg, #f8f9fa);
+      color: var(--text-color, #333);
+      border: 1px solid var(--input-border, #e0e0e0);
+    }
+    .action-btn.danger {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+      color: white;
+    }
+  </style>
 </head>
-
 <body>
-  <button type="button" class="theme-toggle" onclick="toggleTheme(); return false;">🌓</button>
-  <div class="profile-container">
-    <h1>User Profile</h1>
-    <div class="profile-info">
-      <p>ID: <%= user.id %></p>
-      <p>Username: <%= user.username %></p>
-      <p>Name: <%= user.displayName %></p>
-      <% if (user.emails) { %>
-      <p>Email: <%= user.emails[0].value %></p>
+  <%- include('nav.ejs') %>
+  
+  <div class="profile-page">
+    <div class="profile-card">
+      <% if (user.photo) { %>
+        <img src="<%= user.photo %>" alt="<%= user.username %>" class="profile-avatar" onerror="this.style.display='none'">
+      <% } else { %>
+        <div class="profile-avatar" style="display: flex; align-items: center; justify-content: center; font-size: 3rem; background: rgba(255,255,255,0.2);">
+          <%= user.username.charAt(0).toUpperCase() %>
+        </div>
       <% } %>
+      <div class="profile-name"><%= user.displayName || user.username %></div>
+      <div class="profile-username">@<%= user.username %></div>
+      <div class="profile-badge"><%= user.subscriptionTier === 'premium' ? '⭐ Premium' : '🆓 Free' %></div>
     </div>
-    <a href="/logout" class="logout-link">Log Out</a>
-    <a href="/" class="logout-link" style="margin-left: 10px;">Home</a>
-    <a href="/admin" class="logout-link" style="margin-left: 10px;">Admin</a>
+
+    <div class="info-section">
+      <h3>📋 계정 정보</h3>
+      <div class="info-item">
+        <span class="info-label">사용자명</span>
+        <span class="info-value"><%= user.username %></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">이름</span>
+        <span class="info-value"><%= user.displayName || '-' %></span>
+      </div>
+      <% if (user.emails && user.emails[0]) { %>
+      <div class="info-item">
+        <span class="info-label">이메일</span>
+        <span class="info-value"><%= user.emails[0].value %></span>
+      </div>
+      <% } %>
+      <div class="info-item">
+        <span class="info-label">구독 등급</span>
+        <span class="info-value"><%= user.subscriptionTier || 'free' %></span>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h3>🚀 바로가기</h3>
+      <div class="action-grid">
+        <a href="/@<%= user.username %>" class="action-btn primary">📺 내 피드</a>
+        <a href="/@<%= user.username %>/manage" class="action-btn secondary">⚙️ 채널 관리</a>
+        <a href="/admin" class="action-btn secondary">🔧 관리자</a>
+        <a href="/logout" class="action-btn danger">🚪 로그아웃</a>
+      </div>
+    </div>
   </div>
 
-  <script>
-    // 테마 관리 함수
-    function toggleTheme() {
-      const currentTheme = localStorage.getItem('theme') || 'light'
-      let newTheme
-      
-      if (currentTheme === 'light') {
-        newTheme = 'dark'
-      } else {
-        newTheme = 'light'
-      }
-      
-      localStorage.setItem('theme', newTheme)
-      applyTheme(newTheme)
-      updateThemeButton(newTheme)
-    }
-
-    function applyTheme(theme) {
-      if (theme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark')
-      } else {
-        document.documentElement.setAttribute('data-theme', 'light')
-      }
-    }
-
-    function updateThemeButton(theme) {
-      const button = document.querySelector('.theme-toggle')
-      if (button) {
-        if (theme === 'light') {
-          button.textContent = '☀️'
-        } else {
-          button.textContent = '🌙'
-        }
-      }
-    }
-
-    function loadTheme() {
-      const savedTheme = localStorage.getItem('theme') || 'light'
-      applyTheme(savedTheme)
-      updateThemeButton(savedTheme)
-    }
-
-    // 페이지 로드 시 테마 적용
-    loadTheme()
-  </script>
+  <%- include('footer') %>
 </body>
-
 </html>

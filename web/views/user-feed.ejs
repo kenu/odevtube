@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title><%= owner.username %>'s Feed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <link rel='stylesheet' href='/css/style.css' />
+    <script src="/js/index.js"></script>
+  </head>
+  <body>
+    <section id="title">
+      <h1 class="title">
+        <a href="/">HOME</a>
+        <a href="/@<%= owner.username %>">
+          <img src="<%= owner.photo %>" alt="<%= owner.username %>" class="profile" style="vertical-align: middle; margin-right: 0.5rem; width: 32px; height: 32px; border-radius: 50%;" />
+          <%= owner.username %>'s Feed
+        </a>
+      </h1>
+    </section>
+    <%- include('nav.ejs') %>
+    
+    <p style="padding: 0 1rem;">
+      구독 채널: <%= channels.length %>개
+      <% if (user && user.username === owner.username) { %>
+        | <a href="/@<%= owner.username %>/manage">채널 관리 →</a>
+      <% } %>
+    </p>
+
+    <% if (channels.length === 0) { %>
+      <div style="padding: 2rem; text-align: center;">
+        <p><%= owner.username %>님이 아직 채널을 등록하지 않았습니다.</p>
+      </div>
+    <% } else { %>
+      <p style="padding: 0 1rem; color: #666;">
+        총 <%= total %>개 영상 (페이지 <%= page %>/<%= totalPages %>)
+      </p>
+      <ul id="list">
+        <% videos.forEach(function(video) { %>
+          <li data-v="<%= video.videoId %>">
+            <div class="channel">
+              <a href="https://www.youtube.com/<%= video.customUrl %>" target="_blank">
+                <img src="<%= video.channelThumbnail %>" alt="<%= video.channelTitle %>" class="profile" />
+                <span class="channame"><%= video.channelTitle %></span>
+              </a>
+            </div>
+            <a href="https://youtu.be/<%= video.videoId %>" alt="<%= video.title %>" target="_blank">
+              <img src="<%= video.thumbnail %>" alt="<%= video.title %>" loading="lazy" />
+              <div>
+                <%= video.pubdate %>
+              </div>
+              <%= video.title %>
+            </a>
+          </li>
+        <% }); %>
+      </ul>
+      
+      <% if (totalPages > 1) { %>
+        <div class="pagination">
+          <% if (page > 1) { %>
+            <a href="/@<%= owner.username %>?page=1">First</a>
+            <a href="/@<%= owner.username %>?page=<%= page - 1 %>">Previous</a>
+          <% } %>
+          
+          <% for (let i = Math.max(1, page - 2); i <= Math.min(totalPages, page + 2); i++) { %>
+            <% if (i === page) { %>
+              <span class="current"><%= i %></span>
+            <% } else { %>
+              <a href="/@<%= owner.username %>?page=<%= i %>"><%= i %></a>
+            <% } %>
+          <% } %>
+          
+          <% if (page < totalPages) { %>
+            <a href="/@<%= owner.username %>?page=<%= page + 1 %>">Next</a>
+            <a href="/@<%= owner.username %>?page=<%= totalPages %>">Last</a>
+          <% } %>
+        </div>
+      <% } %>
+    <% } %>
+    <%- include('footer') %>
+  </body>
+</html>
