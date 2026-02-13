@@ -19,6 +19,8 @@ CREATE TABLE channels (
   thumbnail VARCHAR(255),
   category VARCHAR(255),
   lang VARCHAR(255),
+  isPublic TINYINT(1) DEFAULT 1,
+  accountId VARCHAR(255),
   publishedAt DATETIME,
   createdAt DATETIME,
   updatedAt DATETIME

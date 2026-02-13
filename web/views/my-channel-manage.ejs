@@ -46,6 +46,7 @@
           <tr>
             <th class="channel">채널</th>
             <th class="customurl">URL</th>
+            <th class="visibility">공개 여부</th>
             <th class="action">작업</th>
           </tr>
         </thead>
@@ -62,6 +63,14 @@
               <a href="https://youtube.com/<%= channel.customUrl %>" title="<%= channel.title %>" target="_blank">
                 <%= channel.customUrl %>
               </a>
+            </td>
+            <td>
+              <form action="/@<%= user.username %>/toggle-channel-visibility" method="POST" style="display: inline;">
+                <input type="hidden" name="channelId" value="<%= channel.channelId %>">
+                <button type="submit" class="btn-toggle" style="padding: 0.3rem 0.6rem; background: <%= channel.isPublic ? '#4CAF50' : '#999' %>; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                  <%= channel.isPublic ? '🌍 Public' : '🔒 Private' %>
+                </button>
+              </form>
             </td>
             <td>
               <form action="/@<%= user.username %>/remove-channel" method="POST" style="display: inline;">

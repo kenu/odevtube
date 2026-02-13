@@ -547,7 +547,7 @@ async function getYearlyVideoStats() {
 async function getMonthlyVideoStats(months = 12) {
   const result = await Video.findAll({
     attributes: [
-      [sequelize.fn('strftime', '%Y-%m', sequelize.col('publishedAt')), 'month'],
+      [sequelize.fn('DATE_FORMAT', sequelize.col('publishedAt'), '%Y-%m'), 'month'],
       [sequelize.fn('COUNT', sequelize.col('id')), 'count']
     ],
     where: {
@@ -565,15 +565,32 @@ async function getMonthlyVideoStats(months = 12) {
 async function getTopChannels(limit = 10) {
   const result = await Video.findAll({
     attributes: [
-      'customUrl',
+      [sequelize.col('Channel.channelId'), 'channelId'],
+      [sequelize.col('Channel.title'), 'title'],
+      [sequelize.col('Channel.customUrl'), 'customUrl'],
       [sequelize.fn('COUNT', sequelize.col('Video.id')), 'video_count']
     ],
-    group: ['customUrl'],
+    include: [{
+      model: Channel,
+      attributes: [],
+      required: true
+    }],
+    group: ['Channel.id'],
     order: [[sequelize.literal('video_count'), 'DESC']],
     limit: limit,
     raw: true
   });
   return result;
+}
+
+async function updateChannelVisibility(channelId, isPublic) {
+  const channel = await Channel.findOne({ where: { channelId } });
+  if (channel) {
+    channel.isPublic = isPublic;
+    await channel.save();
+    return channel;
+  }
+  return null;
 }
 
 export default {
@@ -612,5 +629,6 @@ export default {
   getAccountByUsername,
   getChannelsByUsername,
   getAllUserChannels,
-  getVideosByUserChannels
+  getVideosByUserChannels,
+  updateChannelVisibility
 }

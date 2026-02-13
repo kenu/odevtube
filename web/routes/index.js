@@ -358,6 +358,28 @@ router.post('/@:username/remove-channel', connectEnsureLogin.ensureLoggedIn(), a
   res.redirect(`/@${req.user.username}/manage`);
 });
 
+router.post('/@:username/toggle-channel-visibility', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
+  const { username } = req.params;
+  const { channelId } = req.body;
+  const user = req.user;
+
+  // 본인만 변경 가능
+  if (user.username !== username) {
+    return res.status(403).redirect(`/@${user.username}/manage`);
+  }
+
+  // 해당 채널이 사용자의 채널인지 확인
+  const userChannels = await dao.getChannelsByAccountId(user.accountId);
+  const channel = userChannels.find(c => c.channelId === channelId);
+
+  if (channel) {
+    // 현재 상태의 반대로 토글
+    await dao.updateChannelVisibility(channelId, !channel.isPublic);
+  }
+
+  res.redirect(`/@${req.user.username}/manage`);
+});
+
 router.get('/@:username/:channelId', connectEnsureLogin.ensureLoggedIn(), async (req, res) => {
   const { username, channelId } = req.params;
   const user = req.user;
@@ -420,8 +442,12 @@ router.get('/statistics', async function (req, res, next) {
     // Get top channels
     const topChannels = await dao.getTopChannels(10);
     
-    res.render('statistics', { 
+    res.render('statistics', {
+      title: 'Statistics - 통계',
       user: req.user,
+      totalCount: totalVideos,
+      uri: 'statistics',
+      locale: 'ko_KR',
       stats: {
         totalVideos,
         totalChannels,
