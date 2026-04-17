@@ -100,7 +100,9 @@
             <%= video.credate %>
           </td>
           <td class="datecell">
+            <% if (user && (user.username === 'kenu' || (video.Channel && video.Channel.accountId === user.accountId))) { %>
             <a href="javascript:remove('<%= video.videoId %>')">x</a>
+            <% } %>
           </td>
         </tr>
         <% }) %>

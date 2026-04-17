@@ -27,6 +27,7 @@ router.get('/admin', async function (req, res, next) {
     pageSize: pageSize,
     channelId,
     channelQuery,
+    accountId: req.user?.accountId,
   }
   const data = await dao.getPagedVideos(whereClause)
   const videos = data.rows

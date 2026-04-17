@@ -160,7 +160,9 @@ async function getPagedVideos(options) {
     offset,
     options.pageSize,
     options.channelQuery,
-    options.channelId
+    options.channelId,
+    undefined,
+    options.accountId
   );
   return result;
 }
