@@ -10,7 +10,7 @@
     "helmet": "^8.1.0",
     "mariadb": "^3.4.5",
     "node-html-parser": "^7.0.2",
-    "nodemailer": "^7.0.12",
+    "nodemailer": "^8.0.7",
     "openai": "^6.16.0",
     "sequelize": "^6.37.7",
     "youtube-transcript": "^1.2.1"
