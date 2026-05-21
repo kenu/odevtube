@@ -1,8 +1,8 @@
-import dao from '../youtubeDao.js'
+import videoDao from '../dao/videoDao.js'
 import axios from 'axios'
 
 async function getNewHourly() {
-  const newList = await dao.newList()
+  const newList = await videoDao.newList()
   const messages = newList.map((data) => {
     // videoId, title
     return `https://youtu.be/${data.videoId} ${data.title}`

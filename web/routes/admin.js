@@ -1,5 +1,7 @@
 import express from 'express'
-import dao from '../../youtubeDao.js'
+import videoDao from '../../dao/videoDao.js'
+import channelDao from '../../dao/channelDao.js'
+import accountDao from '../../dao/accountDao.js'
 import capi from '../../services/channel.js'
 import vapi from '../../services/video.js'
 import dayjs from 'dayjs'
@@ -42,7 +44,7 @@ router.get('/admin', async function (req, res, next) {
     accountId: req.user?.accountId,
   }
 
-  const data = await dao.getPagedVideos(whereClause)
+  const data = await videoDao.getPagedVideos(whereClause)
   const videos = data.rows
   videos.forEach((v) => {
     v.pubdate = dayjs(v.publishedAt).format('YYYY-MM-DD HH:mm:ss')
@@ -77,7 +79,7 @@ router.get('/admin', async function (req, res, next) {
 })
 
 router.get('/admin/channel', async function (req, res, next) {
-  const channelList = await dao.findAllChannelList()
+  const channelList = await channelDao.findAllChannelList()
   channelList.forEach((item) => {
     item.credate = dayjs(item.createdAt).format('MM-DD')
     item.pubdate = dayjs(item.publishedAt).format('YYYY-MM-DD')
@@ -92,7 +94,7 @@ router.get('/admin/channel', async function (req, res, next) {
 
 // 사용자별 채널 등록 현황
 router.get('/admin/user-channels', async function (req, res, next) {
-  const userChannels = await dao.getAllUserChannels()
+  const userChannels = await channelDao.getAllUserChannels()
   userChannels.forEach((item) => {
     item.addedDate = dayjs(item.addedAt).format('YYYY-MM-DD HH:mm')
   })
@@ -106,10 +108,10 @@ router.get('/admin/user-channels', async function (req, res, next) {
 // 사용자 통계 관리 페이지
 router.get('/admin/stats', async function (req, res, next) {
   const stats = {
-    totalUsers: (await dao.getUsersCount()) || 0,
-    totalVideos: (await dao.getVideosCount()) || 0,
-    totalChannels: (await dao.getChannelsCount()) || 0,
-    categoryStats: (await dao.getCategoryStats()) || [],
+    totalUsers: (await accountDao.getUsersCount()) || 0,
+    totalVideos: (await videoDao.getVideosCount()) || 0,
+    totalChannels: (await channelDao.getChannelsCount()) || 0,
+    categoryStats: (await videoDao.getCategoryStats()) || [],
   }
 
   res.render('admin/stats', {
@@ -218,7 +220,7 @@ router.post('/api/channel', auth, async function (req, res, next) {
   }
 
   try {
-    const result = await dao.create(channel)
+    const result = await channelDao.create(channel)
     res.json(result.dataValues)
   } catch (error) {
     if (isYouTubeQuotaExceeded(error)) {

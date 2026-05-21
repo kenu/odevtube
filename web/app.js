@@ -15,7 +15,7 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(
   expressSession({
-    secret: 'github cat',
+    secret: process.env.SESSION_SECRET || 'github cat',
     resave: true,
     saveUninitialized: true,
   })
@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 import 'dotenv/config'
 import passport from 'passport'
 import GitHub from 'passport-github2'
-import dao from '../youtubeDao.js'
+import accountDao from '../dao/accountDao.js'
 
 try {
   passport.use(
@@ -55,7 +55,7 @@ try {
           photo: profile.photos[0].value,
           provider: profile.provider,
         }
-        await dao.createAccount(account)
+        await accountDao.createAccount(account)
         return cb(null, profile)
       }
     )

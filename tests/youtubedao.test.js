@@ -1,8 +1,8 @@
-import dao from '../youtubeDao'
+import videoDao from '../dao/videoDao'
 
 // pagination test
 test('pagination', async () => {
-  const result = await dao.getPagedVideos({
+  const result = await videoDao.getPagedVideos({
     page: 1,
     pageSize: 3,
   })
@@ -10,7 +10,7 @@ test('pagination', async () => {
   expect(result.count).not.toBe(0)
   expect(result.rows.length).toBe(3)
 
-  const result2 = await dao.getPagedVideos({
+  const result2 = await videoDao.getPagedVideos({
     page: 2,
     pageSize: 3,
   })

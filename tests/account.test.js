@@ -1,4 +1,4 @@
-import dao from '../youtubeDao.js'
+import accountDao from '../dao/accountDao.js'
 // github profile 저장
 // login update
 // 탈퇴
@@ -105,6 +105,6 @@ test('github login', async () => {
     photo: data.photos[0].value,
     provider: data.provider,
   }
-  const acnt = await dao.createAccount(account)
+  const acnt = await accountDao.createAccount(account)
   console.log(acnt)
 })

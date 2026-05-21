@@ -1,5 +1,6 @@
 import youtube from '../youtube.js'
-import dao from '../youtubeDao.js'
+import videoDao from '../dao/videoDao.js'
+import channelDao from '../dao/channelDao.js'
 
 async function getLatestVideos(channelId) {
   try {
@@ -33,18 +34,18 @@ async function getLatestVideos(channelId) {
 
 async function addVideos(channelId) {
   const videos = await getLatestVideos(channelId)
-  const channel = await dao.findOneByChannelId(channelId)
+  const channel = await channelDao.findOneByChannelId(channelId)
   if (!channel) {
     return
   }
   for (const data of videos || []) {
     data.ChannelId = channel.id
-    await dao.createVideo(data)
+    await videoDao.createVideo(data)
   }
 }
 
 async function remove(videoId) {
-  await dao.removeVideo(videoId)
+  await videoDao.removeVideo(videoId)
 }
 
 export default {

@@ -2,17 +2,15 @@ import express from 'express'
 import dayjs from 'dayjs'
 import passport from 'passport'
 import { getFullText } from '../utils/transcriptUtil.js'
-import dao from '../../youtubeDao.js'
+import videoDao from '../../dao/videoDao.js'
+import channelDao from '../../dao/channelDao.js'
+import transcriptDao from '../../dao/transcriptDao.js'
+import accountDao from '../../dao/accountDao.js'
 import { parseYoutubeUrl } from '../utils/uri.js'
 import youtube from '../../youtube.js'
 import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-
-
-
-// Add a counter to track page calls
-let pageCallCounter = 0;
 
 const router = express.Router()
 router.use(passport.initialize())
@@ -68,28 +66,13 @@ async function goRenderPage(
   isApi = false,
   page
 ) {
-  // Increment the page call counter
-  pageCallCounter++;
-  
-  // Check if garbage collection should be triggered
-  if (pageCallCounter >= 10) {
-    if (global.gc) {
-      console.log('Triggering garbage collection after 10 page calls');
-      global.gc();
-    } else {
-      console.log('Manual garbage collection not available. Run with --expose-gc flag to enable.');
-    }
-    // Reset the counter
-    pageCallCounter = 0;
-  }
-  
   const locale = lang === 'en' ? 'en_US' : 'ko_KR';
   const stime = Date.now();
   const pageSize = 60;
   const searchKeyword = req.query.search || '';
 
   const user = req.user;
-  const data = await dao.getPagedVideosWithSearch({
+  const data = await videoDao.getPagedVideosWithSearch({
     category: uri,
     lang,
     page,
@@ -100,15 +83,27 @@ async function goRenderPage(
 
   const etime = Date.now();
   console.log('elapsed time: ', etime - stime);
-  building(data.rows);
+  
+  // Use .get({ plain: true }) if they are Sequelize instances
+  const list = data.rows.map(item => {
+    const plainItem = item.get ? item.get({ plain: true }) : item;
+    return {
+      ...plainItem,
+      pubdate: dayjs(plainItem.publishedAt).format('YYYY-MM-DD'),
+      profile: plainItem.Channel?.thumbnail,
+      channame: plainItem.Channel?.title,
+      customUrl: plainItem.Channel?.customUrl
+    };
+  });
+
   const totalPages = Math.ceil(data.count / pageSize);
 
   if (isApi) {
-    res.json(data.rows);
+    res.json(list);
   } else {
     res.render('index', {
       title,
-      list: data.rows,
+      list,
       totalCount: data.count,
       locale,
       uri,
@@ -121,24 +116,13 @@ async function goRenderPage(
   }
 }
 
-function building(list) {
-  list.forEach((item) => {
-    item.pubdate = dayjs(item.publishedAt).format('YYYY-MM-DD')
-    item.profile = item.Channel.dataValues.thumbnail
-    item.channame = item.Channel.dataValues.title
-    item.customUrl = item.Channel.dataValues.customUrl
-    delete item.dataValues.Channel
-    delete item.dataValues.ChannelId
-    delete item.dataValues.createdAt
-    delete item.dataValues.updatedAt
-  })
-}
+// Remove old building function as it's replaced by inline mapping in goRenderPage
 
 import summarize from '../utils/summary.js'
 router.get('/transcript/:videoId', async function (req, res, next) {
   const videoId = req.params.videoId
   // find by videoId
-  const item = await dao.findTranscriptByVideoId(videoId)
+  const item = await transcriptDao.findTranscriptByVideoId(videoId)
   if (item) {
     res.json({ videoId, summary: item.summary, text: item.content })
     return
@@ -157,7 +141,7 @@ async function upsertTranscript(res, videoId) {
       },
     ]
     const summary = await summarize(messages)
-    await dao.createTranscript({
+    await transcriptDao.createTranscript({
       videoId,
       content: fullText,
       summary: summary,
@@ -204,7 +188,7 @@ router.get('/@:username', async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = 20;
   
-  const result = await dao.getChannelsByUsername(username);
+  const result = await channelDao.getChannelsByUsername(username);
   
   if (!result) {
     return res.status(404).render('404', { message: `사용자 "${username}"을(를) 찾을 수 없습니다.` });
@@ -221,7 +205,7 @@ router.get('/@:username', async (req, res) => {
   }
 
   try {
-    const { videos, total, totalPages } = await dao.getVideosByUserChannels(username, page, limit);
+    const { videos, total, totalPages } = await videoDao.getVideosByUserChannels(username, page, limit);
     
     res.render('user-feed', { 
       user: req.user, owner: account, videos, channels, isOwner,
@@ -242,7 +226,7 @@ router.get('/@:username/manage', connectEnsureLogin.ensureLoggedIn(), async (req
   if (req.user.username !== username) {
     return res.redirect(`/@${username}`);
   }
-  const channels = await dao.getChannelsByAccountId(req.user.accountId);
+  const channels = await accountDao.getChannelsByAccountId(req.user.accountId);
   res.render('my-channel-manage', { user: req.user, channels });
 });
 
@@ -277,7 +261,7 @@ router.post('/@:username/add-channel', connectEnsureLogin.ensureLoggedIn(), asyn
   }
 
   const user = req.user;
-  const channelCount = await dao.countChannelsByAccountId(user.accountId);
+  const channelCount = await accountDao.countChannelsByAccountId(user.accountId);
 
   if (user.subscriptionTier === 'free' && channelCount >= 5) {
     return res.redirect(`/@${user.username}`);
@@ -307,12 +291,12 @@ router.post('/@:username/add-channel', connectEnsureLogin.ensureLoggedIn(), asyn
         customUrl: channelData.snippet.customUrl
       };
       
-      await dao.create(channel);
-      await dao.addChannelToAccount(user.accountId, channelData.id);
+      await channelDao.create(channel);
+      await accountDao.addChannelToAccount(user.accountId, channelData.id);
       
       // 채널의 최신 비디오를 DB에 저장
       try {
-        const dbChannel = await dao.findOneByChannelId(channelData.id);
+        const dbChannel = await channelDao.findOneByChannelId(channelData.id);
         if (dbChannel) {
           const videosResponse = await youtube.search.list({
             part: 'snippet',
@@ -330,7 +314,7 @@ router.post('/@:username/add-channel', connectEnsureLogin.ensureLoggedIn(), asyn
               publishedAt: item.snippet.publishedAt,
               ChannelId: dbChannel.id
             };
-            await dao.createVideo(video);
+            await videoDao.createVideo(video);
           }
         }
       } catch (videoError) {
@@ -354,7 +338,7 @@ router.post('/@:username/remove-channel', connectEnsureLogin.ensureLoggedIn(), a
     return res.status(403).redirect(`/@${user.username}/manage`);
   }
   
-  await dao.removeChannelFromAccount(user.accountId, channelId);
+  await accountDao.removeChannelFromAccount(user.accountId, channelId);
   res.redirect(`/@${req.user.username}/manage`);
 });
 
@@ -369,12 +353,12 @@ router.post('/@:username/toggle-channel-visibility', connectEnsureLogin.ensureLo
   }
 
   // 해당 채널이 사용자의 채널인지 확인
-  const userChannels = await dao.getChannelsByAccountId(user.accountId);
+  const userChannels = await accountDao.getChannelsByAccountId(user.accountId);
   const channel = userChannels.find(c => c.channelId === channelId);
 
   if (channel) {
     // 현재 상태의 반대로 토글
-    await dao.updateChannelVisibility(channelId, !channel.isPublic);
+    await channelDao.updateChannelVisibility(channelId, !channel.isPublic);
   }
 
   res.redirect(`/@${req.user.username}/manage`);
@@ -385,7 +369,7 @@ router.get('/@:username/:channelId', connectEnsureLogin.ensureLoggedIn(), async 
   const user = req.user;
   
   try {
-    const channel = await dao.findOneByChannelId(channelId);
+    const channel = await channelDao.findOneByChannelId(channelId);
     if (!channel) {
       return res.redirect(`/@${req.user.username}`);
     }
@@ -425,22 +409,22 @@ router.get('/logout', function (req, res, next) {
 router.get('/statistics', async function (req, res, next) {
   try {
     // Get total videos count
-    const totalVideos = (await dao.getVideosCount()) || 0;
+    const totalVideos = (await videoDao.getVideosCount()) || 0;
     
     // Get unique channels count
-    const totalChannels = (await dao.getChannelsCount()) || 0;
+    const totalChannels = (await channelDao.getChannelsCount()) || 0;
     
     // Calculate average videos per channel
     const avgVideosPerChannel = totalChannels > 0 ? totalVideos / totalChannels : 0;
     
     // Get yearly stats
-    const yearlyStats = await dao.getYearlyVideoStats();
+    const yearlyStats = await videoDao.getYearlyVideoStats();
     
     // Get monthly stats (last 12 months)
-    const monthlyStats = await dao.getMonthlyVideoStats(12);
+    const monthlyStats = await videoDao.getMonthlyVideoStats(12);
     
     // Get top channels
-    const topChannels = await dao.getTopChannels(10);
+    const topChannels = await videoDao.getTopChannels(10);
     
     res.render('statistics', {
       title: 'Statistics - 통계',
@@ -491,7 +475,7 @@ router.get('/payment-success', connectEnsureLogin.ensureLoggedIn(), async (req, 
   if (session.client_reference_id === req.user.accountId) {
     const subscription = await stripe.subscriptions.retrieve(session.subscription);
     
-    await dao.updateAccount(req.user.accountId, {
+    await accountDao.updateAccount(req.user.accountId, {
       subscriptionTier: 'premium',
       subscriptionExpiry: new Date(subscription.current_period_end * 1000),
     });
@@ -519,14 +503,14 @@ router.post('/stripe-webhook', express.raw({type: 'application/json'}), async (r
     case 'invoice.payment_succeeded':
       const invoice = event.data.object;
       const subscription = await stripe.subscriptions.retrieve(invoice.subscription);
-      await dao.updateAccount(invoice.customer, {
+      await accountDao.updateAccount(invoice.customer, {
           subscriptionTier: 'premium',
           subscriptionExpiry: new Date(subscription.current_period_end * 1000),
       });
       break;
     case 'customer.subscription.deleted':
       const subscriptionDeleted = event.data.object;
-      await dao.updateAccount(subscriptionDeleted.customer, {
+      await accountDao.updateAccount(subscriptionDeleted.customer, {
           subscriptionTier: 'free',
           subscriptionExpiry: null,
       });
