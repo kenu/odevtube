@@ -1,5 +1,8 @@
 {
     "chat.tools.terminal.autoApprove": {
         "npm update": true
+    },
+    "[html]": {
+        "editor.formatOnSave": false
     }
 }

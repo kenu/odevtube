@@ -22,10 +22,9 @@
   <%- include('search.ejs') %>
   <% if (uri === 'kpop' ) { %>
   <section style="background-color: #FABE98; margin-bottom: 2.2rem; padding: 0.45rem;">
-    ➡️ <a href="https://www.youtube.com/playlist?list=PLQu3_HfiL3GQnaFfT7CAfrWMyhoWL7khJ" title="2022 교차편집 모음 (2022 Stage mix playlist)" style="padding-left: 1rem;">2022 교차편집 모음 (2022 Stage mix playlist)</a>
+    ➡️ <a href="https://www.youtube.com/playlist?list=PLC2pe_twbyvJbvTfwTqneE78RVYMqBP3k" title="2022" style="padding-left: 1rem;" target="_blank">걸그룹 교차편집 모음</a> 
   </section>
   <% } %>
-
   <ul id="list">
     <% list.forEach(video => { %>
     <%- include('video.ejs', { video }) %>
