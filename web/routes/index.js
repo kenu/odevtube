@@ -1,12 +1,9 @@
 import express from 'express'
 import dayjs from 'dayjs'
 import passport from 'passport'
-import { getFullText } from '../utils/transcriptUtil.js'
 import videoDao from '../../dao/videoDao.js'
 import channelDao from '../../dao/channelDao.js'
-import transcriptDao from '../../dao/transcriptDao.js'
 import accountDao from '../../dao/accountDao.js'
-import { parseYoutubeUrl } from '../utils/uri.js'
 import youtube from '../../youtube.js'
 import Stripe from 'stripe'
 
@@ -113,43 +110,6 @@ async function goRenderPage(
       pageSize,
       searchKeyword, // Pass the search keyword to the view
     });
-  }
-}
-
-// Remove old building function as it's replaced by inline mapping in goRenderPage
-
-import summarize from '../utils/summary.js'
-router.get('/transcript/:videoId', async function (req, res, next) {
-  const videoId = req.params.videoId
-  // find by videoId
-  const item = await transcriptDao.findTranscriptByVideoId(videoId)
-  if (item) {
-    res.json({ videoId, summary: item.summary, text: item.content })
-    return
-  }
-  await upsertTranscript(res, videoId)
-})
-
-async function upsertTranscript(res, videoId) {
-  try {
-    let fullText = await getFullText(videoId)
-    const cmd = "3줄 단문에, 명사형 어미로 요약(예)'있습니다.' 대신 '있음', '설명드립니다' 대신 '설명함' :\n"
-    const messages = [
-      {
-        role: 'user',
-        content: cmd + fullText,
-      },
-    ]
-    const summary = await summarize(messages)
-    await transcriptDao.createTranscript({
-      videoId,
-      content: fullText,
-      summary: summary,
-    })
-    res.json({ videoId, summary, text: fullText })
-  } catch (error) {
-    console.error(error)
-    res.json({ videoId, summary: '', text: 'Not Available ' + error.message })
   }
 }
 

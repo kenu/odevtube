@@ -142,7 +142,6 @@ npm run dev
 - `Accounts` - 사용자 정보
 - `Channels` - YouTube 채널 정보 (isPublic, accountId 포함)
 - `Videos` - 비디오 정보
-- `Transcripts` - 비디오 자막 및 요약
 - `UserVideos` - 사용자-비디오 관계
 - `UserChannels` - 사용자-채널 관계
 

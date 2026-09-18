@@ -2,7 +2,6 @@ import { Sequelize } from 'sequelize'
 import AccountModel from './Account.js'
 import ChannelModel from './Channel.js'
 import VideoModel from './Video.js'
-import TranscriptModel from './Transcript.js'
 import UserVideoModel from './UserVideo.js'
 import UserChannelModel from './UserChannel.js'
 
@@ -23,7 +22,6 @@ const sequelize = new Sequelize(
 const Account = AccountModel(sequelize)
 const Channel = ChannelModel(sequelize)
 const Video = VideoModel(sequelize)
-const Transcript = TranscriptModel(sequelize)
 const UserVideo = UserVideoModel(sequelize)
 const UserChannel = UserChannelModel(sequelize)
 
@@ -31,9 +29,6 @@ const UserChannel = UserChannelModel(sequelize)
 Channel.belongsTo(Account, { foreignKey: 'accountId', targetKey: 'accountId' })
 Channel.hasMany(Video)
 Video.belongsTo(Channel)
-
-Transcript.belongsTo(Video, { as: 'video', foreignKey: 'videoId' })
-Video.hasOne(Transcript, { as: 'transcripts', foreignKey: 'videoId' })
 
 Account.belongsToMany(Video, { through: UserVideo })
 Video.belongsToMany(Account, { through: UserVideo })
@@ -43,7 +38,7 @@ Channel.belongsToMany(Account, { through: UserChannel })
 
 // Synchronize models with the database
 if (process.env.NODE_ENV !== 'production') {
-  ;(async () => {
+  ; (async () => {
     try {
       await sequelize.sync()
       console.log('Database synchronized')
@@ -59,10 +54,9 @@ const db = {
   Account,
   Channel,
   Video,
-  Transcript,
   UserVideo,
   UserChannel,
 }
 
 export default db
-export { sequelize, Sequelize, Account, Channel, Video, Transcript, UserVideo, UserChannel }
+export { sequelize, Sequelize, Account, Channel, Video, UserVideo, UserChannel }

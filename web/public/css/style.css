@@ -266,19 +266,6 @@ a:hover {
   overflow-wrap: break-word;
 }
 
-li button.transcript {
-  display: block;
-  position: absolute;
-  bottom: 6px;
-  right: 10px;
-  padding: 4px;
-  background-color: var(--button-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 0.3rem;
-  color: var(--text-color);
-  cursor: pointer;
-}
-
 .modal {
   display: none;
   position: fixed;
@@ -585,13 +572,6 @@ li button.share-twitter:hover {
   
   .channame {
     font-size: 13px;
-  }
-  
-  li button.transcript {
-    padding: 3px;
-    font-size: 11px;
-    bottom: 4px;
-    right: 6px;
   }
   
   .pagination a,

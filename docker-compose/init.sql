@@ -48,15 +48,6 @@ INSERT INTO videos
 (title, videoId, thumbnail, publishedAt, createdAt, updatedAt, channelId)
 VALUES('🔥Data Analyst Salary in 2025  #shorts #simplilearn', 'NhMfqhT_wOk', 'https://i.ytimg.com/vi/NhMfqhT_wOk/mqdefault.jpg', '2025-09-27 01:30:10.000', '2025-09-27 02:05:19.000', '2025-09-27 02:05:19.000', 30);
 
-CREATE TABLE transcripts (
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  videoId VARCHAR(255) UNIQUE NOT NULL,
-  content TEXT,
-  summary TEXT,
-  createdAt DATETIME,
-  updatedAt DATETIME
-);
-
 CREATE TABLE uservideos (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   createdAt DATETIME NOT NULL,
