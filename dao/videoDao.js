@@ -283,6 +283,17 @@ async function getTopChannels(limit = 10) {
   return result
 }
 
+/**
+ * 삭제 감지를 위해 모든 videoId만 반환 (다른 컬럼은 제외하여 메모리 효율화)
+ */
+async function findAllVideoIds() {
+  const rows = await Video.findAll({
+    attributes: ['videoId'],
+    raw: true,
+  })
+  return rows.map((r) => r.videoId)
+}
+
 export default {
   createVideo,
   removeVideo,
@@ -297,4 +308,5 @@ export default {
   getYearlyVideoStats,
   getMonthlyVideoStats,
   getTopChannels,
+  findAllVideoIds,
 }
