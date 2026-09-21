@@ -11,3 +11,5 @@ sonar-project.properties
 codebase.md
 .DS_Store
 .Thumbs.db
+*.pid
+whatap*
